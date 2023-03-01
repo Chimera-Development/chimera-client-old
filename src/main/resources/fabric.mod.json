@@ -3,20 +3,21 @@
 	"id": "chimera-client",
 	"version": "${version}",
 	"name": "chimera-client",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "An Attempt at a highly extensible minecraft utility mod",
 	"authors": [
-		"Me!"
+		"Patsore",
+		"Shrecknt"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Chimera-Development/chimera-client"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/chimera-client/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"dev.chimera.ExampleMod"
+			"dev.chimera.ChimeraClient"
 		]
 	},
 	"mixins": [
