@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="src\main\resources\assets\chimera-client\chimera-logo.png">
+    <img src="src\main\resources\assets\chimera-client\chimera-logo.png" width="30%" height="30%">
     <br>
     Chimera Client
     <br>
