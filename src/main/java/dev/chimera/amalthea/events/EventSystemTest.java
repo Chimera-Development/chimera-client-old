@@ -1,10 +1,9 @@
 package dev.chimera.amalthea.events;
 
 import dev.chimera.ChimeraClient;
-import dev.chimera.amalthea.EventBus;
 import dev.chimera.amalthea.EventListener;
 
-public class Lememe {
+public class EventSystemTest {
 
     public void main(){
         try{
@@ -13,6 +12,7 @@ public class Lememe {
             throw new RuntimeException(e);
         }
     }
+
     @EventListener
     public void ass(String test){
         ChimeraClient.LOGGER.warn("WORKS!!!!!" + test);

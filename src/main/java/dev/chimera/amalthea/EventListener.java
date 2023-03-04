@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 //Le funny listener (I am in deep psychological torment)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface RegisterListener {
-
+public @interface EventListener {
+    public String tag() default "";
 }
