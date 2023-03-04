@@ -5,8 +5,8 @@ import dev.chimera.amalthea.EventListener;
 
 public class EventSystemTest {
 
-    public void main() {
-            ChimeraClient.EVENT_BUS.registerListenersInClass(this);
+    public EventSystemTest() {
+        ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }
 
     @EventListener
