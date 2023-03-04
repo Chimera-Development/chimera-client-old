@@ -1,12 +1,8 @@
 package dev.chimera.amalthea;
 
-import io.wispforest.owo.Owo;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class EventBus{
 
@@ -14,9 +10,14 @@ public class EventBus{
       TODO Also maybe come up with a better way of registering listeners and change the way exceptions are thrown
     */
 
-    public HashMap<TaggedType, List<Method>> taggedListeners = new HashMap<>();
-    public HashMap<Class<?>, List<Method>> listeners = new HashMap<>();
+    public HashMap<TaggedType, List<PriorityMethod>> taggedListeners = new HashMap<>();
+    public HashMap<Class<?>, List<PriorityMethod>> listeners = new HashMap<>();
     public HashMap<Method, Object> methodObjectHashMap = new HashMap<>();
+
+
+    public record PriorityMethod(Method method, int priority){
+
+    }
 
     public record TaggedType(String tag, Class<?> klass) {
     }
@@ -24,20 +25,20 @@ public class EventBus{
     public void registerListenersInClass(Object object){
         for (Method method : object.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(EventListener.class)) {
-
-                String tag = method.getAnnotation(EventListener.class).tag();
-                if (tag.equals("")) {
-                    registerListener(method);
+                EventListener eventListener = method.getAnnotation(EventListener.class);
+                if (eventListener.tag().equals("")) {
+                    registerListener(method, eventListener);
                 } else {
-                    registerTaggedListener(method, tag);
+                    registerTaggedListener(method, eventListener);
                 }
 
                 this.methodObjectHashMap.put(method, object);
+
             }
         }
-
     }
-    public void registerTaggedListener(Method listener, String tag) {
+
+    public void registerTaggedListener(Method listener, EventListener eventListener) {
         Class<?>[] parameterTypes = listener.getParameterTypes();
         if (parameterTypes.length != 1) {
             throw new IllegalArgumentException("Invalid listener method: " + listener);
@@ -48,13 +49,14 @@ public class EventBus{
 
         Class<?> klass = parameterTypes[0];
 
-        TaggedType taggedType = new TaggedType(tag, klass);
+        TaggedType taggedType = new TaggedType(eventListener.tag(), klass);
+        PriorityMethod priorityMethod = new PriorityMethod(listener, eventListener.priority());
         if (!taggedListeners.containsKey(taggedType)) {
             taggedListeners.put(taggedType, new ArrayList<>());
         }
-        this.taggedListeners.get(taggedType).add(listener);
+        this.taggedListeners.get(taggedType).add(priorityMethod);
     }
-    public void registerListener(Method listener) {
+    public void registerListener(Method listener, EventListener eventListener) {
         Class<?>[] parameterTypes = listener.getParameterTypes();
         if (parameterTypes.length != 1) {
             throw new IllegalArgumentException("Invalid listener method: " + listener);
@@ -64,18 +66,20 @@ public class EventBus{
         }
 
         Class<?> klass = parameterTypes[0];
-
+        PriorityMethod priorityMethod = new PriorityMethod(listener, eventListener.priority());
         if (!listeners.containsKey(klass)) {
             listeners.put(klass, new ArrayList<>());
         }
-        this.listeners.get(klass).add(listener);
+        this.listeners.get(klass).add(priorityMethod);
     }
     public <T> void post(T event) {
-        List<Method> methods = listeners.get(event.getClass());
+        List<PriorityMethod> methods = listeners.get(event.getClass());
+        Comparator<PriorityMethod> byPriority = Comparator.comparingInt(PriorityMethod::priority).reversed();
         if (methods != null) {
-            for (Method listener : methods) {
+            methods.sort(byPriority);
+            for (PriorityMethod listener : methods) {
                 try {
-                    listener.invoke(methodObjectHashMap.get(listener), event);
+                    listener.method.invoke(methodObjectHashMap.get(listener.method), event);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
@@ -84,14 +88,14 @@ public class EventBus{
     }
     public <T> void post(String tag, T event) {
         TaggedType taggedType = new TaggedType(tag, event.getClass());
-        List<Method> methods = taggedListeners.get(taggedType);
-        if (methods != null) {
-            for (Method listener : methods) {
-                try {
-                    listener.invoke(methodObjectHashMap.get(listener), event);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                }
+        List<PriorityMethod> methods = taggedListeners.get(taggedType);
+        Comparator<PriorityMethod> byPriority = Comparator.comparingInt(PriorityMethod::priority).reversed();
+        methods.sort(byPriority);
+        for (PriorityMethod listener : methods) {
+            try {
+                listener.method.invoke(methodObjectHashMap.get(listener.method), event);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
             }
         }
     }
