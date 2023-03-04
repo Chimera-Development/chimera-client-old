@@ -22,10 +22,10 @@ public class ChimeraClient implements ModInitializer {
 		// Proceed with mild caution.
 		LOGGER.info("Hello Chimera sussers!");
 		EventSystemTest test = new EventSystemTest();
+
 		test.main();
-
-
 		EVENT_BUS.post("string test");
+		EVENT_BUS.post("sussy", "Works!!");
 
 	}
 

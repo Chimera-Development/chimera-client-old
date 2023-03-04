@@ -18,4 +18,9 @@ public class EventSystemTest {
         ChimeraClient.LOGGER.warn("WORKS!!!!!" + test);
     }
 
+    @EventListener(tag = "sussy")
+    public void sussy(String test){
+        ChimeraClient.LOGGER.warn("Works??" + test);
+    }
+
 }
