@@ -5,21 +5,21 @@ import dev.chimera.amalthea.EventListener;
 
 public class EventSystemTest {
 
-    public void main(){
-        try{
-        ChimeraClient.EVENT_BUS.registerListenersInClass(this);
-    }catch (IllegalAccessException e){
+    public void main() {
+        try {
+            ChimeraClient.EVENT_BUS.registerListenersInClass(this);
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
     @EventListener
-    public void ass(String test){
+    public void ass(String test) {
         ChimeraClient.LOGGER.warn("WORKS!!!!!" + test);
     }
 
     @EventListener(tag = "sussy")
-    public void sussy(String test){
+    private void sussy(String test) {
         ChimeraClient.LOGGER.warn("Works??" + test);
     }
 

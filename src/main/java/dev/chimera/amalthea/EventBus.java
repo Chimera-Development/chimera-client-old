@@ -24,7 +24,7 @@ public class EventBus implements EventBusInterface {
 
 
     public void registerListenersInClass(Object object) throws IllegalAccessException {
-        for (Method method : object.getClass().getMethods()) {
+        for (Method method : object.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(EventListener.class)) {
 
                 String tag = method.getAnnotation(EventListener.class).tag();
