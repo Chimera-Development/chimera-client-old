@@ -2,6 +2,8 @@ package dev.chimera;
 
 import dev.chimera.amalthea.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
+import dev.chimera.amalthea.events.misc.TickEvent;
+import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.gui.InGameOverlay;
 import dev.chimera.gui.components.Label;
 import dev.chimera.gui.components.Panel;
@@ -62,9 +64,18 @@ public class ChimeraClient implements ModInitializer {
 		//Events test
 		EventSystemTest test = new EventSystemTest();
 
-		test.main();
 		EVENT_BUS.post("string test");
 		EVENT_BUS.post("sussy", "Works!!");
+
+		new ModuleInitializer().initializeModules();
+
+		ClientTickEvents.START_CLIENT_TICK.register((startTick) -> {
+			EVENT_BUS.post("start", new TickEvent());
+		});
+
+		ClientTickEvents.END_CLIENT_TICK.register((endTick) -> {
+			EVENT_BUS.post("end", new TickEvent());
+		});
 	}
 
 	public Event<?> event = ScreenEvents.AFTER_INIT;

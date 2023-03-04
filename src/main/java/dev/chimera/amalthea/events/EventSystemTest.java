@@ -6,8 +6,8 @@ import dev.chimera.amalthea.Priority;
 
 public class EventSystemTest {
 
-    public void main() {
-            ChimeraClient.EVENT_BUS.registerListenersInClass(this);
+    public EventSystemTest() {
+        ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }
 
     @EventListener
