@@ -6,11 +6,7 @@ import dev.chimera.amalthea.EventListener;
 public class EventSystemTest {
 
     public void main() {
-        try {
             ChimeraClient.EVENT_BUS.registerListenersInClass(this);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @EventListener
