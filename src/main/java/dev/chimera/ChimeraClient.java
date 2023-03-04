@@ -2,8 +2,11 @@ package dev.chimera;
 
 import dev.chimera.amalthea.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
+import dev.chimera.amalthea.events.misc.TickEvent;
+import dev.chimera.modules.ModuleInitializer;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.event.Event;
 import org.slf4j.Logger;
@@ -23,9 +26,18 @@ public class ChimeraClient implements ModInitializer {
 		LOGGER.info("Hello Chimera sussers!");
 		EventSystemTest test = new EventSystemTest();
 
-		test.main();
 		EVENT_BUS.post("string test");
 		EVENT_BUS.post("sussy", "Works!!");
+
+		new ModuleInitializer().initializeModules();
+
+		ClientTickEvents.START_CLIENT_TICK.register((startTick) -> {
+			EVENT_BUS.post("start", new TickEvent());
+		});
+
+		ClientTickEvents.END_CLIENT_TICK.register((endTick) -> {
+			EVENT_BUS.post("end", new TickEvent());
+		});
 
 	}
 
