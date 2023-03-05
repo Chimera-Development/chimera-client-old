@@ -1,99 +1,147 @@
 package dev.chimera.amalthea;
 
-import io.wispforest.owo.Owo;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-public class EventBus{
+
+
+
+public class EventBus {
 
     /*
-      TODO Also maybe come up with a better way of registering listeners and change the way exceptions are thrown
+      TODO Actual make the tag system again
     */
 
-    public HashMap<TaggedType, List<Method>> taggedListeners = new HashMap<>();
-    public HashMap<Class<?>, List<Method>> listeners = new HashMap<>();
-    public HashMap<Method, Object> methodObjectHashMap = new HashMap<>();
+    private final HashMap<Class<?>, List<Listener>> listenersByEventType = new HashMap<>();
+    private static final HashMap<String, Listener> listenerIDs = new HashMap<>();
 
-    public record TaggedType(String tag, Class<?> klass) {
-    }
+    private boolean listenersChanged = true;
 
     public void registerListenersInClass(Object object){
         for (Method method : object.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(EventListener.class)) {
 
-                String tag = method.getAnnotation(EventListener.class).tag();
-                if (tag.equals("")) {
-                    registerListener(method);
-                } else {
-                    registerTaggedListener(method, tag);
+                Class<?>[] parameterTypes = method.getParameterTypes();
+                if (parameterTypes.length != 1) {
+                    throw new IllegalArgumentException("Invalid listener method: " + method);
                 }
-
-                this.methodObjectHashMap.put(method, object);
-            }
-        }
-
-    }
-    public void registerTaggedListener(Method listener, String tag) {
-        Class<?>[] parameterTypes = listener.getParameterTypes();
-        if (parameterTypes.length != 1) {
-            throw new IllegalArgumentException("Invalid listener method: " + listener);
-        }
-        if (!listener.trySetAccessible()) {
-            throw new RuntimeException("Invalid listener method, illegal access: " + listener);
-        }
-
-        Class<?> klass = parameterTypes[0];
-
-        TaggedType taggedType = new TaggedType(tag, klass);
-        if (!taggedListeners.containsKey(taggedType)) {
-            taggedListeners.put(taggedType, new ArrayList<>());
-        }
-        this.taggedListeners.get(taggedType).add(listener);
-    }
-    public void registerListener(Method listener) {
-        Class<?>[] parameterTypes = listener.getParameterTypes();
-        if (parameterTypes.length != 1) {
-            throw new IllegalArgumentException("Invalid listener method: " + listener);
-        }
-        if (!listener.trySetAccessible()) {
-            throw new RuntimeException("Invalid listener method, illegal access: " + listener);
-        }
-
-        Class<?> klass = parameterTypes[0];
-
-        if (!listeners.containsKey(klass)) {
-            listeners.put(klass, new ArrayList<>());
-        }
-        this.listeners.get(klass).add(listener);
-    }
-    public <T> void post(T event) {
-        List<Method> methods = listeners.get(event.getClass());
-        if (methods != null) {
-            for (Method listener : methods) {
-                try {
-                    listener.invoke(methodObjectHashMap.get(listener), event);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
+                if (!method.trySetAccessible()) {
+                    throw new RuntimeException("Invalid listener method, illegal access: " + method);
                 }
+                EventListener eventListener = method.getAnnotation(EventListener.class);
+                Listener listener = new Listener(object, method, eventListener.priority(), eventListener.id(), Arrays.stream(eventListener.dependencies()).toList());
+                registerListener(listener, parameterTypes[0]);
             }
         }
     }
-    public <T> void post(String tag, T event) {
-        TaggedType taggedType = new TaggedType(tag, event.getClass());
-        List<Method> methods = taggedListeners.get(taggedType);
-        if (methods != null) {
-            for (Method listener : methods) {
-                try {
-                    listener.invoke(methodObjectHashMap.get(listener), event);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
+
+    private <T> void registerListener(Listener listener, Class<T> eventType) {
+        List<Listener> listeners = listenersByEventType.computeIfAbsent(eventType, k -> new ArrayList<>());
+        listenerIDs.put(listener.getId(), listener);
+        //todo
+        listeners.add(listener);
+        listenersChanged = true;
+    }
+
+
+
+    public static class PrioritySystem {
+        private static class ListenerNode {
+            Listener listener;
+            List<String> dependencies;
+            // constructor, getters and setters omitted for brevity
+
+
+            public List<String> getDependencies() {
+                return dependencies;
+            }
+
+            public ListenerNode(Listener listener, List<String> dependencies) {
+                this.listener = listener;
+                this.dependencies = dependencies;
+            }
+
+        }
+
+
+        public static List<Listener> topologicalSort(List<Listener> listeners) {
+            // Create a map of listener nodes, where each listener node
+            // represents a listener and its dependencies
+            Map<Listener, ListenerNode> nodeMap = new HashMap<>();
+            for (Listener listener : listeners) {
+                ListenerNode node = new ListenerNode(listener, listener.getDependencies());
+                nodeMap.put(listener, node);
+            }
+
+            // Create a map of nodes and their incoming edges
+            Map<ListenerNode, Integer> incomingEdges = new HashMap<>();
+            for (ListenerNode node : nodeMap.values()) {
+                incomingEdges.put(node, 0);
+            }
+            for (ListenerNode node : nodeMap.values()) {
+                for (String dependency : node.getDependencies()) {
+                    ListenerNode dependentNode = nodeMap.get(findListenerById(dependency));
+                    incomingEdges.put(dependentNode, incomingEdges.get(dependentNode) + 1);
                 }
             }
+
+            // Initialize the queue with nodes that have no incoming edges
+            Queue<ListenerNode> queue = new LinkedList<>();
+            for (ListenerNode node : incomingEdges.keySet()) {
+                if (incomingEdges.get(node) == 0) {
+                    queue.offer(node);
+                }
+            }
+
+            // Perform the topological sort
+            List<Listener> sortedListeners = new ArrayList<>();
+            while (!queue.isEmpty()) {
+                ListenerNode node = queue.poll();
+                sortedListeners.add(node.listener);
+                for (String dependency : node.dependencies) {
+                    ListenerNode dependentNode = nodeMap.get(findListenerById(dependency));
+                    incomingEdges.put(dependentNode, incomingEdges.get(dependentNode) - 1);
+                    if (incomingEdges.get(dependentNode) == 0) {
+                        queue.offer(dependentNode);
+                    }
+                }
+            }
+
+            // Check for cycles
+            if (sortedListeners.size() != listeners.size()) {
+                throw new IllegalArgumentException("Graph contains a cycle");
+            }
+            Collections.reverse(sortedListeners);
+            return sortedListeners;
         }
+
+        public static Listener findListenerById(String id) {
+            return listenerIDs.computeIfAbsent(id, (k) -> {
+                throw new IllegalArgumentException("No listener found with id: " + id);
+            });
+        }
+    }
+
+
+
+    public <T> void postEvent(T event) {
+        List<Listener> listeners;
+        if(listenersChanged){
+            listeners = PrioritySystem.topologicalSort(listenersByEventType.get(event.getClass()));
+            listenersChanged = false;
+        }else{
+            listeners = listenersByEventType.get(event.getClass());
+        }
+
+        for (Listener listener : listeners) {
+            try {
+                listener.invoke(event);
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
 }
