@@ -22,8 +22,8 @@ public class NoFallModule extends Module {
     public void onDisable() {}
 
     @Override
-    public void onTickStart(TickEvent event) {}
+    public void onTickStart(TickEvent.Start event) {}
 
     @Override
-    public void onTickEnd(TickEvent event) {}
+    public void onTickEnd(TickEvent.End event) {}
 }

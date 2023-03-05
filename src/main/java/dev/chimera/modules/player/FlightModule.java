@@ -4,10 +4,11 @@ import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
 
 import net.minecraft.client.MinecraftClient;
+import org.lwjgl.glfw.GLFW;
 
 public class FlightModule extends Module {
     public FlightModule() {
-        super("Flight", "G");
+        super("Flight", GLFW.GLFW_KEY_G);
     }
 
     @Override
@@ -26,13 +27,13 @@ public class FlightModule extends Module {
     }
 
     @Override
-    public void onTickStart(TickEvent event) {
+    public void onTickStart(TickEvent.Start event) {
         if (MinecraftClient.getInstance().player == null) return;
         MinecraftClient.getInstance().player.getAbilities().flying = getModuleEnabled();
     }
 
     @Override
-    public void onTickEnd(TickEvent event) {
+    public void onTickEnd(TickEvent.End event) {
         if (MinecraftClient.getInstance().player == null) return;
         MinecraftClient.getInstance().player.getAbilities().flying = getModuleEnabled();
     }

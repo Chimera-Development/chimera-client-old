@@ -11,13 +11,14 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ItemEntity;
+import org.lwjgl.glfw.GLFW;
 
 public class KillAuraModule extends Module {
     private static final int TOTAL_TICK_COOLDOWN = 12;
     private static int tickCooldown = TOTAL_TICK_COOLDOWN;
 
     public KillAuraModule() {
-        super("Kill Aura", "R");
+        super("Kill Aura", GLFW.GLFW_KEY_R);
     }
 
     @Override
@@ -30,7 +31,7 @@ public class KillAuraModule extends Module {
     public void onDisable() {}
 
     @Override
-    public void onTickStart(TickEvent event) {
+    public void onTickStart(TickEvent.Start event) {
         tickCooldown--;
 
         if (!getModuleEnabled()) return;
@@ -61,5 +62,5 @@ public class KillAuraModule extends Module {
     }
 
     @Override
-    public void onTickEnd(TickEvent event) {}
+    public void onTickEnd(TickEvent.End event) {}
 }

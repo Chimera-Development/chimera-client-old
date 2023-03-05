@@ -2,6 +2,7 @@ package dev.chimera.modules;
 
 import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.misc.TickEvent;
+import org.lwjgl.glfw.GLFW;
 
 /*
     **IMPORTANT**
@@ -10,7 +11,7 @@ import dev.chimera.amalthea.events.misc.TickEvent;
 
 public class ExampleModule extends Module {
     public ExampleModule() {
-        super("Example Module", "Y", true);
+        super("Example Module", GLFW.GLFW_KEY_Y, true);
     }
 
     @Override
@@ -29,12 +30,12 @@ public class ExampleModule extends Module {
     }
 
     @Override
-    public void onTickStart(TickEvent event) {
+    public void onTickStart(TickEvent.Start event) {
 
     }
 
     @Override
-    public void onTickEnd(TickEvent event) {
+    public void onTickEnd(TickEvent.End event) {
 
     }
 }
