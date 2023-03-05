@@ -13,7 +13,11 @@ import java.lang.annotation.Target;
 public @interface EventListener {
     public String tag() default "";
 
+    public String id();
+
     public int priority() default Priority.MEDIUM;
+
+    public String[] dependencies() default {};
 
 }
 
