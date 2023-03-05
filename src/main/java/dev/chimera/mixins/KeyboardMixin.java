@@ -16,9 +16,6 @@ import java.awt.event.KeyEvent;
 
 @Mixin(Keyboard.class)
 public abstract class KeyboardMixin {
-    @Shadow @Final
-    private MinecraftClient client;
-
     @Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
     public void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo info) {
         if (key != GLFW.GLFW_KEY_UNKNOWN && MinecraftClient.getInstance().currentScreen == null) {
