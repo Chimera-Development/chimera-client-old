@@ -9,6 +9,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ItemEntity;
 
 public class KillAuraModule extends Module {
@@ -45,13 +46,14 @@ public class KillAuraModule extends Module {
 
         Entity targetEntity = world.getEntities().iterator().next();
         for (Entity e : client.world.getEntities()) {
-            if (targetEntity.distanceTo(player) == 0 || e.distanceTo(player) < targetEntity.distanceTo(player)) {
+            if (targetEntity.distanceTo(player) == 0 || e.distanceTo(player) < targetEntity.distanceTo(player)
+                    && !(e instanceof ItemEntity) && !(e instanceof ExperienceOrbEntity)) {
                 targetEntity = e;
             }
         }
 
         if (targetEntity == player) return;
-        if (targetEntity instanceof ItemEntity) return;
+        if (targetEntity instanceof ItemEntity || targetEntity instanceof ExperienceOrbEntity) return;
         if (targetEntity.squaredDistanceTo(player) > 20.25) return;
 
         manager.attackEntity(player, targetEntity);
