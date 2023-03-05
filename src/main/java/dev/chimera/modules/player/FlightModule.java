@@ -11,9 +11,7 @@ public class FlightModule extends Module {
     }
 
     @Override
-    public void init() {
-        setModuleState(true);
-    }
+    public void init() {}
 
     @Override
     public void onEnable() {
