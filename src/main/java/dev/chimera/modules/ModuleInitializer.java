@@ -36,7 +36,7 @@ public class ModuleInitializer {
         ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }
 
-    public void addModules(List<Module> moduleList) {
+    public static void addModules(List<Module> moduleList) {
         MODULE_LIST.addAll(moduleList);
         moduleList.forEach(Module::init);
     }
