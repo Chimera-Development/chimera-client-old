@@ -65,6 +65,7 @@ public class EventBus {
         }
 
 
+
         public static List<Listener> topologicalSort(List<Listener> listeners) {
             // Create a map of listener nodes, where each listener node
             // represents a listener and its dependencies
@@ -125,7 +126,7 @@ public class EventBus {
 
 
 
-    public <T> void postEvent(T event) {
+    public <T> void postEvent(T event) throws InvocationTargetException, IllegalAccessException {
         List<Listener> listeners;
         if(listenersChanged){
             listeners = PrioritySystem.topologicalSort(listenersByEventType.get(event.getClass()));
@@ -133,15 +134,15 @@ public class EventBus {
         }else{
             listeners = listenersByEventType.get(event.getClass());
         }
-
         for (Listener listener : listeners) {
-            try {
                 listener.invoke(event);
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
         }
-
     }
 
+    public <T> void postEventToListener(T event, String id) throws InvocationTargetException, IllegalAccessException {
+        Listener listener = listenerIDs.get(id);
+        if(listener.getMethod().getParameterTypes()[0] == event.getClass()){
+            listener.invoke(event);
+        }
+    }
 }
