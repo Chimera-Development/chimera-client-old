@@ -10,7 +10,7 @@ import dev.chimera.amalthea.events.misc.TickEvent;
 
 public class ExampleModule extends Module {
     public ExampleModule() {
-        super("Example Module");
+        super("Example Module", "Y", true);
     }
 
     @Override
