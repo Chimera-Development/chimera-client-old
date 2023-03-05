@@ -29,13 +29,16 @@ public class ModuleInitializer {
     public void initializeModules() {
         buildModuleList();
 
-        for (Module module : MODULE_LIST) {
-            module.init();
-        }
+        MODULE_LIST.forEach(Module::init);
 
         INITIALIZED = true;
 
         ChimeraClient.EVENT_BUS.registerListenersInClass(this);
+    }
+
+    public void addModules(List<Module> moduleList) {
+        MODULE_LIST.addAll(moduleList);
+        moduleList.forEach(Module::init);
     }
 
     public static List<Module> getModuleList() {
