@@ -28,7 +28,6 @@ public class ChimeraClient implements ModInitializer {
 		LOGGER.info("Hello Chimera sussers!");
 		EventSystemTest test = new EventSystemTest();
 
-		test.main();
 		try {
 			EVENT_BUS.postEvent("Works!!");
 		} catch (InvocationTargetException | IllegalAccessException e) {
@@ -39,16 +38,28 @@ public class ChimeraClient implements ModInitializer {
 		} catch (InvocationTargetException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
-		EVENT_BUS.postEvent("Works!!");
+		try {
+			EVENT_BUS.postEvent("Works!!");
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
 
 		new ModuleInitializer().initializeModules();
 
 		ClientTickEvents.START_CLIENT_TICK.register((startTick) -> {
-			EVENT_BUS.postEvent(new TickEvent.Start());
+			try {
+				EVENT_BUS.postEvent(new TickEvent.Start());
+			} catch (InvocationTargetException | IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
 		});
 
 		ClientTickEvents.END_CLIENT_TICK.register((endTick) -> {
-			EVENT_BUS.postEvent(new TickEvent.End());
+			try {
+				EVENT_BUS.postEvent(new TickEvent.End());
+			} catch (InvocationTargetException | IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
 		});
 
 	}
