@@ -12,6 +12,8 @@ import net.fabricmc.fabric.api.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class ChimeraClient implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
@@ -26,8 +28,18 @@ public class ChimeraClient implements ModInitializer {
 		LOGGER.info("Hello Chimera sussers!");
 		EventSystemTest test = new EventSystemTest();
 
-		//EVENT_BUS.post("string test");
-		//EVENT_BUS.post("sussy", "Works!!");
+		test.main();
+		try {
+			EVENT_BUS.postEvent("Works!!");
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+		try{
+			EVENT_BUS.postEventToListener("idPush", EventListeners.a);
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+		EVENT_BUS.postEvent("Works!!");
 
 		new ModuleInitializer().initializeModules();
 
