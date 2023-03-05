@@ -16,6 +16,8 @@ public class EventBus {
     private final HashMap<Class<?>, List<Listener>> listenersByEventType = new HashMap<>();
     private static final HashMap<String, Listener> listenerIDs = new HashMap<>();
 
+    private boolean listenersChanged = true;
+
     public void registerListenersInClass(Object object){
         for (Method method : object.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(EventListener.class)) {
@@ -39,6 +41,7 @@ public class EventBus {
         listenerIDs.put(listener.getId(), listener);
         //todo
         listeners.add(listener);
+        listenersChanged = true;
     }
 
 
@@ -123,7 +126,13 @@ public class EventBus {
 
 
     public <T> void postEvent(T event) {
-        List<Listener> listeners = PrioritySystem.topologicalSort(listenersByEventType.get(event.getClass()));
+        List<Listener> listeners;
+        if(listenersChanged){
+            listeners = PrioritySystem.topologicalSort(listenersByEventType.get(event.getClass()));
+            listenersChanged = false;
+        }else{
+            listeners = listenersByEventType.get(event.getClass());
+        }
 
         for (Listener listener : listeners) {
             try {
