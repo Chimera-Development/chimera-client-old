@@ -42,6 +42,15 @@ public class ModuleInitializer {
         return new ArrayList<Module>(MODULE_LIST.stream().filter(Module::getModuleEnabled).toList());
     }
 
+    public Module findModule(String name) {
+        for (Module module : MODULE_LIST) {
+            if (module.getModuleName().equals(name)) {
+                return module;
+            }
+        }
+        return null;
+    }
+
     @EventListener( tag = "start" )
     public static void onTickStart(TickEvent event) {
         if (MinecraftClient.getInstance().player == null || !INITIALIZED) return;
