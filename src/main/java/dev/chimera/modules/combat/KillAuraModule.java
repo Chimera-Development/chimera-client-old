@@ -45,7 +45,7 @@ public class KillAuraModule extends Module {
 
         Entity targetEntity = world.getEntities().iterator().next();
         for (Entity e : client.world.getEntities()) {
-            if (targetEntity.distanceTo(player) == 0 || e.distanceTo(player) < targetEntity.distanceTo(player)) {
+            if (targetEntity.distanceTo(player) == 0 || e.distanceTo(player) < targetEntity.distanceTo(player) && !(e instanceof ItemEntity)) {
                 targetEntity = e;
             }
         }
