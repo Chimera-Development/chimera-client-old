@@ -38,6 +38,10 @@ public class ModuleInitializer {
         return MODULE_LIST;
     }
 
+    public static List<Module> getEnabledModuleList() {
+        return new ArrayList<Module>(MODULE_LIST.stream().filter(Module::getModuleEnabled).toList());
+    }
+
     @EventListener( tag = "start" )
     public static void onTickStart(TickEvent event) {
         if (MinecraftClient.getInstance().player == null || !INITIALIZED) return;
