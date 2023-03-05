@@ -32,11 +32,11 @@ public class ChimeraClient implements ModInitializer {
 		new ModuleInitializer().initializeModules();
 
 		ClientTickEvents.START_CLIENT_TICK.register((startTick) -> {
-			EVENT_BUS.post("start", new TickEvent());
+			EVENT_BUS.postEvent(new TickEvent.Start());
 		});
 
 		ClientTickEvents.END_CLIENT_TICK.register((endTick) -> {
-			EVENT_BUS.post("end", new TickEvent());
+			EVENT_BUS.postEvent(new TickEvent.End());
 		});
 
 	}

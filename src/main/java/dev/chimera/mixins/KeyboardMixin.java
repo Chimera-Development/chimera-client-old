@@ -1,6 +1,8 @@
 package dev.chimera.mixins;
 
 import dev.chimera.ChimeraClient;
+import dev.chimera.EventListeners;
+import dev.chimera.amalthea.events.misc.KeyEvents;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
@@ -16,8 +18,8 @@ public abstract class KeyboardMixin {
     @Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
     public void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo info) {
         if (key != GLFW.GLFW_KEY_UNKNOWN && MinecraftClient.getInstance().currentScreen == null) {
-            if (action == 1) ChimeraClient.EVENT_BUS.post("key-press", KeyEvent.getKeyText(key));
-            if (action == 0) ChimeraClient.EVENT_BUS.post("key-release", KeyEvent.getKeyText(key));
+            if (action == 1) ChimeraClient.EVENT_BUS.postEvent(new KeyEvents.Press(key));
+            if (action == 0) ChimeraClient.EVENT_BUS.postEvent(new KeyEvents.Release(key));
         }
     }
 }

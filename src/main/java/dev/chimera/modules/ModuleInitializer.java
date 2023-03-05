@@ -1,7 +1,9 @@
 package dev.chimera.modules;
 
 import dev.chimera.ChimeraClient;
+import dev.chimera.EventListeners;
 import dev.chimera.amalthea.EventListener;
+import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.combat.KillAuraModule;
 import dev.chimera.modules.player.NoFallModule;
@@ -58,31 +60,31 @@ public class ModuleInitializer {
         return null;
     }
 
-    @EventListener( tag = "start" )
-    public static void onTickStart(TickEvent event) {
+    @EventListener( id = EventListeners.moduleInitializerTickEventStart )
+    public static void onTickStart(TickEvent.Start event) {
         if (MinecraftClient.getInstance().player == null || !INITIALIZED) return;
         for (Module module : MODULE_LIST) {
             module.onTickStart(event);
         }
     }
 
-    @EventListener( tag = "end" )
-    public static void onTickEnd(TickEvent event) {
+    @EventListener( id = EventListeners.moduleInitializerTickEventEnd )
+    public static void onTickEnd(TickEvent.End event) {
         if (MinecraftClient.getInstance().player == null || !INITIALIZED) return;
         for (Module module : MODULE_LIST) {
             module.onTickEnd(event);
         }
     }
 
-    @EventListener( tag = "key-press" )
-    public static void onKeyPress(String key) {
-        List<Module> toToggleModulesList = getModuleList().stream().filter((module) -> module.keyBindingMatches(key)).toList();
+    @EventListener( id = EventListeners.moduleInitializerKeyPress )
+    public static void onKeyPress(KeyEvents.Press event) {
+        List<Module> toToggleModulesList = getModuleList().stream().filter((module) -> module.keyBindingMatches(event.key)).toList();
         toToggleModulesList.forEach(Module::toggle);
     }
 
-    @EventListener( tag = "key-release" )
-    public static void onKeyRelease(String key) {
-        List<Module> toToggleModulesList = getModuleList().stream().filter((module) -> module.keyBindingMatches(key) && module.releaseToToggle).toList();
+    @EventListener( id = EventListeners.moduleInitializerKeyRelease )
+    public static void onKeyRelease(KeyEvents.Release event) {
+        List<Module> toToggleModulesList = getModuleList().stream().filter((module) -> module.keyBindingMatches(event.key) && module.releaseToToggle).toList();
         toToggleModulesList.forEach(Module::toggle);
     }
 }
