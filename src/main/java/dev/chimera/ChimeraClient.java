@@ -24,8 +24,7 @@ public class ChimeraClient implements ModInitializer {
 		EventSystemTest test = new EventSystemTest();
 
 		test.main();
-		EVENT_BUS.post("string test");
-		EVENT_BUS.post("sussy", "Works!!");
+		EVENT_BUS.postEvent("Works!!");
 
 	}
 
