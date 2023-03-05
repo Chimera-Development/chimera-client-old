@@ -1,9 +1,10 @@
 {
 	"required": true,
-	"package": "dev.chimera.mixin",
+	"package": "dev.chimera.mixins",
 	"compatibilityLevel": "JAVA_17",
-	"mixins": [
-		
+	"client": [
+		"KeyboardMixin",
+		"NoFallMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
