@@ -1,9 +1,12 @@
 package dev.chimera.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import dev.chimera.ChimeraClient;
+import dev.chimera.amalthea.events.misc.GuiRenderEvent;
 import dev.chimera.gui.components.Panel;
 import dev.chimera.gui.types.Size;
 import dev.chimera.gui.types.Value;
+import io.wispforest.owo.Owo;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
@@ -21,6 +24,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,11 +47,10 @@ public class InGameOverlay {
         @Override
         public void run() {
             try {
-                Size size = new Size(new Value(MinecraftClient.getInstance().getWindow().getWidth(), Value.ValueType.Pixel),
-                        new Value(MinecraftClient.getInstance().getWindow().getHeight(), Value.ValueType.Pixel));
+                Size size = Component.getMaxSize();
                 synchronized (lock) {
                     if (!SCREEN.hasUpdated(size)) {
-                        System.out.println("Skipping render!");
+                        //System.out.println("Skipping render!");
                         return;
                     }
                     rendering = true;
@@ -82,8 +85,12 @@ public class InGameOverlay {
 
     public InGameOverlay(){
         HudRenderCallback.EVENT.register((matrices, tickDelta) -> {
+            MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
             Window window = MinecraftClient.getInstance().getWindow();
-
+            // can owo lib even do overlay, bcs f3 debug hud isn't show in screens
+            // i don't see anyhing about it in docs
+            // also btw you know the percentage it was using
+            // it will be compatible
             synchronized (lock)
             {
                 if(frameAvailable) {
@@ -106,19 +113,25 @@ public class InGameOverlay {
             DrawableHelper.drawTexture(matrices, 0,0, 0,0,
                     window.getScaledWidth(), window.getScaledHeight(),
                     window.getScaledWidth(), window.getScaledHeight());
+            MinecraftClient.getInstance().getProfiler().pop();
         });
 
         ClientTickEvents.START_CLIENT_TICK.register((minecraftClient) -> {
+            MinecraftClient.getInstance().getProfiler().push("ChimeraHUDTick");
             synchronized (lock){
                 if(!rendering) {
+                    synchronized (SCREEN)
+                    {
+                        try {
+                            ChimeraClient.EVENT_BUS.postEvent(new GuiRenderEvent());
+                        } catch (InvocationTargetException | IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                     service.submit(new ProcessTask());
-                    //rendering = true;
-                    //System.out.println("Requesting render!");
-                }
-                else {
-                    System.out.println("RENDERING!");
                 }
             }
+            MinecraftClient.getInstance().getProfiler().pop();
         });
     }
 

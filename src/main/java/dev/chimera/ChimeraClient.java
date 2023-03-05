@@ -3,10 +3,9 @@ package dev.chimera;
 import dev.chimera.amalthea.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
 import dev.chimera.amalthea.events.misc.TickEvent;
+import dev.chimera.gui.components.Picture;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.gui.InGameOverlay;
-import dev.chimera.gui.components.Label;
-import dev.chimera.gui.components.Panel;
 import dev.chimera.gui.types.Size;
 import dev.chimera.gui.types.Value;
 import net.fabricmc.api.ModInitializer;
@@ -14,16 +13,14 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.event.Event;
-import net.minecraft.client.MinecraftClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ChimeraClient implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
@@ -42,27 +39,15 @@ public class ChimeraClient implements ModInitializer {
 		// Proceed with mild caution.
 		LOGGER.info("Hello Chimera sussers!");
 
-		//GUI test
-		ClientTickEvents.START_CLIENT_TICK.register((minecraftClient) -> {
-			// Im gonna have to make a onrender event instead of using start client tick
-			OVERLAY.SCREEN.children.clear();
-			for(int i = 0; i < 100; i+=16) {
-				Label label = new Label();
-				float diff = (float)Math.abs(i-test);
-				int grey = Math.min(255,(int)( (diff/50F)*255F ));
-				label.color = new Color(grey, grey, grey);
-				label.content = "Example GUI";
-				label.size.width.setValue("100%");
-				label.position.y.value = i;
-				OVERLAY.SCREEN.children.add(label);
-			}
-			test+=1;
-			if(test > 100)
-				test = 0;
 
-			//System.out.println(test);
-
-		});
+		Picture p = new Picture();
+		try {
+			p.texture = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("trollface.png")));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		p.size = new Size(new Value("75%"), new Value("75%"));
+		OVERLAY.SCREEN.children.add(p);
 
 		//Events test
 		EventSystemTest test = new EventSystemTest();

@@ -1,11 +1,11 @@
 package dev.chimera.gui;
 
-import dev.chimera.ChimeraClient;
-import dev.chimera.gui.events.MouseUpdateEvent;
+import dev.chimera.gui.events.MouseButtonEvent;
+import dev.chimera.gui.events.MouseMoveEvent;
 import dev.chimera.gui.types.Position;
 import dev.chimera.gui.types.Size;
 import dev.chimera.gui.types.Value;
-import org.spongepowered.asm.util.PrettyPrinter;
+import net.minecraft.client.MinecraftClient;
 
 import java.awt.image.BufferedImage;
 
@@ -17,11 +17,25 @@ public abstract class Component {
         return null;
     }
 
+    public static Size getMaxSize()
+    {
+        Size size = new Size(new Value(MinecraftClient.getInstance().getWindow().getWidth(), Value.ValueType.Pixel),
+                new Value(MinecraftClient.getInstance().getWindow().getHeight(), Value.ValueType.Pixel));
+        return size;
+    }
+
+    public Size getSize(Size maxSize)
+    {
+        return maxSize;
+    }
+
     private Position lastPosition = null;
     private Size lastSize = null;
     private Size lastMaxSize = null;
     public boolean hasUpdated(Size maxSize)
     {
+        return true;
+        /*
         if(size != lastSize || position != lastPosition || maxSize.width.value != lastMaxSize.width.value || lastMaxSize.height.value != maxSize.height.value)
         {
             lastSize = size;
@@ -29,9 +43,12 @@ public abstract class Component {
             lastMaxSize = maxSize;
             return true;
         }
-        return false;
+        return false;*/
     }
 
+
     //Event system would be useful here
-    public void onMouseUpdate(MouseUpdateEvent mouseUpdate){}
+    public void onMouseButton(Size maxSize, MouseButtonEvent event) {}
+
+    public void onMouseMove(Size maxSize, MouseMoveEvent event) {}
 }
