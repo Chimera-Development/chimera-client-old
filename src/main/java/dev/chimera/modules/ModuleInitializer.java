@@ -57,4 +57,16 @@ public class ModuleInitializer {
             module.onTickEnd(event);
         }
     }
+
+    @EventListener( tag = "key-press" )
+    public static void onKeyPress(String key) {
+        List<Module> toToggleModulesList = getModuleList().stream().filter((module) -> module.keyBindingMatches(key)).toList();
+        toToggleModulesList.forEach(Module::toggle);
+    }
+
+    @EventListener( tag = "key-release" )
+    public static void onKeyRelease(String key) {
+        List<Module> toToggleModulesList = getModuleList().stream().filter((module) -> module.keyBindingMatches(key) && module.releaseToToggle).toList();
+        toToggleModulesList.forEach(Module::toggle);
+    }
 }
