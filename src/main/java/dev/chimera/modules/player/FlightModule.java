@@ -7,7 +7,7 @@ import net.minecraft.client.MinecraftClient;
 
 public class FlightModule extends Module {
     public FlightModule() {
-        super("Flight");
+        super("Flight", "G");
     }
 
     @Override
