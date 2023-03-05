@@ -55,7 +55,6 @@ public class EventSystemTest {
 
     @EventListener(id = "@+id/e", dependencies = {EventListeners.a, "@+id/c", "@+id/d"})
     private void e(String test){
-
         ChimeraClient.LOGGER.warn("e");
     }
 

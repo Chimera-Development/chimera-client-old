@@ -3,7 +3,10 @@
 	"package": "dev.chimera.mixins",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
+		"ClientConnectionMixin",
+		"PlayerEntityMixin",
 		"KeyboardMixin",
+		"MinecraftClientMixin",
 		"NoFallMixin"
 	],
 	"injectors": {
