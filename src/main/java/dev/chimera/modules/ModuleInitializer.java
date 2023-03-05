@@ -3,6 +3,7 @@ package dev.chimera.modules;
 import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.EventListener;
 import dev.chimera.amalthea.events.misc.TickEvent;
+import dev.chimera.modules.player.NoFallModule;
 import net.minecraft.client.MinecraftClient;
 
 import dev.chimera.modules.player.FlightModule;
@@ -20,6 +21,7 @@ public class ModuleInitializer {
 
         MODULE_LIST.add(new ExampleModule());
         MODULE_LIST.add(new FlightModule());
+        MODULE_LIST.add(new NoFallModule());
 
     }
     public void initializeModules() {
@@ -42,7 +44,7 @@ public class ModuleInitializer {
         return new ArrayList<Module>(MODULE_LIST.stream().filter(Module::getModuleEnabled).toList());
     }
 
-    public Module findModule(String name) {
+    public static Module findModule(String name) {
         for (Module module : MODULE_LIST) {
             if (module.getModuleName().equals(name)) {
                 return module;

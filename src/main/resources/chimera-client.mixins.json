@@ -3,7 +3,8 @@
 	"package": "dev.chimera.mixins",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-		"KeyboardMixin"
+		"KeyboardMixin",
+		"NoFallMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
