@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -64,17 +65,38 @@ public class ChimeraClient implements ModInitializer {
 		//Events test
 		EventSystemTest test = new EventSystemTest();
 
-		EVENT_BUS.post("string test");
-		EVENT_BUS.post("sussy", "Works!!");
+		try {
+			EVENT_BUS.postEvent("Works!!");
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+		try{
+			EVENT_BUS.postEventToListener("idPush", EventListeners.a);
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+		try {
+			EVENT_BUS.postEvent("Works!!");
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
 
 		new ModuleInitializer().initializeModules();
 
 		ClientTickEvents.START_CLIENT_TICK.register((startTick) -> {
-			EVENT_BUS.post("start", new TickEvent());
+			try {
+				EVENT_BUS.postEvent(new TickEvent.Start());
+			} catch (InvocationTargetException | IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
 		});
 
 		ClientTickEvents.END_CLIENT_TICK.register((endTick) -> {
-			EVENT_BUS.post("end", new TickEvent());
+			try {
+				EVENT_BUS.postEvent(new TickEvent.End());
+			} catch (InvocationTargetException | IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
 		});
 	}
 
