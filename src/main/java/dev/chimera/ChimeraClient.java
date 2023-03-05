@@ -3,6 +3,7 @@ package dev.chimera;
 import dev.chimera.amalthea.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
 import dev.chimera.amalthea.events.misc.TickEvent;
+import dev.chimera.gui.components.ShreckntButton;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.gui.InGameOverlay;
 import dev.chimera.gui.components.Label;
@@ -14,6 +15,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.event.Event;
+import net.minecraft.client.MinecraftClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +44,7 @@ public class ChimeraClient implements ModInitializer {
 
 		//GUI test
 		ClientTickEvents.START_CLIENT_TICK.register((minecraftClient) -> {
+			// Im gonna have to make a onrender event instead of using start client tick
 			OVERLAY.SCREEN.children.clear();
 			for(int i = 0; i < 100; i+=16) {
 				Label label = new Label();
@@ -57,7 +60,7 @@ public class ChimeraClient implements ModInitializer {
 			if(test > 100)
 				test = 0;
 
-			System.out.println(test);
+			//System.out.println(test);
 
 		});
 

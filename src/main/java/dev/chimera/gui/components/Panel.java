@@ -13,6 +13,13 @@ import java.util.List;
 public class Panel extends Component {
     public List<Component> children = new ArrayList<>();
 
+    public Panel()
+    {
+        onLoad();
+    }
+
+    public void onLoad() {}
+
     @Override
     public BufferedImage render(Size maxSize) {
         BufferedImage output = new BufferedImage((int) maxSize.width.value, (int) maxSize.height.value, BufferedImage.TYPE_INT_ARGB);
