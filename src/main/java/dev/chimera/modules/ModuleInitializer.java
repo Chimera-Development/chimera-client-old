@@ -34,6 +34,10 @@ public class ModuleInitializer {
         ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }
 
+    public static List<Module> getModuleList() {
+        return MODULE_LIST;
+    }
+
     @EventListener( tag = "start" )
     public static void onTickStart(TickEvent event) {
         if (MinecraftClient.getInstance().player == null || !INITIALIZED) return;
