@@ -3,7 +3,6 @@ package dev.chimera;
 import dev.chimera.amalthea.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
 import dev.chimera.amalthea.events.misc.TickEvent;
-import dev.chimera.gui.components.ShreckntButton;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.gui.InGameOverlay;
 import dev.chimera.gui.components.Label;
