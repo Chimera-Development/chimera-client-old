@@ -4,7 +4,6 @@ import dev.chimera.gui.events.MouseButtonEvent;
 import dev.chimera.gui.events.MouseMoveEvent;
 import dev.chimera.gui.types.Position;
 import dev.chimera.gui.types.Size;
-import dev.chimera.gui.types.Value;
 import io.wispforest.owo.ui.base.BaseOwoScreen;
 import io.wispforest.owo.ui.container.Containers;
 import io.wispforest.owo.ui.container.FlowLayout;
@@ -34,7 +33,7 @@ public class InteractiveScreen extends Screen {
         float screenMouseY = (float)((mouseY/height)*(double)w.getHeight());
 
         MouseButtonEvent event = new MouseButtonEvent();
-        event.position = new Position(new Value(screenMouseX, Value.ValueType.Pixel), new Value(screenMouseY, Value.ValueType.Pixel));
+        event.position = new Position(screenMouseX, screenMouseY);
         event.button = button;
         event.type = MouseButtonEvent.Type.MouseDown;
 
@@ -50,7 +49,7 @@ public class InteractiveScreen extends Screen {
         float screenMouseY = (float)((mouseY/height)*(double)w.getHeight());
 
         MouseButtonEvent event = new MouseButtonEvent();
-        event.position = new Position(new Value(screenMouseX, Value.ValueType.Pixel), new Value(screenMouseY, Value.ValueType.Pixel));
+        event.position = new Position(screenMouseX, screenMouseY);
         event.button = button;
         event.type = MouseButtonEvent.Type.MouseUp;
 
@@ -66,7 +65,7 @@ public class InteractiveScreen extends Screen {
         float screenMouseY = (float)((mouseY/height)*(double)w.getHeight());
 
         MouseMoveEvent event = new MouseMoveEvent();
-        event.position = new Position(new Value(screenMouseX, Value.ValueType.Pixel), new Value(screenMouseY, Value.ValueType.Pixel));
+        event.position = new Position(screenMouseX, screenMouseY);
 
         SCREEN.onMouseMove(Component.getMaxSize(), event);
 

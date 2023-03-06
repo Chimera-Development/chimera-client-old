@@ -13,7 +13,7 @@ public class Picture extends Component {
 
     @Override
     public BufferedImage render(Size maxSize) {
-        BufferedImage output = new BufferedImage((int) maxSize.width.value, (int) maxSize.height.value, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage output = new BufferedImage((int) maxSize.width, (int) maxSize.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = output.createGraphics();
         g.drawImage(texture, 0, 0, output.getWidth(), output.getHeight(), null);
         return output;
@@ -23,12 +23,12 @@ public class Picture extends Component {
     public void onMouseMove(Size maxSize, MouseMoveEvent event) {
         if(event.inside)
         {
-            this.size.width.value -= 0.05;
-            this.size.height.value -= 0.05;
+            this.size.width -= 50;
+            this.size.height -= 50;
         }
         else {
-            this.size.width.value += 0.05;
-            this.size.height.value += 0.05;
+            this.size.width += 50;
+            this.size.height += 50;
         }
         super.onMouseMove(maxSize, event);
     }

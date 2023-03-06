@@ -5,7 +5,6 @@ import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.misc.GuiRenderEvent;
 import dev.chimera.gui.components.Panel;
 import dev.chimera.gui.types.Size;
-import dev.chimera.gui.types.Value;
 import io.wispforest.owo.Owo;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -48,6 +47,8 @@ public class InGameOverlay {
         public void run() {
             try {
                 Size size = Component.getMaxSize();
+                if(!size.equals(SCREEN.size))
+                    SCREEN.resize(size);
                 synchronized (lock) {
                     if (!SCREEN.hasUpdated(size)) {
                         //System.out.println("Skipping render!");
@@ -87,10 +88,6 @@ public class InGameOverlay {
         HudRenderCallback.EVENT.register((matrices, tickDelta) -> {
             MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
             Window window = MinecraftClient.getInstance().getWindow();
-            // can owo lib even do overlay, bcs f3 debug hud isn't show in screens
-            // i don't see anyhing about it in docs
-            // also btw you know the percentage it was using
-            // it will be compatible
             synchronized (lock)
             {
                 if(frameAvailable) {

@@ -7,7 +7,6 @@ import dev.chimera.gui.components.Picture;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.gui.InGameOverlay;
 import dev.chimera.gui.types.Size;
-import dev.chimera.gui.types.Value;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -46,7 +45,8 @@ public class ChimeraClient implements ModInitializer {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		p.size = new Size(new Value("75%"), new Value("75%"));
+		OVERLAY.SCREEN.size = new Size(1920,1080);
+		p.size = new Size(0.75*OVERLAY.SCREEN.size.width, 0.75*OVERLAY.SCREEN.size.height);
 		OVERLAY.SCREEN.children.add(p);
 
 		//Events test

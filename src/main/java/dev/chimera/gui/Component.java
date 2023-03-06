@@ -2,16 +2,18 @@ package dev.chimera.gui;
 
 import dev.chimera.gui.events.MouseButtonEvent;
 import dev.chimera.gui.events.MouseMoveEvent;
+import dev.chimera.gui.types.Anchor;
 import dev.chimera.gui.types.Position;
 import dev.chimera.gui.types.Size;
-import dev.chimera.gui.types.Value;
 import net.minecraft.client.MinecraftClient;
 
 import java.awt.image.BufferedImage;
 
 public abstract class Component {
-    public Position position = new Position(new Value("0px"), new Value("0px"));
-    public Size size = new Size(new Value("100%"), new Value("100%"));
+    public Position position = new Position(0, 0);
+    public Size size = new Size(100, 100);
+    public Anchor anchor = new Anchor();
+
     public BufferedImage render(Size maxSize)
     {
         return null;
@@ -19,14 +21,19 @@ public abstract class Component {
 
     public static Size getMaxSize()
     {
-        Size size = new Size(new Value(MinecraftClient.getInstance().getWindow().getWidth(), Value.ValueType.Pixel),
-                new Value(MinecraftClient.getInstance().getWindow().getHeight(), Value.ValueType.Pixel));
-        return size;
+        return new Size(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
     }
 
-    public Size getSize(Size maxSize)
+    public Size getContentSize(Size maxSize)
     {
         return maxSize;
+    }
+
+    public void resize(Size newSize)
+    {
+        // Most components do not need this event, unless they contain another component
+        this.size = newSize.clone();
+        return;
     }
 
     private Position lastPosition = null;
@@ -34,16 +41,15 @@ public abstract class Component {
     private Size lastMaxSize = null;
     public boolean hasUpdated(Size maxSize)
     {
-        return true;
-        /*
-        if(size != lastSize || position != lastPosition || maxSize.width.value != lastMaxSize.width.value || lastMaxSize.height.value != maxSize.height.value)
+        if(!size.equals(lastSize) || !position.equals(lastPosition) || !maxSize.equals(lastMaxSize))
         {
-            lastSize = size;
-            lastPosition = position;
-            lastMaxSize = maxSize;
+            lastSize = size.clone();
+            lastPosition = position.clone();
+            lastMaxSize = maxSize.clone();
+            System.out.println("Component updated, remove this message please!");
             return true;
         }
-        return false;*/
+        return false;
     }
 
 

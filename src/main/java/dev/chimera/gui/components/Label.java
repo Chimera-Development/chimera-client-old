@@ -12,7 +12,7 @@ public class Label extends Component {
     public Color color = new Color(255,255,255);
     @Override
     public BufferedImage render(Size maxSize) {
-        BufferedImage output = new BufferedImage((int) maxSize.width.value, (int) maxSize.height.value, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage output = new BufferedImage((int) maxSize.width, (int) maxSize.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = output.createGraphics();
         g.setPaint(color);
         // lower left corner
