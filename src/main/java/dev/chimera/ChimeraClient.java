@@ -23,6 +23,8 @@ public class ChimeraClient implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
+
+		//TODO clean up this class. we probably shouldn't be doing everything right here
 		LOGGER.info("Hello Chimera sussers!");
 
 		EventSystemTest test = new EventSystemTest();
