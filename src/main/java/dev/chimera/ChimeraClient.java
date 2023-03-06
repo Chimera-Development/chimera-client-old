@@ -12,8 +12,6 @@ import net.fabricmc.fabric.api.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class ChimeraClient implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
@@ -26,40 +24,24 @@ public class ChimeraClient implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		LOGGER.info("Hello Chimera sussers!");
+
 		EventSystemTest test = new EventSystemTest();
 
-		try {
-			EVENT_BUS.postEvent("Works!!");
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-		try{
-			EVENT_BUS.postEventToListener("idPush", EventListeners.a);
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-		try {
-			EVENT_BUS.postEvent("Works!!");
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
+		EVENT_BUS.postEvent("Systems operational?");
+
+		EVENT_BUS.postEventToListener("idPush", EventListeners.a);
+
 
 		new ModuleInitializer().initializeModules();
 
+		TickEvent.Start tickEventStart = new TickEvent.Start();
 		ClientTickEvents.START_CLIENT_TICK.register((startTick) -> {
-			try {
-				EVENT_BUS.postEvent(new TickEvent.Start());
-			} catch (InvocationTargetException | IllegalAccessException e) {
-				throw new RuntimeException(e);
-			}
+				EVENT_BUS.postEvent(tickEventStart);
 		});
 
+		TickEvent.End tickEventEnd = new TickEvent.End();
 		ClientTickEvents.END_CLIENT_TICK.register((endTick) -> {
-			try {
-				EVENT_BUS.postEvent(new TickEvent.End());
-			} catch (InvocationTargetException | IllegalAccessException e) {
-				throw new RuntimeException(e);
-			}
+				EVENT_BUS.postEvent(tickEventEnd);
 		});
 
 	}
