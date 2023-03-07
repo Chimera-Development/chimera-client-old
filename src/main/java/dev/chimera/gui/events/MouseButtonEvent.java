@@ -5,7 +5,7 @@ import dev.chimera.gui.types.Position;
 public class MouseButtonEvent extends InputEvent {
     public int button = 0;
     public Position position = new Position();
-    public boolean inside = false;
+    public boolean inside = true;
 
     public enum Type {
         MouseDown,

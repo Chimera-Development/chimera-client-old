@@ -88,14 +88,16 @@ public class Panel extends Component {
             cSize = child.getContentSize(cSize);
 
             MouseButtonEvent e = new MouseButtonEvent();
+
             e.type = event.type;
             e.button = event.button;
-            e.inside = true;
 
             e.position = new Position(event.position.x-pos.x, event.position.y-pos.y);
             if(e.position.x < 0 || e.position.y < 0)
                 e.inside = false;
             else if(e.position.x > cSize.width || e.position.y > cSize.height)
+                e.inside = false;
+            if(!event.inside)
                 e.inside = false;
 
             child.onMouseButton(maxSize, e);
@@ -113,13 +115,14 @@ public class Panel extends Component {
             cSize = child.getContentSize(cSize);
 
             MouseMoveEvent e = new MouseMoveEvent();
-            e.inside = true;
 
+            e.relative = event.relative.clone();
             e.position = new Position(event.position.x-pos.x, event.position.y-pos.y);
-
             if(e.position.x < 0 || e.position.y < 0)
                 e.inside = false;
             else if(e.position.x > cSize.width || e.position.y > cSize.height)
+                e.inside = false;
+            if(!event.inside)
                 e.inside = false;
 
             child.onMouseMove(maxSize, e);

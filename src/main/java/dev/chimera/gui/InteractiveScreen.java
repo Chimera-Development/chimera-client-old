@@ -58,6 +58,7 @@ public class InteractiveScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
+    Position lastMousePosition = new Position(0,0);
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
         Window w = MinecraftClient.getInstance().getWindow();
@@ -66,6 +67,8 @@ public class InteractiveScreen extends Screen {
 
         MouseMoveEvent event = new MouseMoveEvent();
         event.position = new Position(screenMouseX, screenMouseY);
+        event.relative = new Position(screenMouseX-lastMousePosition.x, screenMouseY-lastMousePosition.y);
+        lastMousePosition = event.position.clone();
 
         SCREEN.onMouseMove(Component.getMaxSize(), event);
 

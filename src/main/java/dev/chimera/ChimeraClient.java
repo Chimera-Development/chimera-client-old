@@ -3,7 +3,9 @@ package dev.chimera;
 import dev.chimera.amalthea.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
 import dev.chimera.amalthea.events.misc.TickEvent;
+import dev.chimera.gui.components.GuiWindow;
 import dev.chimera.gui.components.Picture;
+import dev.chimera.gui.types.Anchor;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.gui.InGameOverlay;
 import dev.chimera.gui.types.Size;
@@ -38,6 +40,10 @@ public class ChimeraClient implements ModInitializer {
 		// Proceed with mild caution.
 		LOGGER.info("Hello Chimera sussers!");
 
+		OVERLAY.SCREEN.size = new Size(1920,1080);
+
+		GuiWindow window = new GuiWindow();
+		window.anchor = Anchor.all();
 
 		Picture p = new Picture();
 		try {
@@ -45,9 +51,11 @@ public class ChimeraClient implements ModInitializer {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		OVERLAY.SCREEN.size = new Size(1920,1080);
-		p.size = new Size(0.75*OVERLAY.SCREEN.size.width, 0.75*OVERLAY.SCREEN.size.height);
-		OVERLAY.SCREEN.children.add(p);
+		p.anchor = Anchor.all();
+		p.size = new Size(0.75*window.contentPanel.size.width, 0.75*window.contentPanel.size.height);
+		window.contentPanel.children.add(p);
+
+		OVERLAY.SCREEN.children.add(window);
 
 		//Events test
 		EventSystemTest test = new EventSystemTest();

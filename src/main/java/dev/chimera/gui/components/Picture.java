@@ -23,12 +23,12 @@ public class Picture extends Component {
     public void onMouseMove(Size maxSize, MouseMoveEvent event) {
         if(event.inside)
         {
-            this.size.width -= 50;
-            this.size.height -= 50;
+            this.size.width -= 5;
+            this.size.height -= 5;
         }
         else {
-            this.size.width += 50;
-            this.size.height += 50;
+            this.size.width += 5;
+            this.size.height += 5;
         }
         super.onMouseMove(maxSize, event);
     }

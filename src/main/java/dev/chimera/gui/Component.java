@@ -46,7 +46,7 @@ public abstract class Component {
             lastSize = size.clone();
             lastPosition = position.clone();
             lastMaxSize = maxSize.clone();
-            System.out.println("Component updated, remove this message please!");
+            //System.out.println("Component updated, remove this message please!");
             return true;
         }
         return false;
