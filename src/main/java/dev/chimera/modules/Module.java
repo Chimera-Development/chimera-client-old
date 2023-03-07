@@ -15,23 +15,36 @@ public abstract class Module {
         KEY_BINDING = bind;
         releaseToToggle = toggleOnRelease;
     }
+
     public Module(String name, int bind) {
         this(name, bind, false);
     }
+
     public Module(String name, boolean toggleOnRelease) {
         this(name, -1, toggleOnRelease);
     }
+
     public Module(String name) {
         this(name, -1, false);
     }
 
 
-    public String getModuleName() { return MODULE_NAME; }
+    public String getModuleName() {
+        return MODULE_NAME;
+    }
 
-    public boolean getModuleEnabled() { return MODULE_ENABLED; }
+    public boolean getModuleEnabled() {
+        return MODULE_ENABLED;
+    }
 
-    public int getKeyBinding() { return KEY_BINDING; }
-    public void setKeyBinding(int bind) { KEY_BINDING = bind; }
+    public int getKeyBinding() {
+        return KEY_BINDING;
+    }
+
+    public void setKeyBinding(int bind) {
+        KEY_BINDING = bind;
+    }
+
     public boolean keyBindingMatches(int compareBind) {
         return KEY_BINDING == compareBind;
     }
@@ -44,12 +57,17 @@ public abstract class Module {
         MODULE_ENABLED = state;
     }
 
-    public void toggle() { setModuleState(!getModuleEnabled()); }
+    public void toggle() {
+        setModuleState(!getModuleEnabled());
+    }
 
     public abstract void init();
+
     public abstract void onEnable();
+
     public abstract void onDisable();
 
     public abstract void onTickStart(TickEvent.Start event);
+
     public abstract void onTickEnd(TickEvent.End event);
 }
