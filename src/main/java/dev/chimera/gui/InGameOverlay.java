@@ -119,11 +119,7 @@ public class InGameOverlay {
                 if(!rendering) {
                     synchronized (SCREEN)
                     {
-                        try {
                             ChimeraClient.EVENT_BUS.postEvent(new GuiRenderEvent());
-                        } catch (InvocationTargetException | IllegalAccessException e) {
-                            throw new RuntimeException(e);
-                        }
                     }
                     service.submit(new ProcessTask());
                 }

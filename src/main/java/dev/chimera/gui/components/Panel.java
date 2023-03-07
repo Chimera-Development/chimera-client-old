@@ -5,6 +5,7 @@ import dev.chimera.gui.events.MouseButtonEvent;
 import dev.chimera.gui.events.MouseMoveEvent;
 import dev.chimera.gui.types.Position;
 import dev.chimera.gui.types.Size;
+import oshi.hardware.platform.mac.MacHardwareAbstractionLayer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -22,10 +23,32 @@ public class Panel extends Component {
     public void onLoad() {}
 
     @Override
+    public Size getContentSize(Size maxSize) {
+        double width = 1;
+        double height = 1;
+        for (Component child : children) {
+            child.parent = this;
+            Position pos = new Position(child.position.x,
+                    child.position.y);
+
+            Size cSize = new Size(child.size.width,
+                    child.size.height);
+            cSize = child.getContentSize(cSize);
+
+            width = Math.max(width, pos.x+cSize.width);
+            height = Math.max(height, pos.y+cSize.height);
+        }
+        width = Math.min(width, maxSize.width);
+        height = Math.min(height, maxSize.height);
+        return new Size(width, height);
+    }
+
+    @Override
     public BufferedImage render(Size maxSize) {
         BufferedImage output = new BufferedImage((int) maxSize.width, (int) maxSize.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = output.createGraphics();
         for (Component child : children) {
+            child.parent = this;
             Position pos = new Position(child.position.x,
                     child.position.y);
 

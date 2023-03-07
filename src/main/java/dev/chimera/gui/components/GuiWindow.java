@@ -7,9 +7,11 @@ import dev.chimera.gui.types.Position;
 import dev.chimera.gui.types.Size;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class GuiWindow extends Panel {
     public Panel contentPanel = null;
+    Rectangle backgroundRect = null;
     boolean movingWindow = false;
     public GuiWindow()
     {
@@ -36,15 +38,27 @@ public class GuiWindow extends Panel {
         contentPanel.anchor = Anchor.all();
         contentPanel.anchor.TOP = false;
 
-        Rectangle bgRect = new Rectangle();
-        bgRect.color = new Color(0,0,0,128);
-        bgRect.size = new Size(this.contentPanel.size.width, this.contentPanel.size.height);
-        bgRect.anchor = Anchor.all();
-        contentPanel.children.add(bgRect);
+        backgroundRect = new Rectangle();
+        backgroundRect.color = new Color(0,0,0,128);
+        backgroundRect.position = new Position(0,16);
+        backgroundRect.size = new Size(this.contentPanel.size.width, this.contentPanel.size.height);
+        backgroundRect.anchor = Anchor.all();
+        backgroundRect.anchor.TOP = false;
+        backgroundRect.anchor.BOTTOM = false;
 
         this.children.add(titleRect);
         this.children.add(titleLabel);
+
+        this.children.add(backgroundRect);
         this.children.add(contentPanel);
+    }
+
+    @Override
+    public BufferedImage render(Size maxSize) {
+        Size newSize = backgroundRect.size.clone();
+        newSize.height = contentPanel.getContentSize(maxSize).height;
+        backgroundRect.resize(newSize);
+        return super.render(maxSize);
     }
 
     @Override

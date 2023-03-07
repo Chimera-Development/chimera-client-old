@@ -13,6 +13,7 @@ public abstract class Component {
     public Position position = new Position(0, 0);
     public Size size = new Size(100, 100);
     public Anchor anchor = new Anchor();
+    public Component parent = null;
 
     public BufferedImage render(Size maxSize)
     {
