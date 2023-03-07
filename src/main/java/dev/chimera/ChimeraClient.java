@@ -38,6 +38,8 @@ public class ChimeraClient implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
+
+		//TODO clean up this class. we probably shouldn't be doing everything right here
 		LOGGER.info("Hello Chimera sussers!");
 
 		OVERLAY.SCREEN.size = new Size(1920,1080);
@@ -60,38 +62,21 @@ public class ChimeraClient implements ModInitializer {
 		//Events test
 		EventSystemTest test = new EventSystemTest();
 
-		try {
-			EVENT_BUS.postEvent("Works!!");
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-		try{
-			EVENT_BUS.postEventToListener("idPush", EventListeners.a);
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-		try {
-			EVENT_BUS.postEvent("Works!!");
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
+		EVENT_BUS.postEvent("Systems operational?");
+
+		EVENT_BUS.postEventToListener("idPush", EventListeners.a);
+
 
 		new ModuleInitializer().initializeModules();
 
+		TickEvent.Start tickEventStart = new TickEvent.Start();
 		ClientTickEvents.START_CLIENT_TICK.register((startTick) -> {
-			try {
-				EVENT_BUS.postEvent(new TickEvent.Start());
-			} catch (InvocationTargetException | IllegalAccessException e) {
-				throw new RuntimeException(e);
-			}
+				EVENT_BUS.postEvent(tickEventStart);
 		});
 
+		TickEvent.End tickEventEnd = new TickEvent.End();
 		ClientTickEvents.END_CLIENT_TICK.register((endTick) -> {
-			try {
-				EVENT_BUS.postEvent(new TickEvent.End());
-			} catch (InvocationTargetException | IllegalAccessException e) {
-				throw new RuntimeException(e);
-			}
+				EVENT_BUS.postEvent(tickEventEnd);
 		});
 	}
 
