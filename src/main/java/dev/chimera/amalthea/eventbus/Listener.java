@@ -1,4 +1,4 @@
-package dev.chimera.amalthea;
+package dev.chimera.amalthea.eventbus;
 
 import java.lang.reflect.*;
 import java.util.List;

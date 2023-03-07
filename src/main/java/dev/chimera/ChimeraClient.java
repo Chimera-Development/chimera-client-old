@@ -1,6 +1,6 @@
 package dev.chimera;
 
-import dev.chimera.amalthea.EventBus;
+import dev.chimera.amalthea.eventbus.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.ModuleInitializer;
