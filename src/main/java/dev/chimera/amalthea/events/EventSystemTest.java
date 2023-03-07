@@ -2,7 +2,7 @@ package dev.chimera.amalthea.events;
 
 import dev.chimera.ChimeraClient;
 import dev.chimera.EventListeners;
-import dev.chimera.amalthea.EventListener;
+import dev.chimera.amalthea.eventbus.EventListener;
 
 public class EventSystemTest {
 

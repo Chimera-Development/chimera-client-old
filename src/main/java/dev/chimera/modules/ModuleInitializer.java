@@ -2,7 +2,7 @@ package dev.chimera.modules;
 
 import dev.chimera.ChimeraClient;
 import dev.chimera.EventListeners;
-import dev.chimera.amalthea.EventListener;
+import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.combat.KillAuraModule;
