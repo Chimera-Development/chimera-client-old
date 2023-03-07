@@ -6,6 +6,7 @@ import dev.chimera.amalthea.EventListener;
 import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.combat.KillAuraModule;
+import dev.chimera.modules.common.FarmAuraModule;
 import dev.chimera.modules.player.NoFallModule;
 import net.minecraft.client.MinecraftClient;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class ModuleInitializer {
     private static boolean INITIALIZED = false;
-    private static List<Module> MODULE_LIST = new ArrayList<>();
+    private static final List<Module> MODULE_LIST = new ArrayList<>();
 
     private static void buildModuleList() {
 
@@ -26,6 +27,7 @@ public class ModuleInitializer {
         MODULE_LIST.add(new FlightModule());
         MODULE_LIST.add(new NoFallModule());
         MODULE_LIST.add(new KillAuraModule());
+        MODULE_LIST.add(new FarmAuraModule());
 
     }
     public void initializeModules() {

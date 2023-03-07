@@ -3,7 +3,6 @@ package dev.chimera.amalthea.events;
 import dev.chimera.ChimeraClient;
 import dev.chimera.EventListeners;
 import dev.chimera.amalthea.EventListener;
-import dev.chimera.amalthea.Priority;
 
 public class EventSystemTest {
 
@@ -21,7 +20,7 @@ public class EventSystemTest {
 //        ChimeraClient.LOGGER.warn("Works??" + test);
 //    }
 
-    @EventListener(id = "@+id/runSecond", dependencies = {"@+id/runFirst"})
+    @EventListener(id = "@+id/runSecond", runAfter = {"@+id/runFirst"})
     private void shouldRunSecond(String test){
         ChimeraClient.LOGGER.warn("2" + test);
     }
@@ -35,25 +34,25 @@ public class EventSystemTest {
         ChimeraClient.LOGGER.warn("a");
     }
 
-    @EventListener(id = "@+id/b", dependencies = {EventListeners.a})
+    @EventListener(id = "@+id/b", runAfter = {EventListeners.a}, runBefore = {"@+id/c"})
     private void b(String test){
 
         ChimeraClient.LOGGER.warn("b");
     }
 
-    @EventListener(id = "@+id/c", dependencies = {EventListeners.a, "@+id/b"})
+    @EventListener(id = "@+id/c", runAfter = {EventListeners.a})
     private void c(String test){
 
         ChimeraClient.LOGGER.warn("c");
     }
 
-    @EventListener(id = "@+id/d", dependencies = {EventListeners.a, "@+id/b", "@+id/c"})
+    @EventListener(id = "@+id/d", runAfter = {EventListeners.a, "@+id/b", "@+id/c"})
     private void d(String test){
 
         ChimeraClient.LOGGER.warn("d");
     }
 
-    @EventListener(id = "@+id/e", dependencies = {EventListeners.a, "@+id/c", "@+id/d"})
+    @EventListener(id = "@+id/e", runAfter = {EventListeners.a, "@+id/c", "@+id/d"})
     private void e(String test){
         ChimeraClient.LOGGER.warn("e");
     }

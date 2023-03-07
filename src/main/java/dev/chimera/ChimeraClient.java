@@ -27,7 +27,6 @@ public class ChimeraClient implements ModInitializer {
 	public static MinecraftClient mc;
 	@Override
 	public void onInitialize() {
-
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
@@ -35,39 +34,21 @@ public class ChimeraClient implements ModInitializer {
 		EventSystemTest test = new EventSystemTest();
 		mc = MinecraftClient.getInstance();
 
-		initializeRPC();
-		try {
-			EVENT_BUS.postEvent("Works!!");
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-		try{
-			EVENT_BUS.postEventToListener("idPush", EventListeners.a);
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-		try {
-			EVENT_BUS.postEvent("Works!!");
-		} catch (InvocationTargetException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
+		EVENT_BUS.postEvent("Systems operational?");
+
+		EVENT_BUS.postEventToListener("idPush", EventListeners.a);
+
 
 		new ModuleInitializer().initializeModules();
 
+		TickEvent.Start tickEventStart = new TickEvent.Start();
 		ClientTickEvents.START_CLIENT_TICK.register((startTick) -> {
-			try {
-				EVENT_BUS.postEvent(new TickEvent.Start());
-			} catch (InvocationTargetException | IllegalAccessException e) {
-				throw new RuntimeException(e);
-			}
+				EVENT_BUS.postEvent(tickEventStart);
 		});
 
+		TickEvent.End tickEventEnd = new TickEvent.End();
 		ClientTickEvents.END_CLIENT_TICK.register((endTick) -> {
-			try {
-				EVENT_BUS.postEvent(new TickEvent.End());
-			} catch (InvocationTargetException | IllegalAccessException e) {
-				throw new RuntimeException(e);
-			}
+				EVENT_BUS.postEvent(tickEventEnd);
 		});
 		//mc.updateWindowTitle();
 	}
@@ -85,5 +66,6 @@ public class ChimeraClient implements ModInitializer {
 		presence.setStart(Instant.now().getEpochSecond());
 		DiscordIPC.setActivity(presence);
 	}
+
 	public Event<?> event = ScreenEvents.AFTER_INIT;
 }

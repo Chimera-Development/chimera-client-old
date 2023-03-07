@@ -1,78 +1,97 @@
 package dev.chimera.amalthea;
 
+import dev.chimera.ChimeraClient;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-
-
-
+import java.util.concurrent.ConcurrentHashMap;
 
 public class EventBus {
 
-    /*
-      TODO Actual make the tag system again
-    */
+    private ConcurrentHashMap<Class<?>, ArrayList<Listener>> listenersByEventType = new ConcurrentHashMap<>();
 
-    private final HashMap<Class<?>, List<Listener>> listenersByEventType = new HashMap<>();
-    private static final HashMap<String, Listener> listenerIDs = new HashMap<>();
+    private static ConcurrentHashMap<String, Listener> listenerIDs = new ConcurrentHashMap<>();
+
+    private static ConcurrentHashMap<String, ArrayList<String>> dependencyBuffer = new ConcurrentHashMap<>();
 
     private boolean listenersChanged = true;
 
-    public void registerListenersInClass(Object object){
+    public void registerListenersInClass(Object object) {
+//        new Thread(() -> {
         for (Method method : object.getClass().getDeclaredMethods()) {
-            if (method.isAnnotationPresent(EventListener.class)) {
-
-                Class<?>[] parameterTypes = method.getParameterTypes();
-                if (parameterTypes.length != 1) {
+            if (!method.isAnnotationPresent(EventListener.class)) continue;
+            //Make sure that the listener is correctly configured and accessible
+            {
+                if (method.getParameterCount() != 1)
                     throw new IllegalArgumentException("Invalid listener method: " + method);
-                }
-                if (!method.trySetAccessible()) {
+
+                if (!method.trySetAccessible())
                     throw new RuntimeException("Invalid listener method, illegal access: " + method);
-                }
-                EventListener eventListener = method.getAnnotation(EventListener.class);
-                Listener listener = new Listener(object, method, eventListener.priority(), eventListener.id(), Arrays.stream(eventListener.dependencies()).toList());
-                registerListener(listener, parameterTypes[0]);
             }
+
+            EventListener eventListener = method.getAnnotation(EventListener.class);
+            String eventID = eventListener.id();
+            LinkedList<String> dependencies = new LinkedList<>(List.of(eventListener.runAfter()));
+            //Add runBefore dependencies
+            {
+
+                Arrays.stream(eventListener.runBefore()).forEach((id) -> {
+                    if (listenerIDs.containsKey(id)) {
+                        listenerIDs.compute(id, (k, v) -> {
+                            assert v != null;
+                            v.addDependency(eventID);
+                            return v;
+                        });
+                    } else {
+                        dependencyBuffer.computeIfAbsent(id, k -> new ArrayList<>());
+                        dependencyBuffer.get(id).add(eventListener.id());
+                    }
+                });
+                if (dependencyBuffer.containsKey(eventID)) {
+                    ArrayList<String> bufferedDependencies = dependencyBuffer.get(eventID);
+                    dependencies.addAll(bufferedDependencies);
+                    dependencyBuffer.remove(eventID);
+                }
+            }
+
+            Listener listener = new Listener(object, method, eventID, dependencies);
+
+            listenerIDs.put(eventID, listener);
+
+            ArrayList<Listener> listeners = listenersByEventType.computeIfAbsent(method.getParameterTypes()[0], k -> new ArrayList<>());
+            listeners.add(listener);
+            //used to only sort the listeners once they have changed
+            listenersChanged = true;
         }
+//        }).start();
     }
-
-    private <T> void registerListener(Listener listener, Class<T> eventType) {
-        List<Listener> listeners = listenersByEventType.computeIfAbsent(eventType, k -> new ArrayList<>());
-        listenerIDs.put(listener.getId(), listener);
-        //todo
-        listeners.add(listener);
-        listenersChanged = true;
-    }
-
-
 
     public static class PrioritySystem {
         private static class ListenerNode {
             Listener listener;
-            List<String> dependencies;
+            List<String> runAfter;
             // constructor, getters and setters omitted for brevity
 
-
-            public List<String> getDependencies() {
-                return dependencies;
+            public List<String> getRunAfter() {
+                return runAfter;
             }
 
-            public ListenerNode(Listener listener, List<String> dependencies) {
+            public ListenerNode(Listener listener, List<String> runAfter) {
                 this.listener = listener;
-                this.dependencies = dependencies;
+                this.runAfter = runAfter;
             }
 
         }
 
+        static ArrayDeque<ListenerNode> queue = new ArrayDeque<>();
 
-
-        public static List<Listener> topologicalSort(List<Listener> listeners) {
+        public static ArrayList<Listener> topologicalSort(ArrayList<Listener> listeners) {
             // Create a map of listener nodes, where each listener node
             // represents a listener and its dependencies
             Map<Listener, ListenerNode> nodeMap = new HashMap<>();
             for (Listener listener : listeners) {
-                ListenerNode node = new ListenerNode(listener, listener.getDependencies());
-                nodeMap.put(listener, node);
+                nodeMap.put(listener, new ListenerNode(listener, listener.getRunAfter()));
             }
 
             // Create a map of nodes and their incoming edges
@@ -81,26 +100,25 @@ public class EventBus {
                 incomingEdges.put(node, 0);
             }
             for (ListenerNode node : nodeMap.values()) {
-                for (String dependency : node.getDependencies()) {
+                for (String dependency : node.getRunAfter()) {
                     ListenerNode dependentNode = nodeMap.get(findListenerById(dependency));
                     incomingEdges.put(dependentNode, incomingEdges.get(dependentNode) + 1);
                 }
             }
 
             // Initialize the queue with nodes that have no incoming edges
-            Queue<ListenerNode> queue = new LinkedList<>();
-            for (ListenerNode node : incomingEdges.keySet()) {
-                if (incomingEdges.get(node) == 0) {
+            incomingEdges.forEach((node, value) -> {
+                if (value == 0) {
                     queue.offer(node);
                 }
-            }
+            });
 
             // Perform the topological sort
-            List<Listener> sortedListeners = new ArrayList<>();
+            ArrayList<Listener> sortedListeners = new ArrayList<>();
             while (!queue.isEmpty()) {
                 ListenerNode node = queue.poll();
                 sortedListeners.add(node.listener);
-                for (String dependency : node.dependencies) {
+                for (String dependency : node.runAfter) {
                     ListenerNode dependentNode = nodeMap.get(findListenerById(dependency));
                     incomingEdges.put(dependentNode, incomingEdges.get(dependentNode) - 1);
                     if (incomingEdges.get(dependentNode) == 0) {
@@ -124,30 +142,37 @@ public class EventBus {
         }
     }
 
-
-
-    public <T> void postEvent(T event) throws InvocationTargetException, IllegalAccessException {
-        if(!listenersByEventType.containsKey(event.getClass()))
-        {
-            // No listeners for event
-            return;
-        }
-        List<Listener> listeners;
-        if(listenersChanged){
-            listeners = PrioritySystem.topologicalSort(listenersByEventType.get(event.getClass()));
-            listenersChanged = false;
-        }else{
-            listeners = listenersByEventType.get(event.getClass());
-        }
-        for (Listener listener : listeners) {
-                listener.invoke(event);
-        }
+    public <T> ArrayList<Listener> sortMap(T event) {
+        if (listenersChanged)
+            return listenersByEventType.computeIfPresent(event.getClass(), (k, v) -> PrioritySystem.topologicalSort(v));
+        return listenersByEventType.get(event.getClass());
     }
 
-    public <T> void postEventToListener(T event, String id) throws InvocationTargetException, IllegalAccessException {
+    public <T> void postEvent(T event) {
+        ArrayList<Listener> listeners = sortMap(event);
+        if (listeners != null) {
+            listeners.forEach((listener) -> {
+                try {
+                    listener.invoke(event);
+                } catch (InvocationTargetException | IllegalAccessException e) {
+                    ChimeraClient.LOGGER.error("Posting event \"" + event.getClass() + "\" failed to listener \"" + listener.getId() + "\"");
+                }
+            });
+        }
+
+    }
+
+    public <T> void postEventToListener(T event, String id) {
         Listener listener = listenerIDs.get(id);
-        if(listener.getMethod().getParameterTypes()[0] == event.getClass()){
-            listener.invoke(event);
+        if (listener.getMethod().getParameterTypes()[0] == event.getClass()) {
+
+            try {
+                listener.invoke(event);
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                ChimeraClient.LOGGER.error("Posting event \"" + event.getClass() + "\" failed to listener \"" + listener.getId() + "\"");
+            }
         }
     }
+
+
 }
