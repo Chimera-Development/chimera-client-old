@@ -1,5 +1,6 @@
 package dev.chimera;
 
+import dev.chimera.Utils.Utils;
 import dev.chimera.amalthea.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
 import dev.chimera.amalthea.events.misc.TickEvent;
@@ -7,7 +8,6 @@ import dev.chimera.modules.ModuleInitializer;
 import meteordevelopment.discordipc.DiscordIPC;
 import meteordevelopment.discordipc.RichPresence;
 import net.fabricmc.api.ModInitializer;
-
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.event.Event;
@@ -27,12 +27,14 @@ public class ChimeraClient implements ModInitializer {
 	public static MinecraftClient mc;
 	@Override
 	public void onInitialize() {
+
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		LOGGER.info("Hello Chimera sussers!");
 		EventSystemTest test = new EventSystemTest();
 		mc = MinecraftClient.getInstance();
+
 		initializeRPC();
 		try {
 			EVENT_BUS.postEvent("Works!!");
@@ -67,7 +69,7 @@ public class ChimeraClient implements ModInitializer {
 				throw new RuntimeException(e);
 			}
 		});
-
+		//mc.updateWindowTitle();
 	}
 	public void initializeRPC(){
 		if (!DiscordIPC.start(1081668565633093662L, () -> System.out.println("Logged in account: " + DiscordIPC.getUser().username))) {

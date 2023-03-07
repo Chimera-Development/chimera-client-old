@@ -3,8 +3,7 @@ package dev.chimera.mixins;
 import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.misc.ChatEvent;
 import dev.chimera.amalthea.events.packet.ConnectServerEvent;
-import dev.chimera.amalthea.events.packet.PacketReceiveEvent;
-import dev.chimera.amalthea.events.packet.PacketSendEvent;
+import dev.chimera.amalthea.events.packet.PacketEvent;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.ClientConnection;
@@ -27,23 +26,24 @@ public class ClientConnectionMixin {
 
     @Shadow
     private Channel channel;
-
+    private PacketEvent.Send sendEvent = new PacketEvent.Send();
+    private PacketEvent.Receive receiveEvent = new PacketEvent.Receive();
+    private ChatEvent.Receive ReceiveChatEvent = new ChatEvent.Receive();
+    private ChatEvent.Send SendChatEvent = new ChatEvent.Send();
     @Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
     private void channelRead0(ChannelHandlerContext channelHandlerContext, Packet<?> packet, CallbackInfo callback) throws InvocationTargetException, IllegalAccessException {
         if (this.channel.isOpen() && packet != null) {
-            PacketReceiveEvent event = new PacketReceiveEvent(packet);
-            ChimeraClient.EVENT_BUS.postEvent(event);
+            receiveEvent.setPacket(packet);
+            ChimeraClient.EVENT_BUS.postEvent(receiveEvent);
           if (packet.getClass().equals(ChatMessageS2CPacket.class)){
-                ChatMessageS2CPacket chatPacket;
-                ChatEvent.Receive chatEvent;
-                chatPacket = (ChatMessageS2CPacket) packet;
-                chatEvent = new ChatEvent.Receive(chatPacket);
-                ChimeraClient.EVENT_BUS.postEvent(chatEvent); // Error here
-//                if (chatEvent.isCancelled()){
-//                    event.setCancelled(true);
-//                }
+                ChatMessageS2CPacket chatPacket = (ChatMessageS2CPacket) packet;
+                ReceiveChatEvent.setPacket(chatPacket);
+                ChimeraClient.EVENT_BUS.postEvent(ReceiveChatEvent); // Error here
+                if (ReceiveChatEvent.isCancelled()){
+                    receiveEvent.setCancelled(true);
+                }
            }
-            if (event.isCancelled()){
+            if (sendEvent.isCancelled()){
                 callback.cancel();
             }
 
@@ -53,17 +53,14 @@ public class ClientConnectionMixin {
 
     @Inject(method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", at = @At("HEAD"), cancellable = true)
     private void send(Packet<?> packet, PacketCallbacks packetCallback, CallbackInfo callback) throws InvocationTargetException, IllegalAccessException {
-        PacketSendEvent event = new PacketSendEvent(packet);
-        ChimeraClient.EVENT_BUS.postEvent(event);
+        ChimeraClient.EVENT_BUS.postEvent(sendEvent);
 
         if (packet.getClass().equals(ChatMessageC2SPacket.class)){
-            ChatMessageC2SPacket chatPacket;
-            ChatEvent.Send chatEvent;
-            chatPacket = (ChatMessageC2SPacket) packet;
-            chatEvent = new ChatEvent.Send(chatPacket);
-            ChimeraClient.EVENT_BUS.postEvent(chatEvent);
+            ChatMessageC2SPacket chatPacket = (ChatMessageC2SPacket) packet;
+            SendChatEvent.setPacket(chatPacket);
+            ChimeraClient.EVENT_BUS.postEvent(SendChatEvent);
         }
-        if (event.isCancelled()) {
+        if (sendEvent.isCancelled()) {
             callback.cancel();
         }
     }

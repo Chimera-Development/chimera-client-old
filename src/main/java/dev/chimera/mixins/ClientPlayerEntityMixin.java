@@ -2,7 +2,6 @@ package dev.chimera.mixins;
 
 import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.movement.PlayerMoveEvent;
-import dev.chimera.amalthea.events.world.TickEvent;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.util.math.Vec3d;

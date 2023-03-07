@@ -127,6 +127,11 @@ public class EventBus {
 
 
     public <T> void postEvent(T event) throws InvocationTargetException, IllegalAccessException {
+        if(!listenersByEventType.containsKey(event.getClass()))
+        {
+            // No listeners for event
+            return;
+        }
         List<Listener> listeners;
         if(listenersChanged){
             listeners = PrioritySystem.topologicalSort(listenersByEventType.get(event.getClass()));

@@ -1,4 +1,4 @@
-package dev.chimera;
+package dev.chimera.Utils;
 
 import dev.chimera.mixins.MinecraftServerAccessor;
 

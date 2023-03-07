@@ -1,5 +1,6 @@
 package dev.chimera.modules.player;
 
+import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
 
@@ -18,6 +19,7 @@ public class FlightModule extends Module {
     public void onEnable() {
         if (MinecraftClient.getInstance().player == null) return;
         MinecraftClient.getInstance().player.getAbilities().flying = true;
+
     }
 
     @Override

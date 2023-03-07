@@ -1,6 +1,7 @@
 package dev.chimera.modules;
 
 import dev.chimera.ChimeraClient;
+import dev.chimera.Utils.ChimeraLogger;
 import dev.chimera.amalthea.events.misc.TickEvent;
 
 public abstract class Module {
@@ -38,8 +39,15 @@ public abstract class Module {
 
     public void setModuleState(boolean state) {
         if (state != MODULE_ENABLED) {
-            if (state) onEnable();
-            else onDisable();
+            if (state) {
+                onEnable();
+                ChimeraClient.LOGGER.info("Enabled " + getModuleName());
+                ChimeraLogger.info("Enabled " + getModuleName());
+            } else{
+                onDisable();
+                ChimeraClient.LOGGER.info("Disabled " + getModuleName());
+                ChimeraLogger.info("Disabled " + getModuleName());
+            }
         }
         MODULE_ENABLED = state;
     }

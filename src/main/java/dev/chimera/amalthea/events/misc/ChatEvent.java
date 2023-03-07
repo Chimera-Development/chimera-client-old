@@ -4,14 +4,12 @@ import dev.chimera.amalthea.events.AbstractEvent;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 
-import java.lang.invoke.MethodHandles;
-
 public class ChatEvent extends AbstractEvent {
 
 
     public static class Send extends ChatEvent{
         private ChatMessageC2SPacket packet;
-        public Send(ChatMessageC2SPacket packet){
+        public Send(){
             this.packet = packet;
         }
 
@@ -30,7 +28,7 @@ public class ChatEvent extends AbstractEvent {
     }
     public static class Receive extends ChatEvent{
         private ChatMessageS2CPacket packet;
-        public Receive(ChatMessageS2CPacket packet){
+        public Receive(){
             this.packet = packet;
         }
 
