@@ -6,18 +6,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
-
 //Le funny listener (I am in deep psychological torment)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface EventListener {
-    public String tag() default "";
+    String id();
 
-    public String id();
+    String[] runBefore() default {};
 
-    public int priority() default Priority.MEDIUM;
-
-    public String[] dependencies() default {};
+    String[] runAfter() default {};
 
 }
 

@@ -16,15 +16,15 @@ import java.lang.reflect.InvocationTargetException;
 
 @Mixin(Keyboard.class)
 public abstract class KeyboardMixin {
+    private KeyEvents.Press pressKeyEvent = new KeyEvents.Press();
+    private KeyEvents.Release releaseKeyEvent = new KeyEvents.Release();
     @Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
     public void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo info) {
         if (key != GLFW.GLFW_KEY_UNKNOWN && MinecraftClient.getInstance().currentScreen == null) {
-            try {
-                if (action == 1) ChimeraClient.EVENT_BUS.postEvent(new KeyEvents.Press(key));
-                if (action == 0) ChimeraClient.EVENT_BUS.postEvent(new KeyEvents.Release(key));
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+            pressKeyEvent.setKey(key);
+            releaseKeyEvent.setKey(key);
+                if (action == 1) ChimeraClient.EVENT_BUS.postEvent(pressKeyEvent);
+                if (action == 0) ChimeraClient.EVENT_BUS.postEvent(releaseKeyEvent);
         }
     }
 }
