@@ -1,10 +1,18 @@
 package dev.chimera.modules;
 
-import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.misc.TickEvent;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public abstract class Module {
     private final String MODULE_NAME;
+
+    public Module(String MODULE_NAME) {
+        this.MODULE_NAME = MODULE_NAME;
+    }
+
     private boolean MODULE_ENABLED;
     private int KEY_BINDING;
     public boolean releaseToToggle;
@@ -16,18 +24,22 @@ public abstract class Module {
         releaseToToggle = toggleOnRelease;
     }
 
-    public Module(String name, int bind) {
-        this(name, bind, false);
-    }
 
     public Module(String name, boolean toggleOnRelease) {
         this(name, -1, toggleOnRelease);
     }
 
-    public Module(String name) {
-        this(name, -1, false);
+    public Module(String name, int bind) {
+        this(name, bind, false);
     }
 
+    public void sendToggledMsg() {
+//         (this.hashCode(), Formatting.GRAY, "Toggled (highlight)%s(default) %s(default).", title, isActive() ? Formatting.GREEN + "on" : Formatting.RED + "off");
+        String state = this.MODULE_ENABLED ? "enabled" : "disabled";
+        MutableText message = Text.literal(this.MODULE_NAME + " has been " + state);
+        message.setStyle(message.getStyle().withFormatting(Formatting.AQUA));
+        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
+    }
 
     public String getModuleName() {
         return MODULE_NAME;

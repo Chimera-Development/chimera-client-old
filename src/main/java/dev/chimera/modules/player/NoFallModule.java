@@ -3,8 +3,6 @@ package dev.chimera.modules.player;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
 
-import net.minecraft.client.MinecraftClient;
-
 public class NoFallModule extends Module {
     public NoFallModule() {
         super("No-Fall");
