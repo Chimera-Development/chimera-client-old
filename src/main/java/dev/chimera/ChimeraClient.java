@@ -42,7 +42,7 @@ public class ChimeraClient implements ModInitializer {
 
         EVENT_BUS.postEventToListener("idPush", EventListenerIDs.a);
 
-
+        //should probably move this somewhere else at some point but for now it can stay here
         ModuleInitializer.addModule(new FlightModule());
         ModuleInitializer.addModule(new ExampleModule());
         ModuleInitializer.addModule(new FlightModule());
