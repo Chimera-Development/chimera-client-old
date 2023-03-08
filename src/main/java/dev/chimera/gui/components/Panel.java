@@ -15,8 +15,7 @@ import java.util.List;
 public class Panel extends Component {
     public List<Component> children = new ArrayList<>();
 
-    public Panel()
-    {
+    public Panel() {
         onLoad();
     }
 

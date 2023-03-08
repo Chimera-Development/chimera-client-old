@@ -5,6 +5,10 @@ import dev.chimera.amalthea.EventListenerIDs;
 import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.amalthea.events.misc.TickEvent;
+import dev.chimera.modules.combat.KillAuraModule;
+import dev.chimera.modules.common.ClickGUIModule;
+import dev.chimera.modules.common.FarmAuraModule;
+import dev.chimera.modules.player.NoFallModule;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.HashMap;
