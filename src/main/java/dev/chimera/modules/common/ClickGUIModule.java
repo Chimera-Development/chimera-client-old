@@ -1,8 +1,8 @@
 package dev.chimera.modules.common;
 
 import dev.chimera.ChimeraClient;
-import dev.chimera.EventListeners;
-import dev.chimera.amalthea.EventListener;
+import dev.chimera.amalthea.EventListenerIDs;
+import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.gui.Component;
@@ -59,10 +59,10 @@ public class ClickGUIModule extends Module {
         p.size = new Size(0.75*window.contentPanel.size.width, 0.75*window.contentPanel.size.height);
         window.contentPanel.children.add(p);*/
         int y = 0;
-        for(Module m : ModuleInitializer.getModuleList())
+        for (Module m : ModuleInitializer.MODULE_NAMES.values())
         {
             System.out.println(m);
-            if(m.getModuleName() == null)
+            if (m.getModuleName() == null)
                 continue; // This shouldn't happen but caused a bug. TODO: Look into fixing mysterious bug
             System.out.println("Module passed!");
             Button l = new Button();
@@ -85,19 +85,15 @@ public class ClickGUIModule extends Module {
         System.out.println(SCREEN.children.size());
     }
 
-    @EventListener( id = EventListeners.moduleInitializerKeyPress )
-    public static void onKeyPress(KeyEvents.Press event) {
-
-    }
-
     @Override
     public void onDisable() {
         ChimeraClient.LOGGER.info("Closing gui!");
-        for(GuiWindow window : windows)
+        for (GuiWindow window : windows)
         {
             SCREEN.children.remove(window);
         }
-        MinecraftClient.getInstance().currentScreen.close();
+        if (MinecraftClient.getInstance().currentScreen != null)
+            MinecraftClient.getInstance().currentScreen.close();
     }
 
 
@@ -110,11 +106,9 @@ public class ClickGUIModule extends Module {
             GuiWindow window = windows.get(0);
             for (Component c : window.contentPanel.children) {
                 if (c instanceof Button b) {
-                    Optional<Module> mod = ModuleInitializer.getModuleList().stream().filter(x -> x.getModuleName().equals(b.text)).findFirst();
-                    if (mod.isEmpty())
-                        continue;
-                    if (mod.get().getModuleEnabled() != b.enabled) {
-                        mod.get().toggle();
+                    Module mod = ModuleInitializer.MODULE_NAMES.get(b.text);
+                    if (mod.getModuleEnabled() != b.enabled) {
+                        mod.toggle();
                     }
                 }
             }
