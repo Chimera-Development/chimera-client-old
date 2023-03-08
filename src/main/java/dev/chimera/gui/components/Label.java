@@ -14,6 +14,8 @@ public class Label extends Component {
     public BufferedImage render(Size maxSize) {
         BufferedImage output = new BufferedImage((int) maxSize.width, (int) maxSize.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = output.createGraphics();
+        System.out.println("RENDERING:" + content);
+        System.out.println(this.parent);
         g.setPaint(color);
         // lower left corner
         g.drawString(content, 0, 16);

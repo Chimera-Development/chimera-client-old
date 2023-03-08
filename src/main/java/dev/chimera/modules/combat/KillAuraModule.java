@@ -26,7 +26,6 @@ public class KillAuraModule extends Module {
 
     @Override
     public void onEnable() {
-        MinecraftClient.getInstance().setScreen(new InteractiveScreen());
     }
 
     @Override

@@ -5,6 +5,13 @@ import dev.chimera.amalthea.EventListenerIDs;
 import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.amalthea.events.misc.TickEvent;
+<<<<<<< Updated upstream
+=======
+import dev.chimera.modules.combat.KillAuraModule;
+import dev.chimera.modules.common.ClickGUIModule;
+import dev.chimera.modules.common.FarmAuraModule;
+import dev.chimera.modules.player.NoFallModule;
+>>>>>>> Stashed changes
 import net.minecraft.client.MinecraftClient;
 
 import java.util.HashMap;
@@ -16,7 +23,16 @@ public class ModuleInitializer {
     public static final HashMap<String, Module> MODULE_NAMES = new HashMap<>();
     public static final HashMap<Integer, Module> MODULE_KEYBINDS = new HashMap<>();
 
+<<<<<<< Updated upstream
     private static boolean initialized = false;
+=======
+        MODULE_LIST.add(new ExampleModule());
+        MODULE_LIST.add(new FlightModule());
+        MODULE_LIST.add(new NoFallModule());
+        MODULE_LIST.add(new KillAuraModule());
+        MODULE_LIST.add(new FarmAuraModule());
+        MODULE_LIST.add(new ClickGUIModule());
+>>>>>>> Stashed changes
 
     public void initializeModules() {
         MODULE_NAMES.values().forEach((v) -> {

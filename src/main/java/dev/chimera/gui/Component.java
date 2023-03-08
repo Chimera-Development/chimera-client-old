@@ -50,7 +50,8 @@ public abstract class Component {
             //System.out.println("Component updated, remove this message please!");
             return true;
         }
-        return false;
+        //return false;
+        return true;
     }
 
 

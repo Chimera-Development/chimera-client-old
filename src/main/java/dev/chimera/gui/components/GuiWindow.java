@@ -10,16 +10,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class GuiWindow extends Panel {
-    public Panel contentPanel = null;
+    public Panel contentPanel = new Panel();
     Rectangle backgroundRect = null;
     boolean movingWindow = false;
-    public GuiWindow()
-    {
-        onLoad();
-    }
 
-    @Override
-    public void onLoad() {
+    public GuiWindow(){
+        System.out.println("GuiWindow> onLoad called!");
         Rectangle titleRect = new Rectangle();
         titleRect.size = new Size(this.size.width, 16);
         titleRect.anchor.LEFT = true;
@@ -31,8 +27,9 @@ public class GuiWindow extends Panel {
         titleRect.anchor.LEFT = true;
         titleRect.anchor.RIGHT = true;
 
-
-        contentPanel = new Panel();
+        System.out.println(this);
+        System.out.println(contentPanel);
+        //contentPanel = new Panel();
         contentPanel.position = new Position(0,16);
         contentPanel.size = new Size(this.size.width, this.size.height-16);
         contentPanel.anchor = Anchor.all();
@@ -51,6 +48,13 @@ public class GuiWindow extends Panel {
 
         this.children.add(backgroundRect);
         this.children.add(contentPanel);
+        System.out.println("GuiWindow> onLoad finished!");
+    }
+
+
+    // For some reason, this is a bit broken
+    @Override
+    public void onLoad() {
     }
 
     @Override

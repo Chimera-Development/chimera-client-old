@@ -62,11 +62,16 @@ public abstract class Module {
     }
 
     public void setModuleState(boolean state) {
-        if (state != MODULE_ENABLED) {
-            if (state) onEnable();
-            else onDisable();
+        try {
+            if (state != MODULE_ENABLED) {
+                if (state) onEnable();
+                else onDisable();
+            }
+            MODULE_ENABLED = state;
+        } catch (Exception e) {
+          System.out.println("Exception while enabling module...");
+          e.printStackTrace();
         }
-        MODULE_ENABLED = state;
     }
 
     public void toggle() {
