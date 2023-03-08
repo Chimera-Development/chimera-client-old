@@ -1,6 +1,5 @@
 package dev.chimera.gui.components;
 
-import dev.chimera.gui.Component;
 import dev.chimera.gui.events.MouseButtonEvent;
 import dev.chimera.gui.types.Anchor;
 import dev.chimera.gui.types.Size;
@@ -8,13 +7,13 @@ import dev.chimera.gui.types.Size;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Button extends Panel {
+public class ToggleableButton extends Panel {
     public String text = "Test Button";
     public boolean enabled = false;
     Rectangle backgroundRect = null;
     Label label = null;
 
-    public Button()
+    public ToggleableButton()
     {
         System.out.println("onLoad called");
         System.out.println(this);
