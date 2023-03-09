@@ -39,6 +39,10 @@ public class ModuleInitializer {
         MODULE_NAMES.put(module.getModuleName(), module);
     }
 
+    public static List<Module> getAllModules() {
+        return MODULE_NAMES.values().stream().toList();
+    }
+
     public static List<Module> getEnabledModuleList() {
         return MODULE_NAMES.values().stream()
                 .filter(Module::getModuleEnabled)
@@ -84,8 +88,8 @@ public class ModuleInitializer {
 
         MODULE_KEYBINDS.computeIfPresent(event.key, (k, v) -> {
             if (v.releaseToToggle) {
-                v.toggle();
-                v.sendToggledMsg();
+                //v.toggle();
+                //v.sendToggledMsg();
             }
             return v;
         });

@@ -1,16 +1,11 @@
 package dev.chimera.modules.common;
 
 import dev.chimera.ChimeraClient;
-import dev.chimera.amalthea.EventListenerIDs;
-import dev.chimera.amalthea.eventbus.EventListener;
-import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.gui.Component;
 import dev.chimera.gui.InteractiveScreen;
-import dev.chimera.gui.components.Button;
+import dev.chimera.gui.components.ToggleableButton;
 import dev.chimera.gui.components.GuiWindow;
-import dev.chimera.gui.components.Label;
-import dev.chimera.gui.components.Picture;
 import dev.chimera.gui.types.Anchor;
 import dev.chimera.gui.types.Position;
 import dev.chimera.gui.types.Size;
@@ -19,12 +14,8 @@ import dev.chimera.modules.ModuleInitializer;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import static dev.chimera.gui.InGameOverlay.SCREEN;
 
@@ -59,13 +50,13 @@ public class ClickGUIModule extends Module {
         p.size = new Size(0.75*window.contentPanel.size.width, 0.75*window.contentPanel.size.height);
         window.contentPanel.children.add(p);*/
         int y = 0;
-        for (Module m : ModuleInitializer.MODULE_NAMES.values())
+        for (Module m : ModuleInitializer.getAllModules())
         {
             System.out.println(m);
             if (m.getModuleName() == null)
                 continue; // This shouldn't happen but caused a bug. TODO: Look into fixing mysterious bug
             System.out.println("Module passed!");
-            Button l = new Button();
+            ToggleableButton l = new ToggleableButton();
             l.text = m.getModuleName();
             l.enabled = m.getModuleEnabled();
             if (l.text.equals(this.getModuleName()))
@@ -92,6 +83,7 @@ public class ClickGUIModule extends Module {
         {
             SCREEN.children.remove(window);
         }
+        windows.clear();
         if (MinecraftClient.getInstance().currentScreen != null)
             MinecraftClient.getInstance().currentScreen.close();
     }
@@ -105,8 +97,12 @@ public class ClickGUIModule extends Module {
                 return;
             GuiWindow window = windows.get(0);
             for (Component c : window.contentPanel.children) {
-                if (c instanceof Button b) {
-                    Module mod = ModuleInitializer.MODULE_NAMES.get(b.text);
+                if (c instanceof ToggleableButton b) {
+                    if (b.text.equals(this.getModuleName()))
+                        continue;
+                    Module mod = ModuleInitializer.findModule(b.text);
+                    if (mod == null)
+                        continue;
                     if (mod.getModuleEnabled() != b.enabled) {
                         mod.toggle();
                     }
