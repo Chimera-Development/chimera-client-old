@@ -4,7 +4,8 @@ import dev.chimera.amalthea.EventListenerIDs;
 import dev.chimera.amalthea.eventbus.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
 import dev.chimera.amalthea.events.misc.TickEvent;
-
+import dev.chimera.gui.InGameOverlay;
+import dev.chimera.gui.types.Size;
 import dev.chimera.modules.ExampleModule;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.modules.combat.KillAuraModule;
@@ -12,25 +13,15 @@ import dev.chimera.modules.common.ClickGUIModule;
 import dev.chimera.modules.common.FarmAuraModule;
 import dev.chimera.modules.player.FlightModule;
 import dev.chimera.modules.player.NoFallModule;
-import dev.chimera.gui.components.GuiWindow;
-import dev.chimera.gui.components.Picture;
-import dev.chimera.gui.types.Anchor;
-import dev.chimera.modules.ModuleInitializer;
-import dev.chimera.gui.InGameOverlay;
-import dev.chimera.gui.types.Size;
+import dev.chimera.nemean.TestScreen;
 import net.fabricmc.api.ModInitializer;
-
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.event.Event;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.InvocationTargetException;
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
 
 public class ChimeraClient implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
@@ -79,6 +70,8 @@ public class ChimeraClient implements ModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register((endTick) -> {
             EVENT_BUS.postEvent(tickEventEnd);
         });
+
+
 
     }
 
