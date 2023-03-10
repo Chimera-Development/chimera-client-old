@@ -46,6 +46,11 @@ public class TestGUI extends Screen {
     }
 
     @Override
+    public boolean shouldCloseOnEsc() {
+        return false;
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 //        if(isActive) {
             //does the imGui stuff
