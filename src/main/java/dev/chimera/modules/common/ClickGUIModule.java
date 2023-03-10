@@ -4,16 +4,12 @@ import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.gui.components.GuiWindow;
 import dev.chimera.modules.Module;
-import dev.chimera.nemean.TestScreen;
+import dev.chimera.nemean.TestGUI;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static dev.chimera.gui.InGameOverlay.SCREEN;
 
 public class ClickGUIModule extends Module {
     List<GuiWindow> windows = new ArrayList<>();
@@ -30,7 +26,8 @@ public class ClickGUIModule extends Module {
     @Override
     public void onEnable() {
         ChimeraClient.LOGGER.info("Opening gui!");
-//        MinecraftClient.getInstance().setScreen(new InteractiveScreen());
+        MinecraftClient.getInstance().setScreen(new TestGUI());
+
 //
 //        GuiWindow window = new GuiWindow();
 //        window.size.height = 1000;
@@ -71,20 +68,21 @@ public class ClickGUIModule extends Module {
 //        SCREEN.children.add(window);
 //        System.out.println(SCREEN.children.size());
 
-        Screen testScreen = new TestScreen(Text.of("idklol"));
+//        Screen testScreen = new TestScreen(Text.of("idklol"));
 //        testScreen.
     }
 
     @Override
     public void onDisable() {
         ChimeraClient.LOGGER.info("Closing gui!");
-        for (GuiWindow window : windows)
-        {
-            SCREEN.children.remove(window);
-        }
-        windows.clear();
-        if (MinecraftClient.getInstance().currentScreen != null)
-            MinecraftClient.getInstance().currentScreen.close();
+//        for (GuiWindow window : windows)
+//        {
+//            SCREEN.children.remove(window);
+//        }
+//        windows.clear();
+//        if (MinecraftClient.getInstance().currentScreen != null)
+//            MinecraftClient.getInstance().currentScreen.close();
+
     }
 
 

@@ -1,7 +1,6 @@
 package dev.chimera.modules.combat;
 
 import dev.chimera.amalthea.events.misc.TickEvent;
-import dev.chimera.gui.InteractiveScreen;
 import dev.chimera.modules.Module;
 
 import net.minecraft.client.MinecraftClient;

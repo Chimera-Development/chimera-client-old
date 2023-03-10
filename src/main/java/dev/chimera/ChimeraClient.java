@@ -5,7 +5,6 @@ import dev.chimera.amalthea.eventbus.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.gui.InGameOverlay;
-import dev.chimera.gui.types.Size;
 import dev.chimera.modules.ExampleModule;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.modules.combat.KillAuraModule;
@@ -13,13 +12,10 @@ import dev.chimera.modules.common.ClickGUIModule;
 import dev.chimera.modules.common.FarmAuraModule;
 import dev.chimera.modules.player.FlightModule;
 import dev.chimera.modules.player.NoFallModule;
-import dev.chimera.nemean.TestScreen;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.event.Event;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +35,7 @@ public class ChimeraClient implements ModInitializer {
         // This code runs as soon as Minecraft is in a mod-load-ready state.
         // However, some things (like resources) may still be uninitialized.
         // Proceed with mild caution.
-        OVERLAY.SCREEN.size = new Size(1920,1080);
+//        OVERLAY.SCREEN.size = new Size(1920,1080);
 
 
         //TODO clean up this class. we probably shouldn't be doing everything right here
