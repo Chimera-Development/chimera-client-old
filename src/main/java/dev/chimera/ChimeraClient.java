@@ -4,7 +4,6 @@ import dev.chimera.amalthea.EventListenerIDs;
 import dev.chimera.amalthea.eventbus.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
 import dev.chimera.amalthea.events.misc.TickEvent;
-import dev.chimera.gui.InGameOverlay;
 import dev.chimera.modules.ExampleModule;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.modules.combat.KillAuraModule;
@@ -26,8 +25,6 @@ public class ChimeraClient implements ModInitializer {
     public static final String MOD_ID = "chimera-client";
     public static final Logger LOGGER = LoggerFactory.getLogger("chimera-client");
     public static final EventBus EVENT_BUS = new EventBus();
-
-	public static final InGameOverlay OVERLAY = new InGameOverlay();
 
 	public static int test = 0;
     @Override

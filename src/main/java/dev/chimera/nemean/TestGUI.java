@@ -30,9 +30,9 @@ import java.util.Objects;
 public class TestGUI extends Screen {
 
     public static TestGUI INSTANCE;
+    public boolean isActive = false;
     private final ImGuiImplGlfw implGlfw = new ImGuiImplGlfw();
     private final ImGuiImplGl3 implGl3 = new ImGuiImplGl3();
-    int x = 25;
 
     public TestGUI() {
         super(Text.of("idkpleasework"));
@@ -42,58 +42,33 @@ public class TestGUI extends Screen {
         implGlfw.init(windowPtr, true);
         implGl3.init();
         ImGui.getIO().setConfigWindowsMoveFromTitleBarOnly(true);
-        ImGui.getStyle().setWindowMenuButtonPosition(-1);
         ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
-
-//        ImGui.getStyle().setColor(ImGuiCol.Button, 0, 0, 0, 127);
-//        ImGui.getStyle().setColor(ImGuiCol.Header, 50, 50, 50, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.Border, 50, 50, 50, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.ButtonHovered, 80, 80, 80, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.TitleBg, 50, 50, 50, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.CheckMark, 255, 255, 255, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.SliderGrab, 255, 255, 255, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.SliderGrabActive, 200, 200, 200, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.FrameBgActive, 200, 200, 200, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.ButtonActive, 100, 100, 100, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.Header, 50, 50, 50, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.HeaderHovered, 75, 75, 75, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.Text, 255, 255, 255, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.WindowBg, 25, 25, 25, 255);
-//        ImGui.getStyle().setColor(ImGuiCol.Border, 0, 0, 0, 255);
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        //does the imGui stuff
-        implGlfw.newFrame();
-        ImGui.newFrame();
-        x = 25;
+//        if(isActive) {
+            //does the imGui stuff
+            implGlfw.newFrame();
+            ImGui.newFrame();
 
-        ImGui.begin("Hello, world!");
-
-//        ImGui.setWindowPos(x, 50);
-        x += 325;
-//        ImGui.setWindowSize(250, 450);
-
-        ModuleInitializer.getAllModules().forEach((module) -> {
-//            if (ImGui.collapsingHeader(module.getModuleEnabled() ? module.getModuleName() + " 0" : module.getModuleName() + " X")) {
-//                if (ImGui.checkbox("Enable", module.getModuleEnabled())) {
-//                    module.toggle();
-//                }
-//
-//            }
-            if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
-                module.toggle();
-            }
-
-        });
+            ImGui.begin("ClickGUI!");
+            ModuleInitializer.getAllModules().forEach((module) -> {
+                if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
+                    module.toggle();
+                }
+            });
 
 
-        ImGui.end();
+            ImGui.end();
 
-        ImGui.endFrame();
-        ImGui.render();
-        implGl3.renderDrawData(Objects.requireNonNull(ImGui.getDrawData()));
+            ImGui.endFrame();
+            ImGui.render();
+            implGl3.renderDrawData(Objects.requireNonNull(ImGui.getDrawData()));
+
+//        }
     }
+
+
 
 }

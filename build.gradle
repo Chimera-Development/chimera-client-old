@@ -37,9 +37,6 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "io.wispforest:owo-lib:${project.owo_version}"
-	include "io.wispforest:owo-sentinel:${project.owo_version}"
-
 	implementation "io.github.spair:imgui-java-app:1.86.9"
 
 	implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")

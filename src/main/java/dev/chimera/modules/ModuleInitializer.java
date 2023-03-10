@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ModuleInitializer {
-
+    //DO NOT CHANGE THIS MAP, IT SHOULD ONLY BE ACCESSED AT STARTUP AND NOT CHANGED LATER ON (UNLESS YOU KNOW WHAT YOU'RE DOING)
     public static final HashMap<String, Module> MODULE_NAMES = new HashMap<>();
     public static final HashMap<Integer, Module> MODULE_KEYBINDS = new HashMap<>();
 
@@ -40,7 +40,7 @@ public class ModuleInitializer {
     }
 
     public static List<Module> getAllModules() {
-        return MODULE_NAMES.values().stream().toList();
+        return MODULE_KEYBINDS.values().stream().toList();
     }
 
     public static List<Module> getEnabledModuleList() {
@@ -81,6 +81,7 @@ public class ModuleInitializer {
             v.sendToggledMsg();
             return v;
         });
+
     }
 
     @EventListener(id = EventListenerIDs.moduleInitializerKeyRelease)
@@ -88,8 +89,6 @@ public class ModuleInitializer {
 
         MODULE_KEYBINDS.computeIfPresent(event.key, (k, v) -> {
             if (v.releaseToToggle) {
-                //v.toggle();
-                //v.sendToggledMsg();
             }
             return v;
         });
