@@ -172,6 +172,11 @@ public class EventBus {
     }
 
     public <T> void postEventToListener(T event, String id) {
+        if(!listenersByEventType.containsKey(event.getClass()))
+        {
+            // No listeners for event
+            return;
+        }
         Listener listener = listenerIDs.get(id);
         if (listener.getMethod().getParameterTypes()[0] == event.getClass()) {
 

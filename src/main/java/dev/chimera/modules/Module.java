@@ -38,9 +38,10 @@ public abstract class Module {
     public void sendToggledMsg() {
 //         (this.hashCode(), Formatting.GRAY, "Toggled (highlight)%s(default) %s(default).", title, isActive() ? Formatting.GREEN + "on" : Formatting.RED + "off");
         String state = this.MODULE_ENABLED ? "enabled" : "disabled";
-        MutableText message = Text.literal(this.MODULE_NAME + " has been " + state);
-        message.setStyle(message.getStyle().withFormatting(Formatting.AQUA));
-        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
+        //MutableText message = Text.literal(this.MODULE_NAME + " has been " + state);
+        //message.setStyle(message.getStyle().withFormatting(Formatting.AQUA));
+        ChimeraLogger.info(this.MODULE_NAME + " has been " + state);
+        //MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
     }
 
     public String getModuleName() {
@@ -64,22 +65,23 @@ public abstract class Module {
     }
 
     public void setModuleState(boolean state) {
-        if (state != MODULE_ENABLED) {
-            if (state) {
-                onEnable();
-                ChimeraClient.LOGGER.info("Enabled " + getModuleName());
-                ChimeraLogger.info("Enabled " + getModuleName());
-            } else{
-                onDisable();
-                ChimeraClient.LOGGER.info("Disabled " + getModuleName());
-                ChimeraLogger.info("Disabled " + getModuleName());
-            }
-        }
-        MODULE_ENABLED = state;
+//        if (state != MODULE_ENABLED) {
+//            if (state) {
+//                onEnable();
+//                ChimeraClient.LOGGER.info("Enabled " + getModuleName());
+//                ChimeraLogger.info("Enabled " + getModuleName());
+//            } else{
+//                onDisable();
+//                ChimeraClient.LOGGER.info("Disabled " + getModuleName());
+//                ChimeraLogger.info("Disabled " + getModuleName());
+//            }
+//        }
+        //MODULE_ENABLED = state;
         try {
             if (state != MODULE_ENABLED) {
                 if (state) onEnable();
                 else onDisable();
+                sendToggledMsg();
             }
             MODULE_ENABLED = state;
         } catch (Exception e) {

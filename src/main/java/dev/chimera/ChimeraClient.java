@@ -1,10 +1,8 @@
 package dev.chimera;
 
 import dev.chimera.Utils.Utils;
-import dev.chimera.amalthea.EventBus;
 import dev.chimera.amalthea.EventListenerIDs;
 import dev.chimera.amalthea.eventbus.EventBus;
-import dev.chimera.amalthea.events.EventSystemTest;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.gui.InGameOverlay;
 import dev.chimera.modules.ExampleModule;
@@ -38,22 +36,9 @@ public class ChimeraClient implements ModInitializer {
 	public static final InGameOverlay OVERLAY = new InGameOverlay();
 
 	public static int test = 0;
-    @Override
-    public void onInitialize() {
-        // This code runs as soon as Minecraft is in a mod-load-ready state.
-        // However, some things (like resources) may still be uninitialized.
-        // Proceed with mild caution.
-//        OVERLAY.SCREEN.size = new Size(1920,1080);
-
-
-        //TODO clean up this class. we probably shouldn't be doing everything right here
-        LOGGER.info("Hello Chimera sussers!");
-
-        EventSystemTest test = new EventSystemTest();
-	public static final Logger LOGGER = LoggerFactory.getLogger("chimera-client");
-	public static final EventBus EVENT_BUS = new EventBus();
 	public static MinecraftClient mc;
 	public static RichPresence presence = new RichPresence();
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -108,7 +93,6 @@ public class ChimeraClient implements ModInitializer {
 	}
 
 
-    }
 
     public Event<?> event = ScreenEvents.AFTER_INIT;
 }

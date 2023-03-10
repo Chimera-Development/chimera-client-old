@@ -16,17 +16,17 @@ public class ExampleModule extends Module {
 
     @Override
     public void init() {
-        ChimeraClient.LOGGER.info("Initialized module '" + getModuleName() + "'");
+        ChimeraClient.LOGGER.info("t Initialized module '" + getModuleName() + "'");
     }
 
     @Override
     public void onEnable() {
-        ChimeraClient.LOGGER.info("Enabled module '" + getModuleName() + "'");
+        ChimeraClient.LOGGER.info("t Enabled module '" + getModuleName() + "'");
     }
 
     @Override
     public void onDisable() {
-        ChimeraClient.LOGGER.info("Disabled module '" + getModuleName() + "'");
+        ChimeraClient.LOGGER.info("t Disabled module '" + getModuleName() + "'");
     }
 
     @Override

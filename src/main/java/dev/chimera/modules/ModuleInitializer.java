@@ -78,9 +78,10 @@ public class ModuleInitializer {
     public static void onKeyPress(KeyEvents.InGame.Press event) {
         MODULE_KEYBINDS.computeIfPresent(event.key, (k, v) -> {
             v.toggle();
-            v.sendToggledMsg();
+            //v.sendToggledMsg();
             return v;
         });
+
     }
 
     @EventListener(id = EventListenerIDs.moduleInitializerKeyRelease)

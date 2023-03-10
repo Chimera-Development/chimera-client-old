@@ -70,7 +70,6 @@ public class TestGUI extends Screen {
         x = 25;
 
         ImGui.begin("Hello, world!");
-
 //        ImGui.setWindowPos(x, 50);
         x += 325;
 //        ImGui.setWindowSize(250, 450);
