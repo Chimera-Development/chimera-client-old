@@ -1,4 +1,4 @@
-package dev.chimera.amalthea;
+package dev.chimera.amalthea.eventbus;
 
 import dev.chimera.ChimeraClient;
 
@@ -65,6 +65,10 @@ public class EventBus {
             listenersChanged = true;
         }
 //        }).start();
+    }
+
+    public Set<String> getAllListenerIDs(){
+        return listenerIDs.keySet();
     }
 
     public static class PrioritySystem {
@@ -145,6 +149,7 @@ public class EventBus {
     public <T> ArrayList<Listener> sortMap(T event) {
         if (listenersChanged)
             return listenersByEventType.computeIfPresent(event.getClass(), (k, v) -> PrioritySystem.topologicalSort(v));
+
         return listenersByEventType.get(event.getClass());
     }
 
@@ -164,7 +169,6 @@ public class EventBus {
                 }
             });
         }
-
     }
 
     public <T> void postEventToListener(T event, String id) {

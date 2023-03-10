@@ -1,4 +1,4 @@
-package dev.chimera.amalthea;
+package dev.chimera.amalthea.eventbus;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,11 +11,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface EventListener {
     String id();
-
     String[] runBefore() default {};
-
     String[] runAfter() default {};
-
 }
 
 

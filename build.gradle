@@ -17,7 +17,6 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
-
 	maven { url 'https://maven.wispforest.io' }
 	maven {
 		name = "meteor-maven"
@@ -27,7 +26,14 @@ repositories {
 //	flatDir {
 //		dirs("libs")
 //	}
+	maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	maven { url 'https://jitpack.io' }
+}
 
+ext {
+	lwjglVersion = '3.3.1'
+	imguiVersion = '1.86.9'
 }
 
 dependencies {
@@ -43,7 +49,22 @@ dependencies {
 	include "io.wispforest:owo-sentinel:${project.owo_version}"
 	implementation "meteordevelopment:discord-ipc:1.1"
 	//implementation "com.google.code.gson:gson:2.8.9"
-	// Uncomment the following line to enable the deprecated Fabric API modules. 
+
+	implementation "io.github.spair:imgui-java-app:1.86.9"
+
+	implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+
+	['', '-opengl', '-glfw'].each {
+		implementation "org.lwjgl:lwjgl$it:$lwjglVersion"
+		implementation "org.lwjgl:lwjgl$it::natives-windows"
+	}
+
+	implementation "io.github.spair:imgui-java-binding:$imguiVersion"
+	implementation "io.github.spair:imgui-java-lwjgl3:$imguiVersion"
+
+	implementation "io.github.spair:imgui-java-natives-windows:$imguiVersion"
+
+	// Uncomment the following line to enable the deprecated Fabric API modules.
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
