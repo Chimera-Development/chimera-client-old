@@ -18,10 +18,6 @@ public class ClientPlayNetworkHandlerMixin {
     @Inject(method="onGameJoin",at=@At("TAIL"))
     public void onGameJoin(GameJoinS2CPacket packet, CallbackInfo ci){
         JoinGameEvent event = new JoinGameEvent(packet);
-        try {
-            ChimeraClient.EVENT_BUS.postEvent(event);
-        } catch (InvocationTargetException | IllegalAccessException  e) {
-            throw new RuntimeException(e);
-        }
+        ChimeraClient.EVENT_BUS.postEvent(event);
     }
 }

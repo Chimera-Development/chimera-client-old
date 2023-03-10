@@ -25,13 +25,14 @@ public class ChimeraClient implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("chimera-client");
 	public static final EventBus EVENT_BUS = new EventBus();
 	public static MinecraftClient mc;
+	public static RichPresence presence = new RichPresence();
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		LOGGER.info("Hello Chimera sussers!");
-		EventSystemTest test = new EventSystemTest();
+		//EventSystemTest test = new EventSystemTest();
 		mc = MinecraftClient.getInstance();
 
 		EVENT_BUS.postEvent("Systems operational?");
@@ -58,7 +59,7 @@ public class ChimeraClient implements ModInitializer {
 			return;
 		}
 
-		RichPresence presence = new RichPresence();
+
 		presence.setDetails("Playing in " + Utils.getWorldName());
 		presence.setState("yes");
 		presence.setLargeImage("chimera-logo", "Chimera Client");

@@ -2,7 +2,11 @@ package dev.chimera.amalthea.events;
 
 import dev.chimera.ChimeraClient;
 import dev.chimera.EventListeners;
+import dev.chimera.Utils.Utils;
 import dev.chimera.amalthea.EventListener;
+import dev.chimera.amalthea.events.misc.TickEvent;
+
+import static dev.chimera.ChimeraClient.presence;
 
 public class EventSystemTest {
 
@@ -57,6 +61,10 @@ public class EventSystemTest {
         ChimeraClient.LOGGER.warn("e");
     }
 
-
+    @EventListener(id="tick")
+    public void onTick(TickEvent.Start event){
+        ChimeraClient.LOGGER.debug("tick");
+        presence.setDetails("Playing in " + Utils.getWorldName());
+    }
 
 }

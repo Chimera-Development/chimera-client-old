@@ -149,6 +149,11 @@ public class EventBus {
     }
 
     public <T> void postEvent(T event) {
+        if(!listenersByEventType.containsKey(event.getClass()))
+        {
+            // No listeners for event
+            return;
+        }
         ArrayList<Listener> listeners = sortMap(event);
         if (listeners != null) {
             listeners.forEach((listener) -> {
