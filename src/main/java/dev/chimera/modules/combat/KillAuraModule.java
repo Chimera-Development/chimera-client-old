@@ -11,24 +11,32 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 public class KillAuraModule extends Module {
     private static final int TOTAL_TICK_COOLDOWN = 12;
     private static int tickCooldown = TOTAL_TICK_COOLDOWN;
+    private static MinecraftClient client;
 
     public KillAuraModule() {
         super("Kill Aura", GLFW.GLFW_KEY_R);
     }
 
     @Override
-    public void init() {}
+    public void init() {
+        client = MinecraftClient.getInstance();
+    }
 
     @Override
-    public void onEnable() {}
+    public void onEnable() {
+        if (client.player != null) client.player.sendMessage(Text.of("Enabled Module: " + getModuleName()), true);
+    }
 
     @Override
-    public void onDisable() {}
+    public void onDisable() {
+        if (client.player != null) client.player.sendMessage(Text.of("Disabled Module: " + getModuleName()), true);
+    }
 
     @Override
     public void onTickStart(TickEvent.Start event) {
