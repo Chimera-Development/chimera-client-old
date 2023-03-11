@@ -10,11 +10,13 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 public class KillAuraModule extends Module {
     private static final int TOTAL_TICK_COOLDOWN = 12;
     private static int tickCooldown = TOTAL_TICK_COOLDOWN;
+    private static MinecraftClient client;
 
     public KillAuraModule() {
         super("Kill Aura", GLFW.GLFW_KEY_R);

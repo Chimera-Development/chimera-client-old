@@ -50,7 +50,6 @@ public class FarmAuraModule extends Module {
     public void onEnable() {
         ClientWorld world = client.world;
         if (client.player == null || world == null) return;
-        client.player.sendMessage(Text.of("Enabled Module: " + getModuleName()), true);
 
         availableFarmland = getFarmlandBlockPosAroundPlayer(world);
 
@@ -93,12 +92,7 @@ public class FarmAuraModule extends Module {
     }
 
     @Override
-    public void onDisable() {
-        if (client.player == null) return;
-        client.player.sendMessage(
-                Text.of("Disabled Module: " + getModuleName()), true
-        );
-    }
+    public void onDisable() {}
 
     @Override
     public void onTickStart(TickEvent.Start event) {
