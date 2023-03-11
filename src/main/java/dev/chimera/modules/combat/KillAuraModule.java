@@ -24,19 +24,13 @@ public class KillAuraModule extends Module {
     }
 
     @Override
-    public void init() {
-        client = MinecraftClient.getInstance();
-    }
+    public void init() {}
 
     @Override
-    public void onEnable() {
-        if (client.player != null) client.player.sendMessage(Text.of("Enabled Module: " + getModuleName()), true);
-    }
+    public void onEnable() {}
 
     @Override
-    public void onDisable() {
-        if (client.player != null) client.player.sendMessage(Text.of("Disabled Module: " + getModuleName()), true);
-    }
+    public void onDisable() {}
 
     @Override
     public void onTickStart(TickEvent.Start event) {
