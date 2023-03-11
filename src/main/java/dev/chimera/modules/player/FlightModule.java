@@ -4,6 +4,7 @@ import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
@@ -45,5 +46,6 @@ public class FlightModule extends Module {
     public void onTickEnd(TickEvent.End event) {
         if (MinecraftClient.getInstance().player == null) return;
         MinecraftClient.getInstance().player.getAbilities().flying = getModuleEnabled();
+        if (client.player.age % 40 >= 0 && client.player.age % 40 <= 2) client.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(client.player.getX(), client.player.getY(), client.player.getZ(), client.player.isOnGround()));
     }
 }
