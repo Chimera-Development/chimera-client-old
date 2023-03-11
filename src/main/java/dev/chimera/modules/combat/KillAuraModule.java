@@ -1,6 +1,5 @@
 package dev.chimera.modules.combat;
 
-import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
 
@@ -25,7 +24,8 @@ public class KillAuraModule extends Module {
     public void init() {}
 
     @Override
-    public void onEnable() {}
+    public void onEnable() {
+    }
 
     @Override
     public void onDisable() {}

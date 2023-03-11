@@ -67,6 +67,10 @@ public class EventBus {
 //        }).start();
     }
 
+    public Set<String> getAllListenerIDs(){
+        return listenerIDs.keySet();
+    }
+
     public static class PrioritySystem {
         private static class ListenerNode {
             Listener listener;
