@@ -25,7 +25,7 @@ public class PacketFilterMixin {
 
         if (packet instanceof PlayerMoveC2SPacket packet1) {
             boolean onGround = client.player.isOnGround();
-            if (nofallModule != null) onGround = nofallModule.getModuleEnabled();
+            if (nofallModule != null && nofallModule.getModuleEnabled()) onGround = true;
             if (serverPos == null) serverPos = new Vec3d(client.player.getX(), client.player.getY(), client.player.getZ());
 
             double newX = packet1.getX(client.player.getX());
