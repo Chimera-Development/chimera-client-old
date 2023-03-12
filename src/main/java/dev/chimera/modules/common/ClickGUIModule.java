@@ -6,6 +6,7 @@ import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
+import dev.chimera.modules.ModuleCategory;
 import dev.chimera.nemean.ClickGui;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
@@ -16,7 +17,7 @@ public class ClickGUIModule extends Module {
     public ClickGui clickGuiScreenInstance;
 
     public ClickGUIModule() {
-        super("ClickGUI", GLFW.GLFW_KEY_RIGHT_SHIFT, false);
+        super(ModuleCategory.MISC, "ClickGUI", GLFW.GLFW_KEY_RIGHT_SHIFT, false);
 
         ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }

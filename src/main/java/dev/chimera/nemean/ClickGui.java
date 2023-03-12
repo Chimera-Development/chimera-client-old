@@ -17,6 +17,7 @@ my implementation was
 
 
 import dev.chimera.modules.Module;
+import dev.chimera.modules.ModuleCategory;
 import dev.chimera.modules.ModuleInitializer;
 import imgui.ImGui;
 import imgui.gl3.ImGuiImplGl3;
@@ -26,7 +27,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-import java.util.Objects;
+import java.util.*;
 
 public class ClickGui extends Screen {
 
@@ -65,15 +66,26 @@ public class ClickGui extends Screen {
 
     public void renderClickGUI()
     {
-        ImGui.begin("ClickGUI!");
+        HashMap<ModuleCategory, ArrayList<Module>> categorized = new HashMap<>();
         ModuleInitializer.getAllModules().forEach((module) -> {
-            if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
-                module.toggle();
-            }
+            if(!categorized.containsKey(module.getModuleCategory()))
+                categorized.put(module.getModuleCategory(), new ArrayList<>());
+            categorized.get(module.getModuleCategory()).add(module);
         });
 
+        // Sort modules alphabetically
+        for(ArrayList<Module> modulesInCategory : categorized.values())
+            Collections.sort(modulesInCategory, Comparator.comparing(Module::getModuleName));
 
-        ImGui.end();
+        for(Map.Entry<ModuleCategory, ArrayList<Module>> entry : categorized.entrySet()) {
+            ImGui.begin(entry.getKey().getName());
+            for(Module module : entry.getValue()) {
+                if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
+                    module.toggle();
+                }
+            }
+            ImGui.end();
+        }
     }
 
     @Override
