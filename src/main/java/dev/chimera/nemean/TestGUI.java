@@ -24,6 +24,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.profiler.Profiler;
 
 import java.util.Objects;
 
@@ -52,6 +53,7 @@ public class TestGUI extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
 //        if(isActive) {
             //does the imGui stuff
             implGlfw.newFrame();
@@ -72,6 +74,7 @@ public class TestGUI extends Screen {
             implGl3.renderDrawData(Objects.requireNonNull(ImGui.getDrawData()));
 
 //        }
+        MinecraftClient.getInstance().getProfiler().pop();
     }
 
 

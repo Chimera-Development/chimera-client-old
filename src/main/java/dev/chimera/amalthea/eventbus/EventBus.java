@@ -1,6 +1,7 @@
 package dev.chimera.amalthea.eventbus;
 
 import dev.chimera.ChimeraClient;
+import net.minecraft.client.MinecraftClient;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -161,6 +162,7 @@ public class EventBus {
                     listener.invoke(event);
                 } catch (InvocationTargetException | IllegalAccessException e) {
                     ChimeraClient.LOGGER.error("Posting event \"" + event.getClass() + "\" failed to listener \"" + listener.getId() + "\"");
+                    e.printStackTrace();
                 }
             });
         }
@@ -174,6 +176,7 @@ public class EventBus {
                 listener.invoke(event);
             } catch (InvocationTargetException | IllegalAccessException e) {
                 ChimeraClient.LOGGER.error("Posting event \"" + event.getClass() + "\" failed to listener \"" + listener.getId() + "\"");
+                e.printStackTrace();
             }
         }
     }

@@ -8,7 +8,7 @@ public interface EventListenerIDs {
     String moduleInitializerKeyPress = "chimera_client:moduleInitializerKeyPress";
     String moduleInitializerKeyRelease = "chimera_client:moduleInitializerKeyRelease";
 
-    String lwjglRendererTick = "chimer-client:lwjglRendererTick";
+    String lwjglRendererTick = "chimera-client:lwjglRendererTick";
     String guiMouseButtonEvent = "chimera-client:guiMouseButtonEvent";
     String guiMouseMoveEvent = "chimera-client:guiMouseMoveEvent";
 }
