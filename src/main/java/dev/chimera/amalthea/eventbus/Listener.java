@@ -44,4 +44,6 @@ public class Listener{
         return method;
     }
 
+    public Object getObject() { return object; }
+
 }

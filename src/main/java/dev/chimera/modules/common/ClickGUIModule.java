@@ -18,7 +18,7 @@ public class ClickGUIModule extends Module {
 
     public ClickGUIModule() {
         super(ModuleCategory.MISC, "ClickGUI", GLFW.GLFW_KEY_RIGHT_SHIFT, false);
-
+        clickGuiScreenInstance = new ClickGui();
         ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }
 
@@ -30,7 +30,6 @@ public class ClickGUIModule extends Module {
     @Override
     public void onEnable() {
         ChimeraClient.LOGGER.info("Opening gui!");
-        clickGuiScreenInstance = new ClickGui();
         clickGuiScreenInstance.isActive = true;
         justOpenedGui = true;
         MinecraftClient.getInstance().setScreen(clickGuiScreenInstance);
