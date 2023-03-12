@@ -1,7 +1,8 @@
 package dev.chimera.mixins;
 
 import dev.chimera.ChimeraClient;
-import dev.chimera.amalthea.events.packet.PacketSendEvent;
+import dev.chimera.amalthea.events.packet.PacketEvent;
+
 import dev.chimera.modules.Module;
 import dev.chimera.modules.ModuleInitializer;
 import net.minecraft.client.MinecraftClient;
@@ -22,7 +23,7 @@ public abstract class PacketFilterMixin {
     @Shadow public abstract void send(Packet<?> packet, @Nullable PacketCallbacks callbacks);
 
     Vec3d serverPos;
-    private PacketSendEvent packetSendEvent = new PacketSendEvent();
+    private PacketEvent.Send packetSendEvent = new PacketEvent.Send();
 
     @Inject(at = @At("HEAD"), method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", cancellable = true )
     private void injected(Packet<?> packet, PacketCallbacks callbacks, CallbackInfo ci) {

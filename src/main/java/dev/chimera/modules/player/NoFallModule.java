@@ -3,7 +3,7 @@ package dev.chimera.modules.player;
 import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.TickEvent;
-import dev.chimera.amalthea.events.packet.PacketSendEvent;
+import dev.chimera.amalthea.events.packet.PacketEvent;
 import dev.chimera.modules.Module;
 import dev.chimera.modules.ModuleInitializer;
 import net.minecraft.client.MinecraftClient;
@@ -39,7 +39,7 @@ public class NoFallModule extends Module {
 
 
     @EventListener(id="nofall")
-    public void onPacketSend(PacketSendEvent event)
+    public void onPacketSend(PacketEvent.Send event)
     {
         Module flightModule = ModuleInitializer.findModule("Flight");
         if (event.packet instanceof PlayerMoveC2SPacket packet1) {

@@ -3,7 +3,7 @@ package dev.chimera.modules.player;
 import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.TickEvent;
-import dev.chimera.amalthea.events.packet.PacketSendEvent;
+import dev.chimera.amalthea.events.packet.PacketEvent;
 import dev.chimera.modules.Module;
 
 import net.minecraft.client.MinecraftClient;
@@ -53,7 +53,7 @@ public class FlightModule extends Module {
     }
 
     @EventListener(id="cancelflightsneak")
-    public void onPacketSend(PacketSendEvent event)
+    public void onPacketSend(PacketEvent.Send event)
     {
         if (!this.getModuleEnabled())
             return;
