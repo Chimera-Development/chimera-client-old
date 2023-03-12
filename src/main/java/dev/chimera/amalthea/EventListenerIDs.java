@@ -9,6 +9,9 @@ public interface EventListenerIDs {
     String moduleInitializerKeyRelease = "chimera_client:moduleInitializerKeyRelease";
 
     String lwjglRendererTick = "chimera-client:lwjglRendererTick";
+    String firstRenderer = "chimera-client:first-renderer";
+    String lastRenderer = "chimera-client:last-renderer";
+
     String guiMouseButtonEvent = "chimera-client:guiMouseButtonEvent";
     String clickGuiOnKeyEvent = "chimera-client:clickGuiOnKeyEvent";
     String guiMouseMoveEvent = "chimera-client:guiMouseMoveEvent";

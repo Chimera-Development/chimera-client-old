@@ -3,6 +3,7 @@ package dev.chimera.modules.common;
 import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
+import dev.chimera.modules.ModuleCategory;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -37,7 +38,7 @@ public class FarmAuraModule extends Module {
     private static List<BlockPos> availableFarmland;
 
     public FarmAuraModule() {
-        super("Farm Aura", GLFW.GLFW_KEY_0);
+        super(ModuleCategory.PLAYER, "Farm Aura", GLFW.GLFW_KEY_0);
     }
 
     @Override

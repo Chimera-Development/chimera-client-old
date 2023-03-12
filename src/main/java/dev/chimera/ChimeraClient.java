@@ -13,6 +13,7 @@ import dev.chimera.modules.common.FarmAuraModule;
 import dev.chimera.modules.player.FlightModule;
 import dev.chimera.modules.player.NoFallModule;
 import dev.chimera.nemean.Gui;
+import dev.chimera.nemean.GuiLayer;
 import imgui.ImGui;
 import meteordevelopment.discordipc.DiscordIPC;
 import meteordevelopment.discordipc.RichPresence;
@@ -70,9 +71,11 @@ public class ChimeraClient implements ModInitializer {
         });
         GuiRenderEvent guiRenderEvent = new GuiRenderEvent();
         HudRenderCallback.EVENT.register((matrix, floatthing) -> {
+            guiRenderEvent.cancelled = false;
             EVENT_BUS.postEvent(guiRenderEvent);
         });
 
+        new GuiLayer();
         new Gui();
 
         TickEvent.End tickEventEnd = new TickEvent.End();

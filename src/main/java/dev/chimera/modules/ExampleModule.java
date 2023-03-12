@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class ExampleModule extends Module {
     public ExampleModule() {
-        super("Example Module", GLFW.GLFW_KEY_Y, true);
+        super(ModuleCategory.MISC, "Example Module", GLFW.GLFW_KEY_Y, true);
     }
 
     @Override
