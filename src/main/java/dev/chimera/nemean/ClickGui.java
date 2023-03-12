@@ -34,7 +34,7 @@ public class ClickGui extends Screen {
     public boolean isActive = false;
     private final ImGuiImplGlfw implGlfw = new ImGuiImplGlfw();
     private final ImGuiImplGl3 implGl3 = new ImGuiImplGl3();
-
+    //FUNNY TEST
     public ClickGui() {
         super(Text.of("idkpleasework"));
         long windowPtr = MinecraftClient.getInstance().getWindow().getHandle();
