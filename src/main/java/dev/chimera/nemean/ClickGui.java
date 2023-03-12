@@ -16,6 +16,7 @@ my implementation was
 */
 
 
+import dev.chimera.modules.Module;
 import dev.chimera.modules.ModuleInitializer;
 import imgui.ImGui;
 import imgui.gl3.ImGuiImplGl3;
@@ -24,18 +25,17 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.profiler.Profiler;
 
 import java.util.Objects;
 
-public class TestGUI extends Screen {
+public class ClickGui extends Screen {
 
-    public static TestGUI INSTANCE;
+    public static ClickGui INSTANCE;
     public boolean isActive = false;
     private final ImGuiImplGlfw implGlfw = new ImGuiImplGlfw();
     private final ImGuiImplGl3 implGl3 = new ImGuiImplGl3();
 
-    public TestGUI() {
+    public ClickGui() {
         super(Text.of("idkpleasework"));
         long windowPtr = MinecraftClient.getInstance().getWindow().getHandle();
         INSTANCE = this;
@@ -50,23 +50,23 @@ public class TestGUI extends Screen {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
 //        if(isActive) {
-            //does the imGui stuff
-            implGlfw.newFrame();
-            ImGui.newFrame();
+        //does the imGui stuff
+        implGlfw.newFrame();
+        ImGui.newFrame();
 
-            ImGui.begin("ClickGUI!");
-            ModuleInitializer.getAllModules().forEach((module) -> {
-                if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
-                    module.toggle();
-                }
-            });
+        ImGui.begin("ClickGUI!");
+        ModuleInitializer.getAllModules().forEach((module) -> {
+            if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
+                module.toggle();
+            }
+        });
 
 
-            ImGui.end();
+        ImGui.end();
 
-            ImGui.endFrame();
-            ImGui.render();
-            implGl3.renderDrawData(Objects.requireNonNull(ImGui.getDrawData()));
+        ImGui.endFrame();
+        ImGui.render();
+        implGl3.renderDrawData(Objects.requireNonNull(ImGui.getDrawData()));
 
 //        }
         MinecraftClient.getInstance().getProfiler().pop();
@@ -75,7 +75,8 @@ public class TestGUI extends Screen {
     @Override
     public void close() {
         isActive = false;
-        Objects.requireNonNull(ModuleInitializer.findModule("ClickGUI")).setModuleState(false);
+        Module module = Objects.requireNonNull(ModuleInitializer.findModule("ClickGUI"));
+        module.toggle();
         super.close();
     }
 }

@@ -1,7 +1,7 @@
 package dev.chimera.amalthea;
 
 public interface EventListenerIDs {
-    String a = "@+id/a";
+    String a = "chimera-client:a";
 
     String moduleInitializerTickEventStart = "chimera_client:moduleInitializerTickEventStart";
     String moduleInitializerTickEventEnd = "chimera_client:moduleInitializerTickEventEnd";
@@ -10,5 +10,6 @@ public interface EventListenerIDs {
 
     String lwjglRendererTick = "chimera-client:lwjglRendererTick";
     String guiMouseButtonEvent = "chimera-client:guiMouseButtonEvent";
+    String clickGuiOnKeyEvent = "chimera-client:clickGuiOnKeyEvent";
     String guiMouseMoveEvent = "chimera-client:guiMouseMoveEvent";
 }

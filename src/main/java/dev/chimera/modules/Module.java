@@ -72,10 +72,13 @@ public abstract class Module {
           System.out.println("Exception while enabling module...");
           e.printStackTrace();
         }
+
+//        sendToggledMsg();
     }
 
     public void toggle() {
         setModuleState(!getModuleEnabled());
+        sendToggledMsg();
     }
 
     public abstract void init();

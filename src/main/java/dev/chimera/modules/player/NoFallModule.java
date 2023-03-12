@@ -22,7 +22,6 @@ public class NoFallModule extends Module {
 
     @Override
     public void init() {
-        setModuleState(true);
         client = MinecraftClient.getInstance();
     }
 
