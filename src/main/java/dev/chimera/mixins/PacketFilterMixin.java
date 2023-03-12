@@ -37,7 +37,7 @@ public abstract class PacketFilterMixin {
         packetSendEvent.packet = packet;
         ChimeraClient.EVENT_BUS.postEvent(packetSendEvent);
         if  (packetSendEvent.cancelled) {
-            ChimeraClient.LOGGER.info("Cancelled packet!");
+            //ChimeraClient.LOGGER.info("Cancelled packet!");
             packetSendEvent.packet = null;
             ci.cancel();
             return;

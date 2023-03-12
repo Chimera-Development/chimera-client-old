@@ -39,11 +39,6 @@ public class ClickGUIModule extends Module {
     @Override
     public void onDisable() {
         ChimeraClient.LOGGER.info("Closing gui!");
-        clickGuiScreenInstance.isActive = false;
-        // Screen has to be closed, otherwise gui will stay showing even if set as inactive
-        if (MinecraftClient.getInstance().currentScreen != null) {
-            MinecraftClient.getInstance().currentScreen.close();
-        }
     }
 
 
@@ -61,8 +56,8 @@ public class ClickGUIModule extends Module {
             justOpenedGui = false;
             return;
         }
-        if(event.key == this.getKeyBinding()){
-            this.toggle();
+        if(event.key == this.getKeyBinding() && MinecraftClient.getInstance().currentScreen != null){
+            MinecraftClient.getInstance().currentScreen.close();
         }
     }
 

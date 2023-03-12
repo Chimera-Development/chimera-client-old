@@ -47,11 +47,6 @@ public class TestGUI extends Screen {
     }
 
     @Override
-    public boolean shouldCloseOnEsc() {
-        return false;
-    }
-
-    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
 //        if(isActive) {
@@ -77,6 +72,10 @@ public class TestGUI extends Screen {
         MinecraftClient.getInstance().getProfiler().pop();
     }
 
-
-
+    @Override
+    public void close() {
+        isActive = false;
+        Objects.requireNonNull(ModuleInitializer.findModule("ClickGUI")).setModuleState(false);
+        super.close();
+    }
 }
