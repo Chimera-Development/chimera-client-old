@@ -64,10 +64,10 @@ public abstract class Module {
     public void setModuleState(boolean state) {
         try {
             if (state != MODULE_ENABLED) {
+                MODULE_ENABLED = state;
                 if (state) onEnable();
                 else onDisable();
             }
-            MODULE_ENABLED = state;
         } catch (Exception e) {
           System.out.println("Exception while enabling module...");
           e.printStackTrace();
