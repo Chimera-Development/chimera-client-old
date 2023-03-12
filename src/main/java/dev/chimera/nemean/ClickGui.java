@@ -39,7 +39,7 @@ public class ClickGui extends Screen {
         super(Text.of("idkpleasework"));
         long windowPtr = MinecraftClient.getInstance().getWindow().getHandle();
         INSTANCE = this;
-        ImGui.createContext();
+//        ImGui.createContext();
         implGlfw.init(windowPtr, true);
         implGl3.init();
         ImGui.getIO().setConfigWindowsMoveFromTitleBarOnly(true);
@@ -48,7 +48,7 @@ public class ClickGui extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
+        MinecraftClient.getInstance().getProfiler().push("ChimeraClickGUI");
 //        if(isActive) {
         //does the imGui stuff
         implGlfw.newFrame();
