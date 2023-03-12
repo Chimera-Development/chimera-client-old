@@ -16,6 +16,10 @@ my implementation was
 */
 
 
+import dev.chimera.ChimeraClient;
+import dev.chimera.amalthea.EventListenerIDs;
+import dev.chimera.amalthea.eventbus.EventListener;
+import dev.chimera.amalthea.events.misc.GuiRenderEvent;
 import dev.chimera.modules.Module;
 import dev.chimera.modules.ModuleInitializer;
 import imgui.ImGui;
@@ -32,39 +36,19 @@ public class ClickGui extends Screen {
 
     public static ClickGui INSTANCE;
     public boolean isActive = false;
-    private final ImGuiImplGlfw implGlfw = new ImGuiImplGlfw();
-    private final ImGuiImplGl3 implGl3 = new ImGuiImplGl3();
     //FUNNY TEST
     public ClickGui() {
         super(Text.of("idkpleasework"));
-        long windowPtr = MinecraftClient.getInstance().getWindow().getHandle();
         INSTANCE = this;
-//        ImGui.createContext();
-        implGlfw.init(windowPtr, true);
-        implGl3.init();
-        ImGui.getIO().setConfigWindowsMoveFromTitleBarOnly(true);
-        ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
+        ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }
 
-    /*
-    @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        MinecraftClient.getInstance().getProfiler().push("ChimeraClickGUI");
-//        if(isActive) {
-        //does the imGui stuff
-        implGlfw.newFrame();
-        ImGui.newFrame();
 
-        ImGui.endFrame();
-        ImGui.render();
-        implGl3.renderDrawData(Objects.requireNonNull(ImGui.getDrawData()));
-
-//        }
-        MinecraftClient.getInstance().getProfiler().pop();
-    }*/
-
-    public void renderClickGUI()
+    @EventListener(id = EventListenerIDs.lwjglRendererTick, runAfter = EventListenerIDs.firstRenderer, runBefore = EventListenerIDs.lastRenderer)
+    public void renderClickGUI(GuiRenderEvent event)
     {
+        if (!this.isActive)
+            return;
         ImGui.begin("ClickGUI!");
         ModuleInitializer.getAllModules().forEach((module) -> {
             if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
