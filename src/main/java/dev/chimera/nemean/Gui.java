@@ -5,6 +5,7 @@ import dev.chimera.amalthea.EventListenerIDs;
 import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.GuiRenderEvent;
 import dev.chimera.modules.ModuleInitializer;
+import dev.chimera.modules.common.ClickGUIModule;
 import imgui.ImGui;
 import imgui.flag.ImGuiCol;
 import imgui.gl3.ImGuiImplGl3;
@@ -27,8 +28,11 @@ public class Gui {
     private void config(){
         long windowPtr = MinecraftClient.getInstance().getWindow().getHandle();
         INSTANCE = this;
+
+        ImGui.createContext();
         implGlfw.init(windowPtr, true);
         implGl3.init();
+
         ImGui.getIO().setConfigWindowsMoveFromTitleBarOnly(true);
         ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
         ImGui.getStyle().setColor(ImGuiCol.WindowBg,
@@ -39,6 +43,7 @@ public class Gui {
     private boolean ranAlready = false;
     @EventListener(id = EventListenerIDs.lwjglRendererTick)
     public void render(GuiRenderEvent event) {
+        if(!ranAlready && MinecraftClient.getInstance().currentScreen != null) return; // Only start gui when ingame
         if(!ranAlready) config();
         MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
 //        if(isActive) {
@@ -54,8 +59,13 @@ public class Gui {
             ImGui.text(module.getModuleName());
         });
 
-
         ImGui.end();
+
+        ClickGUIModule m = (ClickGUIModule) ModuleInitializer.findModule("ClickGUI");
+        if (m.getModuleEnabled())
+        {
+            m.clickGuiScreenInstance.renderClickGUI();
+        }
 
         ImGui.endFrame();
         ImGui.render();

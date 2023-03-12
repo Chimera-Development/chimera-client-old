@@ -46,6 +46,7 @@ public class ClickGui extends Screen {
         ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
     }
 
+    /*
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         MinecraftClient.getInstance().getProfiler().push("ChimeraClickGUI");
@@ -54,6 +55,16 @@ public class ClickGui extends Screen {
         implGlfw.newFrame();
         ImGui.newFrame();
 
+        ImGui.endFrame();
+        ImGui.render();
+        implGl3.renderDrawData(Objects.requireNonNull(ImGui.getDrawData()));
+
+//        }
+        MinecraftClient.getInstance().getProfiler().pop();
+    }*/
+
+    public void renderClickGUI()
+    {
         ImGui.begin("ClickGUI!");
         ModuleInitializer.getAllModules().forEach((module) -> {
             if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
@@ -63,13 +74,6 @@ public class ClickGui extends Screen {
 
 
         ImGui.end();
-
-        ImGui.endFrame();
-        ImGui.render();
-        implGl3.renderDrawData(Objects.requireNonNull(ImGui.getDrawData()));
-
-//        }
-        MinecraftClient.getInstance().getProfiler().pop();
     }
 
     @Override

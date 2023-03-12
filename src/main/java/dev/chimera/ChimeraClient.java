@@ -67,11 +67,6 @@ public class ChimeraClient implements ModInitializer {
             EVENT_BUS.postEvent(guiRenderEvent);
         });
 
-
-        ImGui.createContext();
-//        implGlfw.init(windowPtr, true);
-//        implGl3.init();
-
         new Gui();
 
         TickEvent.End tickEventEnd = new TickEvent.End();
