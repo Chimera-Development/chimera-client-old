@@ -3,6 +3,7 @@ package dev.chimera.modules.combat;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
 
+import dev.chimera.modules.ModuleCategory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -19,7 +20,7 @@ public class KillAuraModule extends Module {
     private static MinecraftClient client;
 
     public KillAuraModule() {
-        super("Kill Aura", GLFW.GLFW_KEY_R);
+        super(ModuleCategory.COMBAT, "Kill Aura", GLFW.GLFW_KEY_R);
     }
 
     @Override

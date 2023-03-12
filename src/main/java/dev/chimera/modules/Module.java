@@ -7,9 +7,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public abstract class Module {
+    private final ModuleCategory MODULE_CATEGORY;
     private final String MODULE_NAME;
 
-    public Module(String MODULE_NAME) {
+    public Module(ModuleCategory MODULE_CATEGORY, String MODULE_NAME) {
+        this.MODULE_CATEGORY = MODULE_CATEGORY;
         this.MODULE_NAME = MODULE_NAME;
     }
 
@@ -17,7 +19,8 @@ public abstract class Module {
     private int KEY_BINDING;
     public boolean releaseToToggle;
 
-    public Module(String name, int bind, boolean toggleOnRelease) {
+    public Module(ModuleCategory category, String name, int bind, boolean toggleOnRelease) {
+        MODULE_CATEGORY = category;
         MODULE_NAME = name;
         MODULE_ENABLED = false;
         KEY_BINDING = bind;
@@ -25,12 +28,12 @@ public abstract class Module {
     }
 
 
-    public Module(String name, boolean toggleOnRelease) {
-        this(name, -1, toggleOnRelease);
+    public Module(ModuleCategory category, String name, boolean toggleOnRelease) {
+        this(category, name, -1, toggleOnRelease);
     }
 
-    public Module(String name, int bind) {
-        this(name, bind, false);
+    public Module(ModuleCategory category, String name, int bind) {
+        this(category, name, bind, false);
     }
 
     public void sendToggledMsg() {
@@ -39,6 +42,10 @@ public abstract class Module {
         MutableText message = Text.literal(this.MODULE_NAME + " has been " + state);
         message.setStyle(message.getStyle().withFormatting(Formatting.AQUA));
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
+    }
+
+    public ModuleCategory getModuleCategory() {
+        return MODULE_CATEGORY;
     }
 
     public String getModuleName() {
