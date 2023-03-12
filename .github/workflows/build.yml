@@ -11,6 +11,9 @@ on:
 
 jobs:
   build:
+    permissions:
+     contents: read
+     packages: write
     strategy:
       matrix:
         # Use these Java versions
