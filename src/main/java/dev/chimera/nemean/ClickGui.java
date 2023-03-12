@@ -16,7 +16,12 @@ my implementation was
 */
 
 
+import dev.chimera.ChimeraClient;
+import dev.chimera.amalthea.EventListenerIDs;
+import dev.chimera.amalthea.eventbus.EventListener;
+import dev.chimera.amalthea.events.misc.GuiRenderEvent;
 import dev.chimera.modules.Module;
+import dev.chimera.modules.ModuleCategory;
 import dev.chimera.modules.ModuleInitializer;
 import imgui.ImGui;
 import imgui.gl3.ImGuiImplGl3;
@@ -26,50 +31,48 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-import java.util.Objects;
+import java.util.*;
 
 public class ClickGui extends Screen {
 
     public static ClickGui INSTANCE;
     public boolean isActive = false;
-    private final ImGuiImplGlfw implGlfw = new ImGuiImplGlfw();
-    private final ImGuiImplGl3 implGl3 = new ImGuiImplGl3();
-
+    //FUNNY TEST
     public ClickGui() {
         super(Text.of("idkpleasework"));
-        long windowPtr = MinecraftClient.getInstance().getWindow().getHandle();
         INSTANCE = this;
-        ImGui.createContext();
-        implGlfw.init(windowPtr, true);
-        implGl3.init();
-        ImGui.getIO().setConfigWindowsMoveFromTitleBarOnly(true);
-        ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
+        ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }
 
-    @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
-//        if(isActive) {
-        //does the imGui stuff
-        implGlfw.newFrame();
-        ImGui.newFrame();
 
-        ImGui.begin("ClickGUI!");
+
+    @EventListener(id = EventListenerIDs.lwjglRendererTick, runAfter = EventListenerIDs.firstRenderer, runBefore = EventListenerIDs.lastRenderer)
+    public void renderClickGUI(GuiRenderEvent event)
+    {
+        if (!this.isActive)
+            return;
+            
+        HashMap<ModuleCategory, ArrayList<Module>> categorized = new HashMap<>();
+
         ModuleInitializer.getAllModules().forEach((module) -> {
-            if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
-                module.toggle();
-            }
+            if(!categorized.containsKey(module.getModuleCategory()))
+                categorized.put(module.getModuleCategory(), new ArrayList<>());
+            categorized.get(module.getModuleCategory()).add(module);
         });
 
+        // Sort modules alphabetically
+        for(ArrayList<Module> modulesInCategory : categorized.values())
+            Collections.sort(modulesInCategory, Comparator.comparing(Module::getModuleName));
 
-        ImGui.end();
-
-        ImGui.endFrame();
-        ImGui.render();
-        implGl3.renderDrawData(Objects.requireNonNull(ImGui.getDrawData()));
-
-//        }
-        MinecraftClient.getInstance().getProfiler().pop();
+        for(Map.Entry<ModuleCategory, ArrayList<Module>> entry : categorized.entrySet()) {
+            ImGui.begin(entry.getKey().getName());
+            for(Module module : entry.getValue()) {
+                if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
+                    module.toggle();
+                }
+            }
+            ImGui.end();
+        }
     }
 
     @Override
