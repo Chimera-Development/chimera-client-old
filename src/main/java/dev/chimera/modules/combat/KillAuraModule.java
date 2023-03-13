@@ -2,8 +2,8 @@ package dev.chimera.modules.combat;
 
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
-
 import dev.chimera.modules.ModuleCategory;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -11,13 +11,12 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.text.Text;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import org.lwjgl.glfw.GLFW;
 
 public class KillAuraModule extends Module {
     private static final int TOTAL_TICK_COOLDOWN = 12;
     private static int tickCooldown = TOTAL_TICK_COOLDOWN;
-    private static MinecraftClient client;
 
     public KillAuraModule() {
         super(ModuleCategory.COMBAT, "Kill Aura", GLFW.GLFW_KEY_R);
@@ -57,7 +56,11 @@ public class KillAuraModule extends Module {
         }
 
         if (targetEntity == player) return;
-        if (targetEntity instanceof ItemEntity || targetEntity instanceof ExperienceOrbEntity) return;
+        if (
+            targetEntity instanceof ItemEntity
+            || targetEntity instanceof ExperienceOrbEntity
+            || targetEntity instanceof ProjectileEntity
+        ) return;
         if (targetEntity.squaredDistanceTo(player) > 20.25) return;
 
         manager.attackEntity(player, targetEntity);
