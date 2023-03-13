@@ -14,8 +14,7 @@ import dev.chimera.modules.player.FlightModule;
 import dev.chimera.modules.player.NoFallModule;
 import dev.chimera.nemean.Gui;
 import dev.chimera.nemean.GuiLayer;
-import imgui.ImGui;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
@@ -23,7 +22,7 @@ import net.fabricmc.fabric.api.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ChimeraClient implements ModInitializer {
+public class ChimeraClient implements ClientModInitializer {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
@@ -33,7 +32,7 @@ public class ChimeraClient implements ModInitializer {
 
 	public static int test = 0;
     @Override
-    public void onInitialize() {
+    public void onInitializeClient() {
         // This code runs as soon as Minecraft is in a mod-load-ready state.
         // However, some things (like resources) may still be uninitialized.
         // Proceed with mild caution.
