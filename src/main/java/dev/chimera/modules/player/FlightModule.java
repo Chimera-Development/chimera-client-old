@@ -6,6 +6,7 @@ import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.amalthea.events.packet.PacketSendEvent;
 import dev.chimera.modules.Module;
 
+import dev.chimera.modules.ModuleCategory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -17,7 +18,7 @@ public class FlightModule extends Module {
     private static MinecraftClient client;
 
     public FlightModule() {
-        super("Flight", GLFW.GLFW_KEY_G);
+        super(ModuleCategory.PLAYER, "Flight", GLFW.GLFW_KEY_G);
         ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }
 

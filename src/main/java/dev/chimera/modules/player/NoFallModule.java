@@ -5,6 +5,7 @@ import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.amalthea.events.packet.PacketSendEvent;
 import dev.chimera.modules.Module;
+import dev.chimera.modules.ModuleCategory;
 import dev.chimera.modules.ModuleInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -13,7 +14,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class NoFallModule extends Module {
     public NoFallModule() {
-        super("No-Fall");
+        super(ModuleCategory.PLAYER, "No-Fall");
         ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }
 
@@ -22,7 +23,6 @@ public class NoFallModule extends Module {
 
     @Override
     public void init() {
-        setModuleState(true);
         client = MinecraftClient.getInstance();
     }
 

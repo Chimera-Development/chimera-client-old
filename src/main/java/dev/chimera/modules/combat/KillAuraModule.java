@@ -2,6 +2,7 @@ package dev.chimera.modules.combat;
 
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -17,7 +18,7 @@ public class KillAuraModule extends Module {
     private static int tickCooldown = TOTAL_TICK_COOLDOWN;
 
     public KillAuraModule() {
-        super("Kill Aura", GLFW.GLFW_KEY_R);
+        super(ModuleCategory.COMBAT, "Kill Aura", GLFW.GLFW_KEY_R);
     }
 
     @Override
