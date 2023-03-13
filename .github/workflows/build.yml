@@ -11,6 +11,9 @@ on:
 
 jobs:
   build:
+    permissions:
+     contents: read
+     packages: write
     strategy:
       matrix:
         # Use these Java versions
@@ -33,11 +36,17 @@ jobs:
       - name: make gradle wrapper executable
         if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
-      - name: build
-        run: ./gradlew build
-      - name: capture build artifacts
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
-        uses: actions/upload-artifact@v3
+      - name: Publish package
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
-          name: Artifacts
-          path: build/libs/
+          arguments: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+#      - name: build
+#        run: ./gradlew build
+#      - name: capture build artifacts
+#        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: Artifacts
+#          path: build/libs/
