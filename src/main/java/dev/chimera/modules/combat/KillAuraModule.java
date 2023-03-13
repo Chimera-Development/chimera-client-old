@@ -2,6 +2,7 @@ package dev.chimera.modules.combat;
 
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
+import dev.chimera.modules.ModuleCategory;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
