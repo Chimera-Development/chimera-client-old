@@ -31,21 +31,12 @@ public class ClickGui extends Screen implements Renderable {
 
     public static ClickGui INSTANCE;
     public boolean isActive = false;
-    //FUNNY TEST
     public ClickGui() {
-        super(Text.of("idkpleasework"));
+        super(Text.of("ClickGUI"));
         INSTANCE = this;
         ChimeraClient.EVENT_BUS.registerListenersInClass(this);
         this.registerRenderable();
     }
-
-
-
-//    @EventListener(id = EventListenerIDs.lwjglRendererTick, runAfter = EventListenerIDs.firstRenderer, runBefore = EventListenerIDs.lastRenderer)
-//    public void renderClickGUI(GuiRenderEvent event)
-//    {
-//
-//    }
 
     @Override
     public void close() {
@@ -70,7 +61,7 @@ public class ClickGui extends Screen implements Renderable {
 
         // Sort modules alphabetically
         for(ArrayList<Module> modulesInCategory : categorized.values())
-            Collections.sort(modulesInCategory, Comparator.comparing(Module::getModuleName));
+            modulesInCategory.sort(Comparator.comparing(Module::getModuleName));
 
         for(Map.Entry<ModuleCategory, ArrayList<Module>> entry : categorized.entrySet()) {
             ImGui.begin(entry.getKey().getName());

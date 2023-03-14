@@ -18,31 +18,16 @@ public class Gui implements Renderable {
         this.registerRenderable();
     }
 
-//    @EventListener(id = EventListenerIDs.lwjglRendererTick, runAfter = EventListenerIDs.firstRenderer, runBefore = EventListenerIDs.lastRenderer)
-//    public void render(GuiRenderEvent event) {
-//
-//    }
-
     @Override
     public void render() {
         //TODO should probably add more screens where gui should not be visible (or we could separate general render and ingame render)
-        if(MinecraftClient.getInstance().currentScreen instanceof TitleScreen || MinecraftClient.getInstance().currentScreen instanceof MultiplayerScreen)
+        if (MinecraftClient.getInstance().currentScreen instanceof TitleScreen || MinecraftClient.getInstance().currentScreen instanceof MultiplayerScreen)
             return;
         ImGui.begin("ChimeraGUI");
         ModuleInitializer.getEnabledModuleList().forEach((module) -> {
-//            if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
-//                module.toggle();
-//            }
             ImGui.text(module.getModuleName());
         });
 
         ImGui.end();
     }
-//    @Override
-//    public void close() {
-//        isActive = false;
-//        Module module = Objects.requireNonNull(ModuleInitializer.findModule("ClickGUI"));
-//        module.toggle();
-//        super.close();
-//    }
 }

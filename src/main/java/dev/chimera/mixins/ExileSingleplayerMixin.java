@@ -30,7 +30,7 @@ public abstract class ExileSingleplayerMixin extends Screen {
             ChimeraClient.LOGGER.info("No singleplayer for you!");
 
             addDrawableChild(ButtonWidget.builder(Text.of("Addons"), (customButton) -> {
-//                addonsScreen.isActive = true;
+                addonsScreen.isActive = true;
 //                MinecraftClient.getInstance().setScreen(addonsScreen);
             }).dimensions(this.width / 2 - 100, ((ButtonWidget) element).getY(), 200, 20).build());
 
