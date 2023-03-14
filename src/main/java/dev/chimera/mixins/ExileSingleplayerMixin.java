@@ -2,6 +2,7 @@ package dev.chimera.mixins;
 
 import dev.chimera.ChimeraClient;
 import dev.chimera.nemean.elements.AddonsScreen;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -31,7 +32,8 @@ public abstract class ExileSingleplayerMixin extends Screen {
 
             addDrawableChild(ButtonWidget.builder(Text.of("Addons"), (customButton) -> {
                 addonsScreen.isActive = true;
-//                MinecraftClient.getInstance().setScreen(addonsScreen);
+
+                //MinecraftClient.getInstance().setScreen(addonsScreen);
             }).dimensions(this.width / 2 - 100, ((ButtonWidget) element).getY(), 200, 20).build());
 
             return null;
