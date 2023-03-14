@@ -72,6 +72,8 @@ public class ChimeraClient implements ModInitializer {
         GuiRenderEvent guiRenderEvent = new GuiRenderEvent();
         HudRenderCallback.EVENT.register((matrix, floatthing) -> {
             guiRenderEvent.cancelled = false;
+            guiRenderEvent.setMatrices(matrix);
+            guiRenderEvent.setFloatthing(floatthing);
             EVENT_BUS.postEvent(guiRenderEvent);
         });
 

@@ -5,7 +5,8 @@
 	"client": [
 		"ExileSingleplayerMixin",
 		"KeyboardMixin",
-		"PacketFilterMixin"
+		"PacketFilterMixin",
+		"InventoryScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

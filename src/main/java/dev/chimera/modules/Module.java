@@ -1,5 +1,6 @@
 package dev.chimera.modules;
 
+import dev.chimera.Utils.ChimeraLogger;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
@@ -39,9 +40,10 @@ public abstract class Module {
     public void sendToggledMsg() {
 //         (this.hashCode(), Formatting.GRAY, "Toggled (highlight)%s(default) %s(default).", title, isActive() ? Formatting.GREEN + "on" : Formatting.RED + "off");
         String state = this.MODULE_ENABLED ? "enabled" : "disabled";
-        MutableText message = Text.literal(this.MODULE_NAME + " has been " + state);
-        message.setStyle(message.getStyle().withFormatting(Formatting.AQUA));
-        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
+//        MutableText message = Text.literal(this.MODULE_NAME + " has been " + state);
+//        message.setStyle(message.getStyle().withFormatting(Formatting.AQUA));
+//        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
+        ChimeraLogger.info(this.MODULE_NAME + " has been " + state);
     }
 
     public ModuleCategory getModuleCategory() {

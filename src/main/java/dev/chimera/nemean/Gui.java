@@ -1,6 +1,7 @@
 package dev.chimera.nemean;
 
 import dev.chimera.ChimeraClient;
+import dev.chimera.Utils.Utils;
 import dev.chimera.amalthea.EventListenerIDs;
 import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.GuiRenderEvent;
@@ -11,8 +12,13 @@ import imgui.flag.ImGuiCol;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.PlayerListEntry;
 
+import java.awt.geom.QuadCurve2D;
 import java.util.Objects;
+
+import static dev.chimera.ChimeraClient.mc;
+import static dev.chimera.Utils.Utils.tpsHistory;
 
 public class Gui {
 
@@ -32,7 +38,28 @@ public class Gui {
 //            }
             ImGui.text(module.getModuleName());
         });
+        ImGui.end();
+        renderDebug();
 
+
+    }
+    private void renderDebug(){
+        ImGui.begin("Debug");
+        // TPS
+//        float[] floatArray = new float[tpsHistory.size()];
+//        for (int i = 0; i < tpsHistory.size(); i++) {
+//            floatArray[i] = tpsHistory.get(i).floatValue();
+//        }
+//        ImGui.plotLines("Tps",floatArray,floatArray.length);
+        ImGui.text("TPS: " + Utils.getTPS());
+
+        // Ping
+        PlayerListEntry playerEntry = mc.player.networkHandler.getPlayerListEntry(mc.player.getGameProfile().getId());
+        int ping = playerEntry == null ? 0 : playerEntry.getLatency();
+        ImGui.text("Ping: "+ ping);
+        // FPS
+        int fps = mc.getCurrentFps();
+        ImGui.text("FPS: " + fps);
         ImGui.end();
     }
 //    @Override
