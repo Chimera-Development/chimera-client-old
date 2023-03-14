@@ -13,29 +13,28 @@ import net.minecraft.client.MinecraftClient;
 import java.util.Objects;
 
 public class GuiLayer {
-    private final ImGuiImplGlfw implGlfw = new ImGuiImplGlfw();
-    private final ImGuiImplGl3 implGl3 = new ImGuiImplGl3();
+    private static final ImGuiImplGlfw implGlfw = new ImGuiImplGlfw();
+    private static final ImGuiImplGl3 implGl3 = new ImGuiImplGl3();
 
     public GuiLayer()
     {
         ChimeraClient.EVENT_BUS.registerListenersInClass(this);
     }
-    
-    private void config(){
-        long windowPtr = MinecraftClient.getInstance().getWindow().getHandle();
+
+
+    public static void config(long windowPtr){
 
         ImGui.createContext();
         implGlfw.init(windowPtr, true);
         implGl3.init();
 
         ImGui.getIO().setConfigWindowsMoveFromTitleBarOnly(true);
-        ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
         ImGui.getStyle().setColor(ImGuiCol.WindowBg,
                 251, 7, 255, 50);
         ImGui.getStyle().setWindowRounding(10f);
         ranAlready = true;
     }
-    private boolean ranAlready = false;
+    private static boolean ranAlready = false;
 
 
     @EventListener(id = EventListenerIDs.firstRenderer, runBefore = EventListenerIDs.lwjglRendererTick)
@@ -45,7 +44,8 @@ public class GuiLayer {
             event.cancelled = true;
             return;
         }
-        if (!ranAlready) config();
+        ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
+//        if (!ranAlready) config();
         MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
 //        if(isActive) {
         //does the imGui stuff

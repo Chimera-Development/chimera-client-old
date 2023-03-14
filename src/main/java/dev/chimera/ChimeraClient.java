@@ -16,7 +16,6 @@ import dev.chimera.nemean.Gui;
 import dev.chimera.nemean.GuiLayer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.event.Event;
 import org.slf4j.Logger;
@@ -63,10 +62,10 @@ public class ChimeraClient implements ClientModInitializer {
             EVENT_BUS.postEvent(tickEventStart);
         });
         GuiRenderEvent guiRenderEvent = new GuiRenderEvent();
-        HudRenderCallback.EVENT.register((matrix, floatthing) -> {
-            guiRenderEvent.cancelled = false;
-            EVENT_BUS.postEvent(guiRenderEvent);
-        });
+//        HudRenderCallback.EVENT.register((matrix, floatthing) -> {
+//            guiRenderEvent.cancelled = false;
+//            EVENT_BUS.postEvent(guiRenderEvent);
+//        });
 
         new GuiLayer();
         new Gui();
