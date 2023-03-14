@@ -1,9 +1,11 @@
 package dev.chimera.mixins;
 
 import dev.chimera.ChimeraClient;
+import dev.chimera.amalthea.events.packet.PacketReceiveEvent;
 import dev.chimera.amalthea.events.packet.PacketSendEvent;
 import dev.chimera.modules.Module;
 import dev.chimera.modules.ModuleInitializer;
+import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
@@ -23,6 +25,7 @@ public abstract class PacketFilterMixin {
 
     Vec3d serverPos;
     private PacketSendEvent packetSendEvent = new PacketSendEvent();
+    private PacketReceiveEvent packetReceiveEvent = new PacketReceiveEvent();
 
     @Inject(at = @At("HEAD"), method = "send(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V", cancellable = true )
     private void injected(Packet<?> packet, PacketCallbacks callbacks, CallbackInfo ci) {
@@ -50,5 +53,17 @@ public abstract class PacketFilterMixin {
         }
 
         packetSendEvent.packet = null;
+    }
+
+    @Inject(at = @At("HEAD"), method = "channelRead0(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/Packet;)V", cancellable = true )
+    public void packetReceive(ChannelHandlerContext channelHandlerContext, Packet<?> packet, CallbackInfo ci)
+    {
+        packetReceiveEvent.cancelled = false;
+        packetReceiveEvent.packet = packet;
+        ChimeraClient.EVENT_BUS.postEvent(packetReceiveEvent);
+        if(packetReceiveEvent.cancelled)
+        {
+            ci.cancel();
+        }
     }
 }
