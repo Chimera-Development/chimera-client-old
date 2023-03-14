@@ -3,7 +3,6 @@ package dev.chimera;
 import dev.chimera.amalthea.EventListenerIDs;
 import dev.chimera.amalthea.eventbus.EventBus;
 import dev.chimera.amalthea.events.EventSystemTest;
-import dev.chimera.amalthea.events.misc.GuiRenderEvent;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.ExampleModule;
 import dev.chimera.modules.ModuleInitializer;
@@ -12,8 +11,9 @@ import dev.chimera.modules.common.ClickGUIModule;
 import dev.chimera.modules.common.FarmAuraModule;
 import dev.chimera.modules.player.FlightModule;
 import dev.chimera.modules.player.NoFallModule;
-import dev.chimera.nemean.Gui;
 import dev.chimera.nemean.GuiLayer;
+import dev.chimera.nemean.elements.Gui;
+import dev.chimera.sisyphus.AddonInitializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
@@ -55,13 +55,12 @@ public class ChimeraClient implements ClientModInitializer {
         ModuleInitializer.addModule(new KillAuraModule());
         ModuleInitializer.addModule(new FarmAuraModule());
         ModuleInitializer.addModule(new ClickGUIModule());
-        
-        new ModuleInitializer().initializeModules();
+
         TickEvent.Start tickEventStart = new TickEvent.Start();
         ClientTickEvents.START_CLIENT_TICK.register((startTick) -> {
             EVENT_BUS.postEvent(tickEventStart);
         });
-        GuiRenderEvent guiRenderEvent = new GuiRenderEvent();
+//        GuiRenderEvent guiRenderEvent = new GuiRenderEvent();
 //        HudRenderCallback.EVENT.register((matrix, floatthing) -> {
 //            guiRenderEvent.cancelled = false;
 //            EVENT_BUS.postEvent(guiRenderEvent);
@@ -75,7 +74,9 @@ public class ChimeraClient implements ClientModInitializer {
             EVENT_BUS.postEvent(tickEventEnd);
         });
 
+        AddonInitializer.initAddons();
 
+        new ModuleInitializer().initializeModules();
 
     }
 

@@ -1,6 +1,7 @@
 package dev.chimera.mixins;
 
 import dev.chimera.ChimeraClient;
+import dev.chimera.nemean.elements.AddonsScreen;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -17,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(TitleScreen.class)
 public abstract class ExileSingleplayerMixin extends Screen {
     @Shadow protected abstract void init();
-
+    AddonsScreen addonsScreen = new AddonsScreen();
     protected ExileSingleplayerMixin(Text title) {
         super(title);
     }
@@ -27,6 +28,12 @@ public abstract class ExileSingleplayerMixin extends Screen {
     public <T extends Element & Drawable & Selectable> T addDrawableChildFromInitWidgetsNormal(TitleScreen instance, T element) {
         if(element instanceof ButtonWidget button && button.getMessage().getContent() instanceof TranslatableTextContent trans && trans.getKey().equals("menu.singleplayer")) {
             ChimeraClient.LOGGER.info("No singleplayer for you!");
+
+            addDrawableChild(ButtonWidget.builder(Text.of("Addons"), (customButton) -> {
+//                addonsScreen.isActive = true;
+//                MinecraftClient.getInstance().setScreen(addonsScreen);
+            }).dimensions(this.width / 2 - 100, ((ButtonWidget) element).getY(), 200, 20).build());
+
             return null;
         }
         return addDrawableChild(element);

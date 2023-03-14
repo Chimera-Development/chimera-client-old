@@ -7,7 +7,7 @@ import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.Module;
 import dev.chimera.modules.ModuleCategory;
-import dev.chimera.nemean.ClickGui;
+import dev.chimera.nemean.elements.ClickGui;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
 

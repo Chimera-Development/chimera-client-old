@@ -15,4 +15,5 @@ public interface EventListenerIDs {
     String guiMouseButtonEvent = "chimera-client:guiMouseButtonEvent";
     String clickGuiOnKeyEvent = "chimera-client:clickGuiOnKeyEvent";
     String guiMouseMoveEvent = "chimera-client:guiMouseMoveEvent";
+    String onRender = "chimera-client:onRenderListener";
 }
