@@ -60,6 +60,7 @@ jobs:
            # You don't need this section if you don't want to publish
            # your assets to GitHub
            github-token: ${{ secrets.GITHUB_TOKEN }}
+           version: ${{github.sha}}
 #      - name: build
 #        run: ./gradlew build
 #      - name: capture build artifacts
