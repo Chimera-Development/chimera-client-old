@@ -33,11 +33,24 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: 'microsoft'
-      - name: build mod
-        run: ./gradlew build
       - name: make gradle wrapper executable
         if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
+      - name: build mod
+        run: ./gradlew build
+      - name: Collect version information
+        run: |
+          shopt -s failglob # print a warning if a glob does not match anything
+          set_var() {
+            echo $1="$2"
+            echo $1="$2" >> $GITHUB_ENV
+            declare -g $1="$2"
+          }
+          set_var JAR_FILE $(eval echo build/libs/${{ env.MOD_ID }}-*-*-*.jar)
+          set_var MINECRAFT_VERSION $(echo ${JAR_FILE%.*} | cut -d- -f3)
+          set_var MOD_VERSION $(echo ${JAR_FILE%.*} | cut -d- -f4)
+          set_var RELEASE_TYPE "$(echo ${GITHUB_REF##*/} | cut -d- -f5)"
+          set_var RELEASE_TYPE "$([[ -z $RELEASE_TYPE ]] && echo release || echo $RELEASE_TYPE)"
 #      - name: Publish package
 #        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
 #        with:
@@ -50,6 +63,7 @@ jobs:
            # You don't need this section if you don't want to publish
            # your assets to GitHub
            github-token: ${{ secrets.GITHUB_TOKEN }}
+           version: ${{ env.MINECRAFT_VERSION }}-${{ env.MOD_VERSION }}
 #      - name: build
 #        run: ./gradlew build
 #      - name: capture build artifacts
