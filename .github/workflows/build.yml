@@ -44,7 +44,7 @@ jobs:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       - name: publish to github releases   
         uses: Kir-Antipov/mc-publish@v3.2 
-          with:
+        with:
            # You don't need this section if you don't want to publish
            # your assets to GitHub
            github-token: ${{ secrets.GITHUB_TOKEN }}
