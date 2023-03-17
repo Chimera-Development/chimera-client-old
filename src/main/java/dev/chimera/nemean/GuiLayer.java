@@ -4,18 +4,23 @@ import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.EventListenerIDs;
 import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.GuiRenderEvent;
+import imgui.ConfigFlag;
 import imgui.ImGui;
-import imgui.flag.ImGuiCol;
-import imgui.gl3.ImGuiImplGl3;
-import imgui.glfw.ImGuiImplGlfw;
+import imgui.ImguiKt;
+import imgui.classes.Context;
+import uno.glfw.GlfwWindow;
+import uno.glfw.VSync;
+import imgui.impl.gl.ImplGL3;
+import imgui.impl.glfw.ImplGlfw;
 import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class  GuiLayer {
-    private static final ImGuiImplGlfw implGlfw = new ImGuiImplGlfw();
-    private static final ImGuiImplGl3 implGl3 = new ImGuiImplGl3();
+    public static ImGui imgui = ImGui.INSTANCE;
+    private static ImplGlfw implGlfw;
+    private static ImplGL3 implGl3;
 
     private static ArrayList<Renderable> renderStack = new ArrayList<>();
 
@@ -26,15 +31,21 @@ public class  GuiLayer {
 
 
     public static void config(long windowPtr){
+        ImguiKt.MINECRAFT_BEHAVIORS = true;
 
-        ImGui.createContext();
-        implGlfw.init(windowPtr, true);
-        implGl3.init();
+        GlfwWindow window = GlfwWindow.from(windowPtr);
 
-        ImGui.getIO().setConfigWindowsMoveFromTitleBarOnly(true);
-        ImGui.getStyle().setColor(ImGuiCol.WindowBg,
-                251, 7, 255, 50);
-        ImGui.getStyle().setWindowRounding(10f);
+        window.makeContextCurrent();
+        new Context();
+
+        implGlfw = new ImplGlfw(window, false);
+        implGl3 = new ImplGL3();
+        /*
+        imgui.getIO().setConfigWindowsMoveFromTitleBarOnly(true);
+        imgui.getStyle().setColor(ImGuiCol.WindowBg,
+                251, 7, 255, 50);*/
+
+        imgui.getStyle().setWindowRounding(10f);
         ranAlready = true;
     }
     private static boolean ranAlready = false;
@@ -51,21 +62,21 @@ public class  GuiLayer {
             event.cancelled = true;
             return;
         }
-        ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
+        //ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
 //        if (!ranAlready) config();
         MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
 //        if(isActive) {
         //does the imGui stuff
+        implGl3.newFrame();
         implGlfw.newFrame();
-        ImGui.newFrame();
+        imgui.newFrame();
 
         for(Renderable renderable: renderStack){
             renderable.render();
         }
 
-        ImGui.endFrame();
-        ImGui.render();
-        implGl3.renderDrawData(Objects.requireNonNull(ImGui.getDrawData()));
+        imgui.render();
+        implGl3.renderDrawData(Objects.requireNonNull(imgui.getDrawData()));
 
         MinecraftClient.getInstance().getProfiler().pop();
     }

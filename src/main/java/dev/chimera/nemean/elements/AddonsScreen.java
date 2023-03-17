@@ -7,10 +7,11 @@ import dev.chimera.nemean.Renderable;
 import dev.chimera.sisyphus.Addon;
 import dev.chimera.sisyphus.AddonInitializer;
 import imgui.ImGui;
+import imgui.WindowFlag;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
-
+import static dev.chimera.nemean.GuiLayer.imgui;
 public class AddonsScreen extends Screen implements Renderable {
 
     public boolean isActive = false;
@@ -36,13 +37,14 @@ public class AddonsScreen extends Screen implements Renderable {
         for (Addon addon : AddonInitializer.ADDON_LIST) {
             if (addon.MOD_ID == null || addon.name == null)
                 continue;
-            ImGui.begin(addon.name);
 
-            if (ImGui.collapsingHeader(addon.name)) {
-                ImGui.text(addon.MOD_ID);
+            imgui.begin(addon.name, new boolean[] {true}, 0);
+
+            if (imgui.collapsingHeader(addon.name, 0)) {
+                imgui.text(addon.MOD_ID);
             }
 
-            ImGui.end();
+            imgui.end();
         }
 
     }

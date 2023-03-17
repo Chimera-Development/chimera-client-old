@@ -21,11 +21,12 @@ repositories {
 	maven { url "https://dl.bintray.com/kotlin/kotlin-dev" }
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 	maven { url 'https://jitpack.io' }
+	maven { url "https://raw.githubusercontent.com/kotlin-graphics/mary/master" }
 }
 
 ext {
 	lwjglVersion = '3.3.1'
-	imguiVersion = '1.86.9'
+	imguiVersion = '1.79+05'
 }
 
 dependencies {
@@ -37,20 +38,20 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	implementation "io.github.spair:imgui-java-app:1.86.9"
+	//implementation "kotlin.graphics:imgui-core:1.79+05"
+	//implementation "kotlin.graphics:imgui-gl:1.79+05"
+	//implementation "kotlin.graphics:imgui-glfw:1.79+05"
 
-	implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
-
-	['', '-opengl', '-glfw'].each {
-		implementation "org.lwjgl:lwjgl$it:$lwjglVersion"
-		implementation "org.lwjgl:lwjgl$it::natives-windows"
+	["gl", "glfw", "core"].each {
+		implementation("kotlin.graphics:imgui-$it:$imguiVersion") {
+			exclude group: "org.lwjgl"
+		}
 	}
 
-	implementation "io.github.spair:imgui-java-binding:$imguiVersion"
-	implementation "io.github.spair:imgui-java-lwjgl3:$imguiVersion"
 
-	implementation "io.github.spair:imgui-java-natives-windows:$imguiVersion"
-
+	//This shouldn't be needed
+	implementation "kotlin.graphics:glm:0.9.9.1-5"
+	implementation "kotlin.graphics:uno-core:0.7.17"
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 

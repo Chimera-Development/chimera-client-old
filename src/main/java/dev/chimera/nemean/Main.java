@@ -1,11 +1,8 @@
 package dev.chimera.nemean;
 
 import imgui.ImGui;
-import imgui.app.Application;
-import imgui.app.Configuration;
-
-public class Main extends Application {
-
+public class Main {
+/*
     public long WINDOW_PTR;
 
     @Override
@@ -21,5 +18,5 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(new Main());
-    }
+    }*/
 }

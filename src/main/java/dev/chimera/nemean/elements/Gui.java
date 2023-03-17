@@ -8,6 +8,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 
+import static dev.chimera.nemean.GuiLayer.imgui;
+
+
 public class Gui implements Renderable {
 
     public static Gui INSTANCE;
@@ -23,11 +26,12 @@ public class Gui implements Renderable {
         //TODO should probably add more screens where gui should not be visible (or we could separate general render and ingame render)
         if (MinecraftClient.getInstance().currentScreen instanceof TitleScreen || MinecraftClient.getInstance().currentScreen instanceof MultiplayerScreen)
             return;
-        ImGui.begin("ChimeraGUI");
+
+        imgui.begin("ChimeraGUI", new boolean[] {true}, 0);
         ModuleInitializer.getEnabledModuleList().forEach((module) -> {
-            ImGui.text(module.getModuleName());
+            imgui.text(module.getModuleName());
         });
 
-        ImGui.end();
+        imgui.end();
     }
 }

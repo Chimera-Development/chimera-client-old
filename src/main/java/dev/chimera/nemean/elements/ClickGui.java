@@ -27,6 +27,8 @@ import net.minecraft.text.Text;
 
 import java.util.*;
 
+import static dev.chimera.nemean.GuiLayer.imgui;
+
 public class ClickGui extends Screen implements Renderable {
 
     public static ClickGui INSTANCE;
@@ -64,13 +66,13 @@ public class ClickGui extends Screen implements Renderable {
             modulesInCategory.sort(Comparator.comparing(Module::getModuleName));
 
         for(Map.Entry<ModuleCategory, ArrayList<Module>> entry : categorized.entrySet()) {
-            ImGui.begin(entry.getKey().getName());
+            imgui.begin(entry.getKey().getName(), new boolean[] {true}, 0);
             for(Module module : entry.getValue()) {
-                if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
+                if (imgui.checkbox(module.getModuleName(), new boolean[] {module.getModuleEnabled()}, 0)) {
                     module.toggle();
                 }
             }
-            ImGui.end();
+            imgui.end();
         }
     }
 }
