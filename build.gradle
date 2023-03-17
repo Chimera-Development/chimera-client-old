@@ -1,7 +1,6 @@
 plugins {
 	id 'fabric-loom' version '1.1-SNAPSHOT'
 	id 'maven-publish'
-	
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -50,6 +49,11 @@ dependencies {
 	implementation "io.github.spair:imgui-java-lwjgl3:$imguiVersion"
 
 	implementation "io.github.spair:imgui-java-natives-windows:$imguiVersion"
+
+	include "io.github.spair:imgui-java-binding:$imguiVersion"
+	include "io.github.spair:imgui-java-lwjgl3:$imguiVersion"
+
+	include "io.github.spair:imgui-java-natives-windows:$imguiVersion"
 
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
