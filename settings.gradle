@@ -8,3 +8,11 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+if (file('imgui/build.gradle.kts').exists()) includeBuild("imgui") {
+    dependencySubstitution { // Substitute the imgui projects you will be using, this example is for glfw
+        substitute module('kotlin-graphics.imgui:imgui-core') with project(':core')
+        substitute module('kotlin-graphics.imgui:imgui-gl') with project(':gl')
+        substitute module('kotlin-graphics.imgui:imgui-glfw') with project(':glfw')
+    }
+}
