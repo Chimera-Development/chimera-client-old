@@ -1,20 +1,4 @@
 package dev.chimera.nemean.elements;
-//totally didnt copy half of Authoms code: https://github.com/fartdev/Atomic/blob/master/src/main/java/me/zeroX150/atomic/feature/gui/ImGuiScreen.java
-//0x's code didnt work. switched to :https://www.youtube.com/watch?v=6jmxwRMb-aY
-//Imgui GitHub: https://github.com/SpaiR/imgui-java/tree/v1.84.1.2
-
-/*
-my implementation was
-
-        make instance
-        on clickgui open, show instance (this was taken from 0x150's pre-existing clickgui system, presumably to preserve the state of windows)
-        have a command to reinitialize imgui
-
-        so then you could just have it work once and preserve that imgui instance (shitty method)
-
-        This is what Authom(The main guy of this gui shit told me was a solution to crashing and derping clickgui.)
-*/
-
 
 import dev.chimera.ChimeraClient;
 import dev.chimera.modules.Module;
@@ -26,7 +10,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import java.util.*;
-
 public class ClickGui extends Screen implements Renderable {
 
     public static ClickGui INSTANCE;

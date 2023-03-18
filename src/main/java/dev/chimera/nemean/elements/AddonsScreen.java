@@ -22,8 +22,7 @@ public class AddonsScreen extends Screen implements Renderable {
     }
 
     @EventListener(id = "AddonsScreenEscape")
-    public void handleEsc(KeyEvents.InGUI.Press escKey)
-    {
+    public void handleEsc(KeyEvents.InGUI.Press escKey) {
         if (escKey.key == GLFW.GLFW_KEY_ESCAPE)
             this.isActive = false;
     }
@@ -32,19 +31,18 @@ public class AddonsScreen extends Screen implements Renderable {
     public void render() {
         if (!isActive)
             return;
+        ImGui.begin("Addons");
 
         for (Addon addon : AddonInitializer.ADDON_LIST) {
             if (addon.MOD_ID == null || addon.name == null)
                 continue;
-            ImGui.begin(addon.name);
-
             if (ImGui.collapsingHeader(addon.name)) {
-                ImGui.text(addon.MOD_ID);
+                ImGui.sameLine();
+//                ImGui.image();
             }
-
-            ImGui.end();
         }
 
+        ImGui.end();
     }
 
     @Override

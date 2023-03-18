@@ -21,7 +21,8 @@ public class GLFWInitMixin {
 
     @Inject(at = @At("TAIL"), method = "<init>", remap = false)
     private void onGLFWInit(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci){
-        GuiLayer.config(handle);
+//        GuiLayer.config(handle);
+        GuiLayer.onGlfwInit(handle);
     }
 
 }
