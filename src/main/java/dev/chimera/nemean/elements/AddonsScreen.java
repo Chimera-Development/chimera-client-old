@@ -6,10 +6,10 @@ import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.nemean.Renderable;
 import dev.chimera.sisyphus.Addon;
 import dev.chimera.sisyphus.AddonInitializer;
-import imgui.ImGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
+import dev.chimera.nemean.ImGui;
 
 public class AddonsScreen extends Screen implements Renderable {
 

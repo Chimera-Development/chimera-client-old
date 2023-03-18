@@ -3,11 +3,10 @@ package dev.chimera.nemean.elements;
 import dev.chimera.ChimeraClient;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.nemean.Renderable;
-import imgui.ImGui;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-
+import dev.chimera.nemean.ImGui;
 public class Gui implements Renderable {
 
     public static Gui INSTANCE;

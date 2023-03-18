@@ -13,6 +13,7 @@ import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;
 
+import dev.chimera.nemean.ImGui;
 import static org.lwjgl.glfw.GLFW.glfwGetCurrentContext;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 
@@ -30,11 +31,9 @@ public class GuiLayer {
 
 
     public static void config(long windowPtr) {
-
         ImGui.createContext();
         implGlfw.init(windowPtr, true);
         implGl3.init();
-
 
         ranAlready = true;
     }

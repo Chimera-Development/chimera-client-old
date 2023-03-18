@@ -5,10 +5,9 @@ import dev.chimera.modules.Module;
 import dev.chimera.modules.ModuleCategory;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.nemean.Renderable;
-import imgui.ImGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-
+import dev.chimera.nemean.ImGui;
 import java.util.*;
 public class ClickGui extends Screen implements Renderable {
 
