@@ -40,7 +40,7 @@ public class ModuleInitializer {
     }
 
     public static List<Module> getAllModules() {
-        return MODULE_KEYBINDS.values().stream().toList();
+        return MODULE_NAMES.values().stream().toList();
     }
 
     public static List<Module> getEnabledModuleList() {

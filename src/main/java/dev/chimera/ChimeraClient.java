@@ -7,8 +7,10 @@ import dev.chimera.amalthea.events.misc.TickEvent;
 import dev.chimera.modules.ExampleModule;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.modules.combat.KillAuraModule;
+import dev.chimera.modules.common.BlockNBT;
 import dev.chimera.modules.common.ClickGUIModule;
 import dev.chimera.modules.common.FarmAuraModule;
+import dev.chimera.modules.common.PacketLogger;
 import dev.chimera.modules.player.FlightModule;
 import dev.chimera.modules.player.NoFallModule;
 import dev.chimera.nemean.GuiLayer;
@@ -54,6 +56,8 @@ public class ChimeraClient implements ClientModInitializer {
         ModuleInitializer.addModule(new NoFallModule());
         ModuleInitializer.addModule(new KillAuraModule());
         ModuleInitializer.addModule(new FarmAuraModule());
+        ModuleInitializer.addModule(new PacketLogger());
+        ModuleInitializer.addModule(new BlockNBT());
         ModuleInitializer.addModule(new ClickGUIModule());
 
         TickEvent.Start tickEventStart = new TickEvent.Start();
