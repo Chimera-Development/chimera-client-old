@@ -24,7 +24,7 @@ public class ClickGui extends Screen implements Renderable {
     @Override
     public void close() {
         isActive = false;
-        dev.chimera.managers.modules.AbstractModule module = Objects.requireNonNull(ModuleManager.findModule("ClickGUI"));
+        AbstractModule module = Objects.requireNonNull(ModuleManager.findModule("ClickGUI"));
         module.toggle();
         super.close();
     }
@@ -34,7 +34,7 @@ public class ClickGui extends Screen implements Renderable {
         if (!this.isActive)
             return;
 
-        HashMap<ModuleCategory, ArrayList<dev.chimera.managers.modules.AbstractModule>> categorized = new HashMap<>();
+        HashMap<ModuleCategory, ArrayList<AbstractModule>> categorized = new HashMap<>();
 
         ModuleManager.getModules().forEach((module) -> {
             if(!categorized.containsKey(module.getCategory()))
@@ -43,10 +43,10 @@ public class ClickGui extends Screen implements Renderable {
         });
 
         // Sort modules alphabetically
-        for(ArrayList<dev.chimera.managers.modules.AbstractModule> modulesInCategory : categorized.values())
-            modulesInCategory.sort(Comparator.comparing(dev.chimera.managers.modules.AbstractModule::getName));
+        for(ArrayList<AbstractModule> modulesInCategory : categorized.values())
+            modulesInCategory.sort(Comparator.comparing(AbstractModule::getName));
 
-        for(Map.Entry<ModuleCategory, ArrayList<dev.chimera.managers.modules.AbstractModule>> entry : categorized.entrySet()) {
+        for(Map.Entry<ModuleCategory, ArrayList<AbstractModule>> entry : categorized.entrySet()) {
             ImGui.begin(entry.getKey().name());
             for(AbstractModule module : entry.getValue()) {
                 if (ImGui.checkbox(module.getName(), module.isEnabled())) {
