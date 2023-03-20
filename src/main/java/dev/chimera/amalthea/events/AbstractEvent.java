@@ -1,6 +1,9 @@
 package dev.chimera.amalthea.events;
 
-public class AbstractEvent {
-        public boolean cancelled = false;
+import lombok.Getter;
+import lombok.Setter;
 
+public class AbstractEvent {
+        @Getter @Setter
+        private boolean cancelled = false;
 }
