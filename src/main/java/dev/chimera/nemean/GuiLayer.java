@@ -82,7 +82,7 @@ public class GuiLayer {
         renderStack.add(e);
     }
 
-    @EventListener(id = "The susser")
+    @EventListener(id = "chimera-client:guiOnRender")
     public void onRender(GuiRenderEvent event) {
         ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
         MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
