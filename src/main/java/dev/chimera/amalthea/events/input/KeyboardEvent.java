@@ -21,4 +21,13 @@ public class KeyboardEvent extends CancellableEvent {
             this.key = key;
         }
     }
+
+    public static class Unnamed extends KeyboardEvent {
+        @Getter
+        private final int key;
+
+        public Unnamed(int key) {
+            this.key = key;
+        }
+    }
 }

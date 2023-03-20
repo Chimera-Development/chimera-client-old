@@ -17,11 +17,12 @@ public abstract class KeyboardMixin {
         if(key != GLFW.GLFW_KEY_UNKNOWN && MinecraftClient.getInstance().currentScreen != null){
             KeyboardEvent event;
 
-            if (action == 1) event = new KeyboardEvent.Press(key);
-            else event = new KeyboardEvent.Release(key);
+            if (action == 0) event = new KeyboardEvent.Release(key);
+            else if (action == 1) event = new KeyboardEvent.Press(key);
+            else event = new KeyboardEvent.Unnamed(key);
 
-            if (action == 1) ChimeraClient.EVENT_BUS.postEvent(event);
-            if (action == 0) ChimeraClient.EVENT_BUS.postEvent(event);
+            ChimeraClient.EVENT_BUS.postEvent(event);
+
             if (event.isCancelled()) info.cancel();
         }
     }
