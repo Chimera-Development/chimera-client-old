@@ -1,7 +1,7 @@
 package dev.chimera.nemean.elements;
 
 import dev.chimera.ChimeraClient;
-import dev.chimera.modules.ModuleInitializer;
+import dev.chimera.managers.modules.ModuleManager;
 import dev.chimera.nemean.Renderable;
 import imgui.ImGui;
 import net.minecraft.client.MinecraftClient;
@@ -24,7 +24,7 @@ public class Gui implements Renderable {
         if (MinecraftClient.getInstance().currentScreen instanceof TitleScreen || MinecraftClient.getInstance().currentScreen instanceof MultiplayerScreen)
             return;
         ImGui.begin("ChimeraGUI");
-        ModuleInitializer.getEnabledModuleList().forEach((module) -> {
+        ModuleManager.getEnabledModuleList().forEach((module) -> {
             ImGui.text(module.getModuleName());
         });
 

@@ -5,9 +5,9 @@ import lombok.Setter;
 
 public abstract class AbstractModule {
     @Getter
-    private final ModuleCategory MODULE_CATEGORY;
+    private final ModuleCategory category;
     @Getter
-    private final String MODULE_NAME;
+    private final String name;
 
     @Getter
     private boolean enabled = false;
@@ -16,9 +16,9 @@ public abstract class AbstractModule {
     private int key_bind;
     public boolean releaseToToggle;
 
-    public AbstractModule( String MODULE_NAME, ModuleCategory MODULE_CATEGORY) {
-        this.MODULE_NAME = MODULE_NAME;
-        this.MODULE_CATEGORY = MODULE_CATEGORY;
+    public AbstractModule(String name, ModuleCategory category) {
+        this.name = name;
+        this.category = category;
     }
 
     public AbstractModule(ModuleCategory category, String name, int bind) {
@@ -26,8 +26,8 @@ public abstract class AbstractModule {
     }
 
     public AbstractModule(ModuleCategory category, String name, int key_bind, boolean toggleOnRelease) {
-        MODULE_CATEGORY = category;
-        MODULE_NAME = name;
+        this.category = category;
+        this.name = name;
         this.key_bind = key_bind;
         releaseToToggle = toggleOnRelease;
     }

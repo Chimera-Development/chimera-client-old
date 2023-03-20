@@ -1,6 +1,6 @@
-package dev.chimera.modules;
+package dev.chimera.managers.modules;
 
-public class ModuleCategory {
+public record ModuleCategory(String name) {
 
     public static ModuleCategory PLAYER = new ModuleCategory("Player");
     public static ModuleCategory COMBAT = new ModuleCategory("Combat");
@@ -8,12 +8,4 @@ public class ModuleCategory {
     public static ModuleCategory RENDER = new ModuleCategory("Render");
     public static ModuleCategory MISC = new ModuleCategory("Misc");
 
-    private final String name;
-    public ModuleCategory(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

@@ -1,9 +1,9 @@
 package dev.chimera.nemean.elements;
 
 import dev.chimera.ChimeraClient;
-import dev.chimera.modules.Module;
-import dev.chimera.modules.ModuleCategory;
-import dev.chimera.modules.ModuleInitializer;
+import dev.chimera.managers.modules.AbstractModule;
+import dev.chimera.managers.modules.ModuleCategory;
+import dev.chimera.managers.modules.ModuleManager;
 import dev.chimera.nemean.Renderable;
 import imgui.ImGui;
 import net.minecraft.client.gui.screen.Screen;
@@ -24,7 +24,7 @@ public class ClickGui extends Screen implements Renderable {
     @Override
     public void close() {
         isActive = false;
-        Module module = Objects.requireNonNull(ModuleInitializer.findModule("ClickGUI"));
+        dev.chimera.managers.modules.AbstractModule module = Objects.requireNonNull(ModuleManager.findModule("ClickGUI"));
         module.toggle();
         super.close();
     }
@@ -34,22 +34,22 @@ public class ClickGui extends Screen implements Renderable {
         if (!this.isActive)
             return;
 
-        HashMap<ModuleCategory, ArrayList<Module>> categorized = new HashMap<>();
+        HashMap<ModuleCategory, ArrayList<dev.chimera.managers.modules.AbstractModule>> categorized = new HashMap<>();
 
-        ModuleInitializer.getAllModules().forEach((module) -> {
-            if(!categorized.containsKey(module.getModuleCategory()))
-                categorized.put(module.getModuleCategory(), new ArrayList<>());
-            categorized.get(module.getModuleCategory()).add(module);
+        ModuleManager.getModules().forEach((module) -> {
+            if(!categorized.containsKey(module.getCategory()))
+                categorized.put(module.getCategory(), new ArrayList<>());
+            categorized.get(module.getCategory()).add(module);
         });
 
         // Sort modules alphabetically
-        for(ArrayList<Module> modulesInCategory : categorized.values())
-            modulesInCategory.sort(Comparator.comparing(Module::getModuleName));
+        for(ArrayList<dev.chimera.managers.modules.AbstractModule> modulesInCategory : categorized.values())
+            modulesInCategory.sort(Comparator.comparing(dev.chimera.managers.modules.AbstractModule::getName));
 
-        for(Map.Entry<ModuleCategory, ArrayList<Module>> entry : categorized.entrySet()) {
-            ImGui.begin(entry.getKey().getName());
-            for(Module module : entry.getValue()) {
-                if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
+        for(Map.Entry<ModuleCategory, ArrayList<dev.chimera.managers.modules.AbstractModule>> entry : categorized.entrySet()) {
+            ImGui.begin(entry.getKey().name());
+            for(AbstractModule module : entry.getValue()) {
+                if (ImGui.checkbox(module.getName(), module.isEnabled())) {
                     module.toggle();
                 }
             }

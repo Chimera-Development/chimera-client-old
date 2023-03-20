@@ -10,7 +10,7 @@ import java.lang.reflect.Constructor;
 
 public class ModuleManager {
     @Getter
-    public static final List<AbstractModule> MODULES = new ArrayList<>();
+    private static final List<AbstractModule> modules = new ArrayList<>();
 
     public void initializeModules() {
 
@@ -35,24 +35,24 @@ public class ModuleManager {
             throw new IllegalArgumentException("Failed to make instance of " + clazz.getName());
         }
 
-        MODULES.add(instance);
+        modules.add(instance);
     }
 
     public static List<AbstractModule> getEnabledModuleList() {
-        return MODULES.stream()
+        return modules.stream()
                 .filter(AbstractModule::isEnabled)
                 .collect(Collectors.toList());
     }
 
     public static AbstractModule findModule(String name) {
-        return MODULES.stream()
-                .filter(m -> m.getMODULE_NAME().equalsIgnoreCase(name))
+        return modules.stream()
+                .filter(m -> m.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
     }
 
     public static AbstractModule findModule(Class<? extends AbstractModule> clazz) {
-        return MODULES.stream()
+        return modules.stream()
                 .filter(m -> m.getClass().equals(clazz))
                 .findFirst()
                 .orElse(null);
