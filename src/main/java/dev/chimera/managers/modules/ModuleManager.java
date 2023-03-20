@@ -1,7 +1,11 @@
 package dev.chimera.managers.modules;
 
-import dev.chimera.ChimeraClient;
+import dev.chimera.managers.modules.combat.KillAuraModule;
+import dev.chimera.managers.modules.common.ClickGUIModule;
+import dev.chimera.managers.modules.common.FarmAuraModule;
 import dev.chimera.managers.modules.misc.TestModule;
+import dev.chimera.managers.modules.player.FlightModule;
+import dev.chimera.managers.modules.player.NoFallModule;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -15,6 +19,11 @@ public class ModuleManager {
 
     public static void initializeModules() {
         registerModule(TestModule.class);
+        registerModule(KillAuraModule.class);
+        registerModule(ClickGUIModule.class);
+        registerModule(FarmAuraModule.class);
+        registerModule(FlightModule.class);
+        registerModule(NoFallModule.class);
         ModuleManager.findModule(TestModule.class).setEnabled(true);
     }
 
@@ -52,8 +61,9 @@ public class ModuleManager {
                 .orElse(null);
     }
 
-    public static AbstractModule findModule(Class<? extends AbstractModule> clazz) {
-        return modules.stream()
+    @SuppressWarnings("unchecked")
+    public static <T extends AbstractModule> T findModule(Class<T> clazz) {
+        return (T) modules.stream()
                 .filter(m -> m.getClass().equals(clazz))
                 .findFirst()
                 .orElse(null);

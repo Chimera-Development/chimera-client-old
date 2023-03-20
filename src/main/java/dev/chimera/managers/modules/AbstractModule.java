@@ -3,8 +3,12 @@ package dev.chimera.managers.modules;
 import dev.chimera.ChimeraClient;
 import lombok.Getter;
 import lombok.Setter;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.MinecraftClient;
 
 public abstract class AbstractModule {
+    protected static final MinecraftClient mc = MinecraftClient.getInstance();
+
     @Getter
     private final ModuleCategory category;
     @Getter
@@ -20,6 +24,7 @@ public abstract class AbstractModule {
     public AbstractModule(String name, ModuleCategory category) {
         this.name = name;
         this.category = category;
+        registerTickListeners();
     }
 
     public AbstractModule(ModuleCategory category, String name, int bind) {
@@ -31,17 +36,21 @@ public abstract class AbstractModule {
         this.name = name;
         this.key_bind = key_bind;
         releaseToToggle = toggleOnRelease;
+        registerTickListeners();
     }
 
-    /* TODO: Makes this tomfoolery work
-    public void sendToggledMsg() {
-//         (this.hashCode(), Formatting.GRAY, "Toggled (highlight)%s(default) %s(default).", title, isActive() ? Formatting.GREEN + "on" : Formatting.RED + "off");
-        String state = this.MODULE_ENABLED ? "enabled" : "disabled";
-        MutableText message = Text.literal(this.MODULE_NAME + " has been " + state);
-        message.setStyle(message.getStyle().withFormatting(Formatting.AQUA));
-        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
+    private void registerTickListeners() {
+        ClientTickEvents.START_CLIENT_TICK.register(client -> {
+            if (isEnabled()) {
+                onTickStart();
+            }
+        });
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (isEnabled()) {
+                onTickEnd();
+            }
+        });
     }
-    */
 
     public void setEnabled(boolean enabled) {
         if (enabled != this.enabled) {
@@ -49,6 +58,7 @@ public abstract class AbstractModule {
             if (this.enabled) {
                 onEnable();
                 ChimeraClient.EVENT_BUS.registerListenersInClass(this);
+                // Register the tick listeners in Fabric
             } else {
                 onDisable();
                 // no event unregistering smh
@@ -73,5 +83,11 @@ public abstract class AbstractModule {
 
     }
 
-    // TODO: Add onTickStart and onTickEnd as Events
+    public void onTickStart() {
+
+    }
+
+    public void onTickEnd() {
+
+    }
 }
