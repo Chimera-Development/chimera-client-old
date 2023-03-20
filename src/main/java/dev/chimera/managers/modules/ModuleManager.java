@@ -1,6 +1,7 @@
 package dev.chimera.managers.modules;
 
 import dev.chimera.ChimeraClient;
+import dev.chimera.managers.modules.misc.TestModule;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -12,9 +13,9 @@ public class ModuleManager {
     @Getter
     private static final List<AbstractModule> modules = new ArrayList<>();
 
-    public void initializeModules() {
-
-        ChimeraClient.EVENT_BUS.registerListenersInClass(this);
+    public static void initializeModules() {
+        registerModule(TestModule.class);
+        ModuleManager.findModule(TestModule.class).setEnabled(true);
     }
 
 

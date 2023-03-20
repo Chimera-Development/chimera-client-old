@@ -3,7 +3,6 @@
 	"package": "dev.chimera.mixins",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-		"ExileSingleplayerMixin",
 		"KeyboardMixin",
 		"PacketFilterMixin",
 		"TailRenderMixin",

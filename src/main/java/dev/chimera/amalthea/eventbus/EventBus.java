@@ -2,6 +2,7 @@ package dev.chimera.amalthea.eventbus;
 
 import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.AbstractEvent;
+import dev.chimera.amalthea.events.CancellableEvent;
 import net.minecraft.client.MinecraftClient;
 
 import java.lang.reflect.InvocationTargetException;
@@ -163,7 +164,7 @@ public class EventBus {
         if (listeners != null) {
             listeners.forEach((listener) -> {
                 try {
-                    if (event.isCancelled()) return;
+                    if (event instanceof CancellableEvent cancellableEvent && cancellableEvent.isCancelled()) return;
                     listener.invoke(event);
                 } catch (InvocationTargetException | IllegalAccessException e) {
                     ChimeraClient.LOGGER.error("Posting event \"" + event.getClass() + "\" failed to listener \"" + listener.getId() + "\"");

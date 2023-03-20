@@ -25,7 +25,7 @@ public class Gui implements Renderable {
             return;
         ImGui.begin("ChimeraGUI");
         ModuleManager.getEnabledModuleList().forEach((module) -> {
-            ImGui.text(module.getModuleName());
+            ImGui.text(module.getName());
         });
 
         ImGui.end();

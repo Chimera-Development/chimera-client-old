@@ -1,5 +1,6 @@
 package dev.chimera.managers.modules;
 
+import dev.chimera.ChimeraClient;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,8 +46,14 @@ public abstract class AbstractModule {
     public void setEnabled(boolean enabled) {
         if (enabled != this.enabled) {
             this.enabled = enabled;
-            if (this.enabled) onEnable();
-            else onDisable();
+            if (this.enabled) {
+                onEnable();
+                ChimeraClient.EVENT_BUS.registerListenersInClass(this);
+            } else {
+                onDisable();
+                // no event unregistering smh
+                //ChimeraClient.EVENT_BUS.(this);
+            };
         }
     }
 
