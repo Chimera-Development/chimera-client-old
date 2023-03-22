@@ -10,6 +10,32 @@ public class ImGui extends imgui.ImGui {
         return imgui.ImGui.createContext();
     }
 
+    public static void frame(Runnable code)
+    {
+        boolean hasStartedFrame = false;
+
+        // Handle frame being called within another frame
+        if (!isInFrame)
+        {
+            newFrame();
+            hasStartedFrame = true;
+        }
+
+        code.run();
+
+        if (hasStartedFrame)
+        {
+            render();
+        }
+    }
+
+    public static void window(String name, Runnable code)
+    {
+        begin(name);
+        code.run();
+        end();
+    }
+
     public static void newFrame()
     {
         if (isInFrame)

@@ -31,18 +31,18 @@ public class AddonsScreen extends Screen implements Renderable {
     public void render() {
         if (!isActive)
             return;
-        ImGui.begin("Addons");
-
-        for (Addon addon : AddonInitializer.ADDON_LIST) {
-            if (addon.MOD_ID == null || addon.name == null)
-                continue;
-            if (ImGui.collapsingHeader(addon.name)) {
-                ImGui.sameLine();
-//                ImGui.image();
-            }
-        }
-
-        ImGui.end();
+        ImGui.frame(() -> {
+            // These are windows
+            ImGui.window("Addons", () -> {
+                for (Addon addon : AddonInitializer.ADDON_LIST) {
+                    if (addon.MOD_ID == null || addon.name == null)
+                        continue;
+                    if (ImGui.collapsingHeader(addon.name)) {
+                        ImGui.sameLine();
+                    }
+                }
+            });
+        });
     }
 
     @Override

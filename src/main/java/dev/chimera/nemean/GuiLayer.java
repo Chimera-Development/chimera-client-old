@@ -13,7 +13,6 @@ import net.minecraft.client.MinecraftClient;
 
 import java.util.ArrayList;
 
-import dev.chimera.nemean.ImGui;
 import static org.lwjgl.glfw.GLFW.glfwGetCurrentContext;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 
@@ -87,20 +86,21 @@ public class GuiLayer {
         ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
         MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");
         implGlfw.newFrame();
-        ImGui.newFrame();
+        ImGui.frame(() -> {
 
-        for (Renderable renderable : renderStack) {
+            for (Renderable renderable : renderStack) {
 
-            renderable.render();
+                renderable.render();
 
-        }
+            }
 
-        MinecraftClient.getInstance().getProfiler().pop();
-        ImGui.render();
-        endFrame(windowPtr);
+            MinecraftClient.getInstance().getProfiler().pop();
+            // I know this does it, its just this code I accidentally left endframe (well render in this case)
+        });
+        drawFrame(windowPtr);
     }
 
-    private static void endFrame(long windowPtr) {
+    private static void drawFrame(long windowPtr) {
         // After Dear ImGui prepared a draw data, we use it in the LWJGL3 renderer.
         // At that moment ImGui will be rendered to the current OpenGL context.
         implGl3.renderDrawData(ImGui.getDrawData());
