@@ -6,6 +6,7 @@ import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.nemean.Renderable;
 import dev.chimera.sisyphus.Addon;
 import dev.chimera.sisyphus.AddonInitializer;
+import imgui.flag.ImGuiCol;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
@@ -38,7 +39,10 @@ public class AddonsScreen extends Screen implements Renderable {
                     if (addon.MOD_ID == null || addon.name == null)
                         continue;
                     if (ImGui.collapsingHeader(addon.name)) {
-                        ImGui.sameLine();
+                        ImGui.indent();
+                            ImGui.text("Test");
+
+                        ImGui.unindent();
                     }
                 }
             });

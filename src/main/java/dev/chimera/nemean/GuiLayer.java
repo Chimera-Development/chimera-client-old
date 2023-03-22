@@ -10,7 +10,10 @@ import imgui.flag.ImGuiConfigFlags;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import net.minecraft.client.MinecraftClient;
+import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import static org.lwjgl.glfw.GLFW.glfwGetCurrentContext;
@@ -21,6 +24,9 @@ public class GuiLayer {
     private static final ImGuiImplGl3 implGl3 = new ImGuiImplGl3();
 
     private static long windowPtr;
+
+    public static ImFont titleFont;
+    public static ImFont contentFont;
 
     private static ArrayList<Renderable> renderStack = new ArrayList<>();
 
@@ -60,18 +66,43 @@ public class GuiLayer {
 
         fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesCyrillic());
 
-        fontAtlas.addFontDefault();
+        //fontAtlas.addFontDefault();
+        // Im trying to make imgui look nicer to make enderschesi happy
+        InputStream is = GuiLayer.class.getResourceAsStream("/OpenSans-Medium.ttf");
+        try {
+            byte[] bytes = is.readAllBytes();
+            contentFont = fontAtlas.addFontFromMemoryTTF(bytes, 20);
+
+            titleFont = fontAtlas.addFontFromMemoryTTF(bytes, 32);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         fontConfig.setMergeMode(true); // When enabled, all fonts added with this config would be merged with the previously added font
         fontConfig.setPixelSnapH(true);
 
         fontConfig.destroy();
 
+
         if (io.hasConfigFlags(ImGuiConfigFlags.ViewportsEnable)) {
             final ImGuiStyle style = ImGui.getStyle();
+
+            style.setWindowMenuButtonPosition(-1);
             style.setColor(ImGuiCol.WindowBg,
-                    251, 7, 255, 50);
-            style.setWindowRounding(10f);
+                    0, 0, 0, 100);
+            // Ill check
+            style.setColor(ImGuiCol.TitleBgActive,
+                    0, 0, 0, 100 );
+            style.setColor(ImGuiCol.TitleBg,
+                    0, 0, 0, 100);
+
+            style.setColor(ImGuiCol.Header,
+                    100, 100, 100, 120);
+
+            style.setColor(ImGuiCol.Border, 0);
+            style.setColor(ImGuiCol.BorderShadow, 0);
+            style.setColor(ImGuiCol.ResizeGrip , 0);
+            style.setWindowRounding(5f);
         }
     }
 

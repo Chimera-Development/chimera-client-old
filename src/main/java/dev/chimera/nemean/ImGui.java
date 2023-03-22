@@ -1,5 +1,6 @@
 package dev.chimera.nemean;
 
+import dev.chimera.nemean.elements.Gui;
 import imgui.internal.ImGuiContext;
 
 public class ImGui extends imgui.ImGui {
@@ -72,6 +73,20 @@ public class ImGui extends imgui.ImGui {
         {
             throw new RuntimeException("Attempted to create window outside of frame!");
         }
-        return imgui.ImGui.begin(text);
+
+        pushFont(GuiLayer.titleFont);
+
+        boolean beginned = imgui.ImGui.begin(text);
+
+        //popFont();
+        pushFont(GuiLayer.contentFont);
+        return beginned;
+    }
+
+    public static void end()
+    {
+        popFont();
+        imgui.ImGui.end();
+        popFont();
     }
 }
