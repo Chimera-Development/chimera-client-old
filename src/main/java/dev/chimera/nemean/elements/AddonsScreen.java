@@ -6,10 +6,10 @@ import dev.chimera.amalthea.events.misc.KeyEvents;
 import dev.chimera.nemean.Renderable;
 import dev.chimera.sisyphus.Addon;
 import dev.chimera.sisyphus.AddonInitializer;
-import imgui.ImGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
+import dev.chimera.nemean.ImGui;
 
 public class AddonsScreen extends Screen implements Renderable {
 
@@ -31,18 +31,18 @@ public class AddonsScreen extends Screen implements Renderable {
     public void render() {
         if (!isActive)
             return;
-        ImGui.begin("Addons");
-
-        for (Addon addon : AddonInitializer.ADDON_LIST) {
-            if (addon.MOD_ID == null || addon.name == null)
-                continue;
-            if (ImGui.collapsingHeader(addon.name)) {
-                ImGui.sameLine();
-//                ImGui.image();
-            }
-        }
-
-        ImGui.end();
+        ImGui.frame(() -> {
+            // These are windows
+            ImGui.window("Addons", () -> {
+                for (Addon addon : AddonInitializer.ADDON_LIST) {
+                    if (addon.MOD_ID == null || addon.name == null)
+                        continue;
+                    if (ImGui.collapsingHeader(addon.name)) {
+                        ImGui.sameLine();
+                    }
+                }
+            });
+        });
     }
 
     @Override

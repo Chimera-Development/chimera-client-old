@@ -5,10 +5,9 @@ import dev.chimera.modules.Module;
 import dev.chimera.modules.ModuleCategory;
 import dev.chimera.modules.ModuleInitializer;
 import dev.chimera.nemean.Renderable;
-import imgui.ImGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-
+import dev.chimera.nemean.ImGui;
 import java.util.*;
 public class ClickGui extends Screen implements Renderable {
 
@@ -46,14 +45,16 @@ public class ClickGui extends Screen implements Renderable {
         for(ArrayList<Module> modulesInCategory : categorized.values())
             modulesInCategory.sort(Comparator.comparing(Module::getModuleName));
 
-        for(Map.Entry<ModuleCategory, ArrayList<Module>> entry : categorized.entrySet()) {
-            ImGui.begin(entry.getKey().getName());
-            for(Module module : entry.getValue()) {
-                if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
-                    module.toggle();
-                }
+        ImGui.frame(() -> {
+            for (Map.Entry<ModuleCategory, ArrayList<Module>> entry : categorized.entrySet()) {
+                ImGui.window(entry.getKey().getName(), () -> {
+                    for (Module module : entry.getValue()) {
+                        if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
+                            module.toggle();
+                        }
+                    }
+                });
             }
-            ImGui.end();
-        }
+        });
     }
 }
