@@ -22,18 +22,12 @@ public class Gui implements Renderable {
         //TODO should probably add more screens where gui should not be visible (or we could separate general render and ingame render)
         if (MinecraftClient.getInstance().currentScreen instanceof TitleScreen || MinecraftClient.getInstance().currentScreen instanceof MultiplayerScreen)
             return;
-//<<<<<<< better-modules
-//        ImGui.begin("ChimeraGUI");
-//       ModuleManager.getEnabledModuleList().forEach((module) -> {
-//            ImGui.text(module.getName());
-//=======
-//        ImGui.frame(() -> {
-//            ImGui.window("ChimeraHUD", () -> {
-//                ModuleInitializer.getEnabledModuleList().forEach((module) -> {
-//                    ImGui.text(module.getModuleName());
-//                });
-//            });
-//>>>>>>> main
+        ImGui.frame(() -> {
+            ImGui.window("ChimeraHUD", () -> {
+                ModuleManager.getEnabledModuleList().forEach((module) -> {
+                    ImGui.text(module.getName());
+                });
+            });
         });
     }
 }
