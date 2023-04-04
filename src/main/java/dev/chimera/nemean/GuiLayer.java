@@ -101,8 +101,12 @@ public class GuiLayer {
 
             style.setColor(ImGuiCol.Border, 0);
             style.setColor(ImGuiCol.BorderShadow, 0);
+
+            style.setColor(ImGuiCol.FrameBg,100, 100, 100, 120);
+
             style.setColor(ImGuiCol.ResizeGrip , 0);
             style.setWindowRounding(5f);
+            style.setFrameRounding(5f);
         }
     }
 

@@ -46,6 +46,7 @@ public class AddonsScreen extends Screen implements Renderable {
                     }
                 }
             });
+            ImGui.showStyleEditor();
         });
     }
 

@@ -11,14 +11,17 @@ import imgui.ImGuiViewport;
 import imgui.ImVec2;
 import imgui.flag.ImGuiStyleVar;
 import imgui.flag.ImGuiWindowFlags;
+import imgui.type.ImBoolean;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import dev.chimera.nemean.ImGui;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.stb.STBImage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -49,46 +52,58 @@ public class ClickGui extends Screen implements Renderable {
     int burrW = 0;
     int burrH = 0;
     public void loadImage()
+            //maybe it is fun challenge, also turns out image loading is slight pain so might abstract (bcs image loading is opengl level)
     {
-        BufferedImage decoder = null;
+        BufferedImage decoderOrg = null;
         try {
-            decoder = ImageIO.read(getClass().getResourceAsStream("/trollface.png"));
+            decoderOrg = ImageIO.read(getClass().getResourceAsStream("/trollface.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ByteBuffer buf = ByteBuffer.allocateDirect(3*decoder.getWidth()*decoder.getHeight());
-        int byteCount = 0;
-        for (int y = 0; y < decoder.getHeight(); y++)
-        {
-            for (int x = 0; x < decoder.getWidth(); x++)
-            {
-                int clr = decoder.getRGB(x, y);
-                int r =   (clr & 0x00ff0000) >> 16;
-                int g = (clr & 0x0000ff00) >> 8;
-                int b =   clr & 0x000000ff;
-                buf.put(byteCount, (byte) r);
-                buf.put(byteCount+1, (byte) g);
-                buf.put(byteCount+2, (byte) b);
-                byteCount += 3;
+        BufferedImage image = new BufferedImage(decoderOrg.getWidth(), decoderOrg.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        image.createGraphics().drawImage(decoderOrg, 0, 0, image.getWidth(), image.getHeight(), null);
+
+        int[] pixels = new int[image.getWidth() * image.getHeight()];
+        image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+
+        ByteBuffer buffer = BufferUtils.createByteBuffer(4*image.getWidth()*image.getHeight());
+
+        for(int y = 0; y < image.getHeight(); y++){
+            for(int x = 0; x < image.getWidth(); x++){
+                int pixel = pixels[y * image.getWidth() + x];
+                buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
+                buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
+                buffer.put((byte) (pixel & 0xFF));               // Blue component
+                buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component. Only for RGBA
             }
         }
-        buf.flip();
 
-        int texture=GL11.glGenTextures();
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, decoder.getWidth(), decoder.getHeight(), 0,
-                GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, buf);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-        burrId = texture;
-        burrW = decoder.getWidth();
-        burrH = decoder.getHeight();
+        buffer.flip(); //FOR THE LOVE OF GOD DO NOT FORGET THIS
+
+        // You now have a ByteBuffer filled with the color data of each pixel.
+        // Now just create a texture ID and bind it. Then you can load it using
+        // whatever OpenGL method you want, for example:
+        int textureID = glGenTextures(); //Generate texture ID
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID); //Bind texture ID
+
+        //Setup wrap mode
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+        //Setup texture scaling filtering
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11. GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        //Send texel data to OpenGL
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, image.getWidth(), image.getHeight(), 0,GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+        burrId = textureID;
+        burrW = image.getWidth();
+        burrH = image.getHeight();
     }
 
     public boolean burrito()
     {
         ImVec2 start = ImGui.getCursorPos();
-        ImVec2 size = new ImVec2(100,100);
 
         if (burrId == -999)
             loadImage();
@@ -127,30 +142,31 @@ public class ClickGui extends Screen implements Renderable {
             modulesInCategory.sort(Comparator.comparing(Module::getModuleName));
 
         ImGui.frame(() -> {
-            /*ImVec2 workSize = ImGui.getIO().getDisplaySize();
-            if(workSize.x <= 0 || workSize.y <= 0)
+
+            //ImVec2 workSize = ImGui.getIO().getDisplaySize();
+            ImGuiViewport viewport = ImGui.getMainViewport();
+            /*if(workSize.x <= 0 || workSize.y <= 0)
             {
                 return;
-            }
+            }*/
 
-            ImGui.setNextWindowPos(0, 0);
-            ImGui.setNextWindowSize(workSize.x, workSize.y);
+            //ImGui.setNextWindowPos(viewport.getWorkPosX(), viewport.getWorkPosY());
+            //ImGui.setNextWindowSize(viewport.getWorkSizeX(), viewport.getWorkSizeY());
 
             // full screen nonresizable window
 
-            ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0f);
+            //ImGui.pushStyleVar(ImGuiStyleVar.WindowRounding, 0f);
 
-            ImGui.begin("FillWindow", ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoResize);
+            /*ImGui.begin("FillWindow", new ImBoolean(true), ImGuiWindowFlags.NoFocusOnAppearing); // ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoResize
             ImGui.text("a");
             ImGui.end();
-            ImGui.popStyleVar(2);*/
-
+            */
             // do you want click gui inside of window?
             // no not really
 
-            if(burrito())
+            //if(burrito())
             {
-                ImGui.text("Clicked burrito!");
+              //  ImGui.text("Clicked burrito!");
             }
             for (Map.Entry<ModuleCategory, ArrayList<Module>> entry : categorized.entrySet()) {
                 ImGui.window(entry.getKey().getName(), () -> {
@@ -161,6 +177,7 @@ public class ClickGui extends Screen implements Renderable {
                     }
                 });
             }
+            //ImGui.popStyleVar();
         });
     }
 }

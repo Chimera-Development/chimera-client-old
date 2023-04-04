@@ -37,6 +37,13 @@ public class ImGui extends imgui.ImGui {
         end();
     }
 
+    public static void childWindow(String name, Runnable code)
+    {
+        beginChild(name);
+        code.run();
+        endChild();
+    }
+
     public static void newFrame()
     {
         if (isInFrame)
@@ -83,10 +90,33 @@ public class ImGui extends imgui.ImGui {
         return beginned;
     }
 
+    public static boolean beginChild(String text)
+    {
+        if (!isInFrame)
+        {
+            throw new RuntimeException("Attempted to create window outside of frame!");
+        }
+
+        pushFont(GuiLayer.titleFont);
+
+        boolean beginned = imgui.ImGui.beginChild(text);
+
+        //popFont();
+        pushFont(GuiLayer.contentFont);
+        return beginned;
+    }
+
     public static void end()
     {
         popFont();
         imgui.ImGui.end();
+        popFont();
+    }
+
+    public static void endChild()
+    {
+        popFont();
+        imgui.ImGui.endChild();
         popFont();
     }
 }
