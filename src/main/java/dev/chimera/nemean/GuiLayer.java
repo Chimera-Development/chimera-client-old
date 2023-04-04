@@ -1,7 +1,6 @@
 package dev.chimera.nemean;
 
 import dev.chimera.ChimeraClient;
-import dev.chimera.amalthea.EventListenerIDs;
 import dev.chimera.amalthea.eventbus.EventListener;
 import dev.chimera.amalthea.events.misc.GuiRenderEvent;
 import imgui.*;
@@ -81,7 +80,7 @@ public class GuiLayer {
         renderStack.add(e);
     }
 
-    @EventListener(id = EventListenerIDs.onRender)
+    @EventListener(id = "chimera-client:guiOnRender")
     public void onRender(GuiRenderEvent event) {
         ImGui.getIO().setDisplaySize(MinecraftClient.getInstance().getWindow().getWidth(), MinecraftClient.getInstance().getWindow().getHeight());
         MinecraftClient.getInstance().getProfiler().push("ChimeraHUD");

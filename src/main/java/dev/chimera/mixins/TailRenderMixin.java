@@ -15,7 +15,6 @@ public class TailRenderMixin {
     @Inject(at = @At("HEAD"), method="flipFrame")
     private static void runTickTail(CallbackInfo ci) {
         MinecraftClient.getInstance().getProfiler().push("ImGui Render");
-        event.cancelled = false;
         ChimeraClient.EVENT_BUS.postEvent(event);
         MinecraftClient.getInstance().getProfiler().pop();
     }

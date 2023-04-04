@@ -2,7 +2,7 @@ package dev.chimera.nemean.elements;
 
 import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.eventbus.EventListener;
-import dev.chimera.amalthea.events.misc.KeyEvents;
+import dev.chimera.amalthea.events.input.KeyboardEvent;
 import dev.chimera.nemean.Renderable;
 import dev.chimera.sisyphus.Addon;
 import dev.chimera.sisyphus.AddonInitializer;
@@ -22,8 +22,8 @@ public class AddonsScreen extends Screen implements Renderable {
     }
 
     @EventListener(id = "AddonsScreenEscape")
-    public void handleEsc(KeyEvents.InGUI.Press escKey) {
-        if (escKey.key == GLFW.GLFW_KEY_ESCAPE)
+    public void handleEsc(KeyboardEvent.Press escKey) {
+        if (escKey.getKey() == GLFW.GLFW_KEY_ESCAPE)
             this.isActive = false;
     }
 

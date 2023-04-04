@@ -1,9 +1,7 @@
-package dev.chimera.modules.combat;
+package dev.chimera.managers.modules.combat;
 
-import dev.chimera.amalthea.events.misc.TickEvent;
-import dev.chimera.modules.Module;
-import dev.chimera.modules.ModuleCategory;
-
+import dev.chimera.managers.modules.AbstractModule;
+import dev.chimera.managers.modules.ModuleCategory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -14,7 +12,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import org.lwjgl.glfw.GLFW;
 
-public class KillAuraModule extends Module {
+public class KillAuraModule extends AbstractModule {
     private static final int TOTAL_TICK_COOLDOWN = 12;
     private static int tickCooldown = TOTAL_TICK_COOLDOWN;
 
@@ -23,20 +21,10 @@ public class KillAuraModule extends Module {
     }
 
     @Override
-    public void init() {}
-
-    @Override
-    public void onEnable() {
-    }
-
-    @Override
-    public void onDisable() {}
-
-    @Override
-    public void onTickStart(TickEvent.Start event) {
+    public void onTickStart() {
         tickCooldown--;
 
-        if (!getModuleEnabled()) return;
+        if (!isEnabled()) return;
         if (tickCooldown > 0) return;
 
         MinecraftClient client = MinecraftClient.getInstance();
@@ -66,7 +54,4 @@ public class KillAuraModule extends Module {
         manager.attackEntity(player, targetEntity);
         tickCooldown = TOTAL_TICK_COOLDOWN;
     }
-
-    @Override
-    public void onTickEnd(TickEvent.End event) {}
 }

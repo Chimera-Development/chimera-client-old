@@ -1,9 +1,9 @@
 package dev.chimera.nemean.elements;
 
 import dev.chimera.ChimeraClient;
-import dev.chimera.modules.Module;
-import dev.chimera.modules.ModuleCategory;
-import dev.chimera.modules.ModuleInitializer;
+import dev.chimera.managers.modules.AbstractModule;
+import dev.chimera.managers.modules.ModuleCategory;
+import dev.chimera.managers.modules.ModuleManager;
 import dev.chimera.nemean.Renderable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -23,7 +23,7 @@ public class ClickGui extends Screen implements Renderable {
     @Override
     public void close() {
         isActive = false;
-        Module module = Objects.requireNonNull(ModuleInitializer.findModule("ClickGUI"));
+        AbstractModule module = Objects.requireNonNull(ModuleManager.findModule("ClickGUI"));
         module.toggle();
         super.close();
     }
@@ -33,27 +33,37 @@ public class ClickGui extends Screen implements Renderable {
         if (!this.isActive)
             return;
 
-        HashMap<ModuleCategory, ArrayList<Module>> categorized = new HashMap<>();
+        HashMap<ModuleCategory, ArrayList<AbstractModule>> categorized = new HashMap<>();
 
-        ModuleInitializer.getAllModules().forEach((module) -> {
-            if(!categorized.containsKey(module.getModuleCategory()))
-                categorized.put(module.getModuleCategory(), new ArrayList<>());
-            categorized.get(module.getModuleCategory()).add(module);
+        ModuleManager.getModules().forEach((module) -> {
+            if(!categorized.containsKey(module.getCategory()))
+                categorized.put(module.getCategory(), new ArrayList<>());
+            categorized.get(module.getCategory()).add(module);
         });
 
         // Sort modules alphabetically
-        for(ArrayList<Module> modulesInCategory : categorized.values())
-            modulesInCategory.sort(Comparator.comparing(Module::getModuleName));
+        for(ArrayList<AbstractModule> modulesInCategory : categorized.values())
+            modulesInCategory.sort(Comparator.comparing(AbstractModule::getName));
 
-        ImGui.frame(() -> {
-            for (Map.Entry<ModuleCategory, ArrayList<Module>> entry : categorized.entrySet()) {
-                ImGui.window(entry.getKey().getName(), () -> {
-                    for (Module module : entry.getValue()) {
-                        if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
-                            module.toggle();
-                        }
-                    }
-                });
+//<<<<<<< better-modules
+//      for(Map.Entry<ModuleCategory, ArrayList<AbstractModule>> entry : categorized.entrySet()) {
+ //           ImGui.begin(entry.getKey().name());
+  //          for(AbstractModule module : entry.getValue()) {
+   //             if (ImGui.checkbox(module.getName(), module.isEnabled())) {
+   //                 module.toggle();
+   //             }
+//=======
+//
+//        ImGui.frame(() -> {
+//            for (Map.Entry<ModuleCategory, ArrayList<Module>> entry : categorized.entrySet()) {
+//                ImGui.window(entry.getKey().getName(), () -> {
+//                    for (Module module : entry.getValue()) {
+//                        if (ImGui.checkbox(module.getModuleName(), module.getModuleEnabled())) {
+//                            module.toggle();
+//                        }
+//                    }
+//              });
+//>>>>>>> main
             }
         });
     }

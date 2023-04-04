@@ -1,9 +1,8 @@
-package dev.chimera.modules.common;
+package dev.chimera.managers.modules.common;
 
 import dev.chimera.ChimeraClient;
-import dev.chimera.amalthea.events.misc.TickEvent;
-import dev.chimera.modules.Module;
-import dev.chimera.modules.ModuleCategory;
+import dev.chimera.managers.modules.AbstractModule;
+import dev.chimera.managers.modules.ModuleCategory;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -11,7 +10,6 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -24,8 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class FarmAuraModule extends Module {
-    private static MinecraftClient client;
+public class FarmAuraModule extends AbstractModule {
     private static final Item[] usableItems = {
             Items.WHEAT_SEEDS,
             Items.BEETROOT_SEEDS,
@@ -42,15 +39,9 @@ public class FarmAuraModule extends Module {
     }
 
     @Override
-    public void init() {
-        client = MinecraftClient.getInstance();
-        ChimeraClient.LOGGER.info("Initialized module '" + getModuleName() + "'");
-    }
-
-    @Override
     public void onEnable() {
-        ClientWorld world = client.world;
-        if (client.player == null || world == null) return;
+        ClientWorld world = mc.world;
+        if (mc.player == null || world == null) return;
 
         availableFarmland = getFarmlandBlockPosAroundPlayer(world);
 
@@ -60,8 +51,8 @@ public class FarmAuraModule extends Module {
     }
 
     private static ArrayList<BlockPos> getFarmlandBlockPosAroundPlayer(ClientWorld world) {
-        BlockPos p1 = client.player.getBlockPos().add(RANGE, RANGE, RANGE);
-        BlockPos p2 = client.player.getBlockPos().add(-RANGE, -RANGE, -RANGE);
+        BlockPos p1 = mc.player.getBlockPos().add(RANGE, RANGE, RANGE);
+        BlockPos p2 = mc.player.getBlockPos().add(-RANGE, -RANGE, -RANGE);
 
         BlockPos max = new BlockPos(
                 Math.max(p1.getX(), p2.getX()),
@@ -96,15 +87,15 @@ public class FarmAuraModule extends Module {
     public void onDisable() {}
 
     @Override
-    public void onTickStart(TickEvent.Start event) {
-        ClientPlayerEntity player = client.player;
-        if (!getModuleEnabled() || player == null
-                || client.world == null
+    public void onTickStart() {
+        ClientPlayerEntity player = mc.player;
+        if (!isEnabled() || player == null
+                || mc.world == null
                 || player.getItemCooldownManager().isCoolingDown(player.getMainHandStack().getItem())
-                || client.interactionManager == null) return;
+                || mc.interactionManager == null) return;
 
         if (!isItemUsable() || availableFarmland.isEmpty()) {
-            setModuleState(false);
+            setEnabled(false);
             return;
         }
         BlockPos farmland = availableFarmland.remove(0);
@@ -113,7 +104,7 @@ public class FarmAuraModule extends Module {
     }
 
     private static void replantForBlockPos(ClientPlayerEntity player, BlockPos farmland) {
-        client.interactionManager.interactBlock(
+        mc.interactionManager.interactBlock(
                 player,
                 Hand.MAIN_HAND,
                 new BlockHitResult(
@@ -125,12 +116,8 @@ public class FarmAuraModule extends Module {
         );
     }
 
-    @Override
-    public void onTickEnd(TickEvent.End event) {
-    }
-
     private static boolean isItemUsable() {
-        ItemStack mainHandStack = client.player.getMainHandStack();
+        ItemStack mainHandStack = mc.player.getMainHandStack();
         return Arrays.stream(usableItems).anyMatch(item ->
                 item.equals(mainHandStack.getItem())
         );

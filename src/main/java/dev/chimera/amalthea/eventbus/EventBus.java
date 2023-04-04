@@ -2,6 +2,7 @@ package dev.chimera.amalthea.eventbus;
 
 import dev.chimera.ChimeraClient;
 import dev.chimera.amalthea.events.AbstractEvent;
+import dev.chimera.amalthea.events.CancellableEvent;
 import net.minecraft.client.MinecraftClient;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,7 +23,6 @@ public class EventBus {
     private boolean listenersChanged = true;
 
     public void registerListenersInClass(Object object) {
-//        new Thread(() -> {
         for (Method method : object.getClass().getDeclaredMethods()) {
             if (!method.isAnnotationPresent(EventListener.class)) continue;
             //Make sure that the listener is correctly configured and accessible
@@ -68,7 +68,6 @@ public class EventBus {
             //used to only sort the listeners once they have changed
             updatedListeners.put(method.getParameterTypes()[0], true);
         }
-//        }).start();
     }
 
     public Set<String> getAllListenerIDs(){
@@ -151,7 +150,7 @@ public class EventBus {
         }
     }
 
-    public <T> ArrayList<Listener> sortMap(T event) {
+    public <T extends AbstractEvent> ArrayList<Listener> sortMap(T event) {
         if (updatedListeners.getOrDefault(event.getClass(), true)) {
             updatedListeners.put(event.getClass(), false);
             return listenersByEventType.computeIfPresent(event.getClass(), (k, v) -> PrioritySystem.topologicalSort(v));
@@ -160,19 +159,12 @@ public class EventBus {
         return listenersByEventType.get(event.getClass());
     }
 
-    public <T> void postEvent(T event) {
+    public void postEvent(AbstractEvent event) {
         ArrayList<Listener> listeners = sortMap(event);
         if (listeners != null) {
             listeners.forEach((listener) -> {
                 try {
-                    if (event instanceof AbstractEvent abstractEvent)
-                    {
-                        if (abstractEvent.cancelled)
-                        {
-                            // Do not send event to additional listeners when cancelled. (since its easy to miss and cause bugs)
-                            return;
-                        }
-                    }
+                    if (event instanceof CancellableEvent cancellableEvent && cancellableEvent.isCancelled()) return;
                     listener.invoke(event);
                 } catch (InvocationTargetException | IllegalAccessException e) {
                     ChimeraClient.LOGGER.error("Posting event \"" + event.getClass() + "\" failed to listener \"" + listener.getId() + "\"");
@@ -182,7 +174,7 @@ public class EventBus {
         }
     }
 
-    public <T> void postEventToListener(T event, String id) {
+    public void postEventToListener(AbstractEvent event, String id) {
         Listener listener = listenerIDs.get(id);
         if (listener.getMethod().getParameterTypes()[0] == event.getClass()) {
 

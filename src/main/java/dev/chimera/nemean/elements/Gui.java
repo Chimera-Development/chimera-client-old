@@ -1,7 +1,7 @@
 package dev.chimera.nemean.elements;
 
 import dev.chimera.ChimeraClient;
-import dev.chimera.modules.ModuleInitializer;
+import dev.chimera.managers.modules.ModuleManager;
 import dev.chimera.nemean.Renderable;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -22,12 +22,18 @@ public class Gui implements Renderable {
         //TODO should probably add more screens where gui should not be visible (or we could separate general render and ingame render)
         if (MinecraftClient.getInstance().currentScreen instanceof TitleScreen || MinecraftClient.getInstance().currentScreen instanceof MultiplayerScreen)
             return;
-        ImGui.frame(() -> {
-            ImGui.window("ChimeraHUD", () -> {
-                ModuleInitializer.getEnabledModuleList().forEach((module) -> {
-                    ImGui.text(module.getModuleName());
-                });
-            });
+//<<<<<<< better-modules
+//        ImGui.begin("ChimeraGUI");
+//       ModuleManager.getEnabledModuleList().forEach((module) -> {
+//            ImGui.text(module.getName());
+//=======
+//        ImGui.frame(() -> {
+//            ImGui.window("ChimeraHUD", () -> {
+//                ModuleInitializer.getEnabledModuleList().forEach((module) -> {
+//                    ImGui.text(module.getModuleName());
+//                });
+//            });
+//>>>>>>> main
         });
     }
 }
