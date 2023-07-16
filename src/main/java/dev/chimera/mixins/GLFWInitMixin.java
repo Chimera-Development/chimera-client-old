@@ -1,6 +1,8 @@
 package dev.chimera.mixins;
 
-import dev.chimera.nemean.GuiLayer;
+//import dev.chimera.nemean.GuiLayer;
+
+import dev.chimera.nemean.ChimeraGUI;
 import net.minecraft.client.WindowEventHandler;
 import net.minecraft.client.WindowSettings;
 import net.minecraft.client.util.MonitorTracker;
@@ -20,9 +22,8 @@ public class GLFWInitMixin {
     private long handle;
 
     @Inject(at = @At("TAIL"), method = "<init>", remap = false)
-    private void onGLFWInit(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci){
-//        GuiLayer.config(handle);
-        GuiLayer.onGlfwInit(handle);
+    private void onGLFWInit(WindowEventHandler eventHandler, MonitorTracker monitorTracker, WindowSettings settings, String videoMode, String title, CallbackInfo ci) {
+//        dev.chimera.nemean.components.Window.getInstance().init();
     }
 
 }
