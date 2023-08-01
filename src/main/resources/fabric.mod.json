@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "chimera-client",
+  "version": "${version}",
+  "name": "Chimera Client",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/Chimera-Development/chimera-1.20"
+  },
+  "license": "MIT",
+  "icon": "assets/chimera-client/trollface.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.chimera.client.ChimeraClient"
+    ]
+  },
+  "mixins": [
+    "chimera-client.mixins.json",
+    "replaymod.mixins.json",
+    "modmenu.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  },
+  "recommends": {
+    "viafabricplus": "2.7.8",
+    "modmenu": "7.2.1",
+    "replaymod": "2.6.13"
+  },
+  "custom": {
+    "chimera-client-module-path": ""
+  },
+  "accessWidener": "chimera-client.accesswidener"
+}

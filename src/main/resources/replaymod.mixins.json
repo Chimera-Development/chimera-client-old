@@ -1,0 +1,13 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "dev.chimera.client.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [],
+  "client": [
+    "ReplayModMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
