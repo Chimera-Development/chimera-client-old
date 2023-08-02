@@ -65,8 +65,6 @@ public abstract class ClientConnectionMixin {
     @Inject(method = "handlePacket", at = @At("HEAD"), cancellable = true)
     private static <T extends PacketListener> void onHandlePacket(Packet<T> packet, PacketListener listener, CallbackInfo ci) {
 
-        MinecraftClient.getInstance().getProfiler().push("Packet event");
-
         packetReceiveEvent.packet = packet;
         packetReceiveEvent.isCancelled = false;
         EventDispatcher.postEvent(packetReceiveEvent);
@@ -75,7 +73,5 @@ public abstract class ClientConnectionMixin {
             ci.cancel();
         }
 
-        MinecraftClient.getInstance().getProfiler().pop();
     }
-
 }

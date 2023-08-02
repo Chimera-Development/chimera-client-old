@@ -1,7 +1,6 @@
 package dev.chimera.client.gui.clickgui;
 
-import dev.chimera.client.ChimeraClient;
-import dev.chimera.client.gui.clickgui.components.ButtonGroup;
+import dev.chimera.client.gui.clickgui.components.ButtonList;
 import dev.chimera.client.gui.clickgui.components.ModuleButton;
 import dev.chimera.client.modules.AbstractModule;
 import dev.chimera.client.modules.ModuleManager;
@@ -9,7 +8,6 @@ import dev.chimera.client.modules.modules.ClickGUIModule;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.profiler.Profiler;
 import org.lwjgl.glfw.GLFW;
@@ -20,27 +18,26 @@ import java.util.List;
 public class ClickGui extends Screen {
 
 
+    ButtonList listView;
+    Profiler profiler = MinecraftClient.getInstance().getProfiler();
+
     public ClickGui(float x, float y, float width, float height) {
         super(Text.literal("ClickGui"));
 
-        textRenderer = MinecraftClient.getInstance().textRenderer;
+        List<ModuleButton> buttonsList = new ArrayList<>();
+
         float buttonGroupHeight = 0.0f;
         for (AbstractModule module : ModuleManager.getAllModules()) {
             buttonsList.add(new ModuleButton(-1, -1, -1, 12f, module));
             buttonGroupHeight += 12f;
         }
 
-
         //the 2f is marginY, I'll need to refactor all of this to have proper dependency injection
         buttonGroupHeight += (buttonsList.size() + 1) * 2f;
 
-        listView = new ButtonGroup(x, y, width, buttonGroupHeight, buttonsList);
+        listView = new ButtonList(x, y, width, buttonGroupHeight, buttonsList);
     }
 
-    List<ModuleButton> buttonsList = new ArrayList<>();
-    ButtonGroup listView;
-
-    Profiler profiler = MinecraftClient.getInstance().getProfiler();
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -53,12 +50,16 @@ public class ClickGui extends Screen {
         profiler.pop();
     }
 
+    private boolean firstRelease = true;
+
     @Override
     public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
 
-        if (keyCode == GLFW.GLFW_KEY_RIGHT_SHIFT) {
+        if (keyCode == GLFW.GLFW_KEY_RIGHT_SHIFT && !firstRelease) {
             ((ClickGUIModule) ModuleManager.getModule(ClickGUIModule.class)).disable();
         }
+
+        firstRelease = false;
 
         return super.keyReleased(keyCode, scanCode, modifiers);
     }
@@ -73,7 +74,7 @@ public class ClickGui extends Screen {
 
     @Override
     public void close() {
-        ((ClickGUIModule)ModuleManager.getModule(ClickGUIModule.class)).disable();
+        ((ClickGUIModule) ModuleManager.getModule(ClickGUIModule.class)).disable();
         super.close();
     }
 }
